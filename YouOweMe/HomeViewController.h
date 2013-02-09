@@ -10,14 +10,11 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "DebtorNameInputCellView.h"
 
-@interface HomeViewController : UIViewController   <UITableViewDelegate,
-                                                    UITableViewDataSource,
-                                                    UIScrollViewDelegate,
-                                                    DebtorNameInputCellDelegate>
+@interface HomeViewController : UIViewController   <UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, strong) IBOutlet UITableView *tableViewPredictiveSearchResults;
-
+@property (nonatomic, strong) IBOutlet UIView *dummyView;
+@property (nonatomic, strong) IBOutlet UILabel *dummyLabel;
+@property (nonatomic, strong) IBOutlet UIView *inputView;
 -(IBAction)resetPressed:(id)sender;
 -(IBAction)showPicker:(id)sender;
 

@@ -16,13 +16,75 @@
 
 @implementation HomeViewController
 
-@synthesize tableView;
-@synthesize tableViewPredictiveSearchResults;
+@synthesize dummyView, dummyLabel;
+@synthesize inputView;
 
-NSArray *tableContents;
+UIPanGestureRecognizer *panGestureRecognizer;
+
+
+
+
+#pragma mark - gesture handlers
+
+BOOL labelIsDown=NO;
+BOOL isAnimating=NO;
+BOOL actionTakenForGesture=NO;
+-(void)handlePan:(UIPanGestureRecognizer*)gesture{
+    UIView *piece = [gesture view];
+    
+    if ([gesture state] == UIGestureRecognizerStateBegan) {
+        actionTakenForGesture=NO;
+    }
+    
+    if([gesture state] == UIGestureRecognizerStateChanged){
+        //NSLog(@"deletmeInt: %d", deletemeInt);
+    }
+    
+    if([gesture state] != UIGestureRecognizerStateEnded){
+        CGPoint velocity = [gesture velocityInView:[gesture view]];
+        if(velocity.y>0 && !labelIsDown && !isAnimating && !actionTakenForGesture){
+            self.dummyLabel.frame = CGRectOffset(self.dummyLabel.frame, 0, velocity.y/80);
+            if(CGRectIntersectsRect(dummyLabel.bounds, self.view.frame)){
+                NSLog(@"I can see youuu...");
+                labelIsDown=YES;
+                isAnimating=YES;
+                //actionTakenForGesture=YES;
+                [UIView animateWithDuration:0.2f animations:^{
+                    self.dummyLabel.frame = CGRectMake(0, 0, self.dummyLabel.frame.size.width, self.dummyLabel.frame.size.height);
+                } completion:^(BOOL finished) {
+                    isAnimating=NO;
+                }];
+            }
+        }
+        if(velocity.y<0 && labelIsDown && !isAnimating && !actionTakenForGesture){
+            labelIsDown=NO;
+            isAnimating=YES;
+            actionTakenForGesture=YES;
+            [UIView animateWithDuration:0.2f animations:^{
+                self.dummyLabel.frame = CGRectMake(0, -53, self.dummyLabel.frame.size.width, self.dummyLabel.frame.size.height);
+            } completion:^(BOOL finished) {
+                isAnimating=NO;
+            }];
+            
+        }
+        
+    }
+}
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
 
 
 #pragma mark - Address book stuff
+
 - (IBAction)showPicker:(id)sender
 {
     ABAddressBookRef addressBook = ABAddressBookCreate();
@@ -44,56 +106,13 @@ NSArray *tableContents;
     if (accessGranted) {
         // Do whatever you want here.
         NSLog(@"ios 6+, address book access granted");
-    }}
-
-#pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    if(CGRectIntersectsRect(scrollView.bounds, CGRectMake(0, -30, scrollView.bounds.size.width, 1))){
-        //insert new cell at the top of the table
-        NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
-
-        if(tableContents.count<1){
-            [self.tableView beginUpdates];
-            tableContents = [NSArray arrayWithObject:[NSNumber numberWithInt:1]];
-            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
-            //self.tableView.scrollEnabled=NO;
-            self.tableView.bounces=NO;
-            [self.tableView endUpdates];
-        }
     }
 }
 
-#pragma mark - UITableView DataSource
 
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    NSString *CellIdentifier = @"HomeScreenCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 
-    if(cell==nil){
-        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"DebtorNameInputCellView" owner:self options:nil];
-        cell = [topLevelObjects objectAtIndex:0];
-        
-        ((DebtorNameInputCellView *)cell).debtorNameTextInput.text = @"HELLO!!!";
-        ((DebtorNameInputCellView *)cell).backgroundView.backgroundColor = [UIColor blueColor];
-        ((DebtorNameInputCellView *)cell).backgroundView.alpha=1.0f;
-        ((DebtorNameInputCellView *)cell).delegate=self;
-        
-        cell.layer.shadowRadius=5.0f;
-        cell.layer.shadowColor=[[UIColor blackColor] CGColor];
-        cell.layer.shadowOpacity=0.7f;
-        cell.layer.masksToBounds=NO;
-        //cell.backgroundColor = [UIColor colorWithRed:0.0/255 green:0.0/255 blue:254/255.0 alpha:1.0f];
-    }
-    return cell;
-}
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"tableContents.count: %d", tableContents.count);
-    return tableContents.count;
-}
-
+#pragma mark - view lifeCycle
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -104,16 +123,17 @@ NSArray *tableContents;
     return self;
 }
 
-
-
-#pragma mark - view lifeCycle
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-
-    tableContents = [[NSArray alloc]init];
+    
+    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [self.dummyView addGestureRecognizer:panGestureRecognizer];
+    
+    inputView.layer.shadowColor=[[UIColor blueColor] CGColor];
+    inputView.layer.shadowOpacity=0.8f;
+    inputView.layer.shadowRadius=5.0f;
 }
 
 - (void)didReceiveMemoryWarning
@@ -125,17 +145,7 @@ NSArray *tableContents;
 
 #pragma mark - delete me
 -(void)resetPressed:(id)sender{
-    NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
     
-    if(tableContents.count>0){
-        [self.tableView beginUpdates];
-        tableContents = [[NSArray alloc] init];
-        [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView endUpdates];
-        self.tableView.bounces=YES;
-    }
-
-
 }
 
 @end

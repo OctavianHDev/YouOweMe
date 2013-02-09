@@ -28,23 +28,6 @@
                                     <action selector="resetPressed:" destination="2" eventType="touchUpInside" id="s1m-Sb-VGQ"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="m5i-c4-dPa">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="241" id="qUY-zs-TJk"/>
-                                </constraints>
-                            </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Tcl-zi-cSg">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="278" id="eEB-Lf-dzW"/>
-                                </constraints>
-                                <color key="separatorColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="2" id="REw-SP-VCs"/>
-                                    <outlet property="delegate" destination="2" id="GQB-XY-24F"/>
-                                </connections>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hH-Xz-DPg">
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="show picker">
@@ -58,25 +41,42 @@
                                     <action selector="showPicker:" destination="2" eventType="touchUpInside" id="jcE-BY-TsC"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W3I-iE-fmE">
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zk5-eF-EDD">
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="qfD-0j-lxQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="zk5-eF-EDD" firstAttribute="leading" secondItem="W3I-iE-fmE" secondAttribute="leading" type="default" id="9nZ-tg-nzD"/>
+                                    <constraint firstItem="zk5-eF-EDD" firstAttribute="trailing" secondItem="W3I-iE-fmE" secondAttribute="trailing" type="default" id="IUB-oh-c8Z"/>
+                                    <constraint firstItem="zk5-eF-EDD" firstAttribute="top" secondItem="W3I-iE-fmE" secondAttribute="top" constant="-53" id="yPD-sG-Iyn"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="W3I-iE-fmE" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="1aA-1m-GWu"/>
                             <constraint firstItem="cRF-7u-RwA" firstAttribute="leading" secondItem="3" secondAttribute="leading" constant="94" type="user" id="7zz-K5-nGQ"/>
-                            <constraint firstAttribute="bottom" secondItem="cRF-7u-RwA" secondAttribute="bottom" constant="92" id="CEi-cq-rqF"/>
-                            <constraint firstItem="m5i-c4-dPa" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="NKX-FK-Vr6"/>
-                            <constraint firstItem="Tcl-zi-cSg" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="VQU-UF-0lW"/>
-                            <constraint firstItem="Tcl-zi-cSg" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="WmG-4Q-iHi"/>
-                            <constraint firstItem="m5i-c4-dPa" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="by9-i2-Xwi"/>
+                            <constraint firstAttribute="bottom" secondItem="W3I-iE-fmE" secondAttribute="bottom" constant="221" id="Rje-UN-mlb"/>
+                            <constraint firstItem="W3I-iE-fmE" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="YPT-r2-Ar2"/>
                             <constraint firstAttribute="bottom" secondItem="1hH-Xz-DPg" secondAttribute="bottom" constant="155" id="hQz-yt-a9J"/>
                             <constraint firstItem="1hH-Xz-DPg" firstAttribute="leading" secondItem="cRF-7u-RwA" secondAttribute="leading" type="default" id="ie6-aa-wql"/>
-                            <constraint firstItem="m5i-c4-dPa" firstAttribute="top" secondItem="3" secondAttribute="top" constant="55" id="pjc-oc-gpm"/>
-                            <constraint firstItem="Tcl-zi-cSg" firstAttribute="top" secondItem="3" secondAttribute="top" constant="-2" id="y0Z-Cb-1Kb"/>
+                            <constraint firstAttribute="bottom" secondItem="cRF-7u-RwA" secondAttribute="bottom" constant="92" id="rBK-cM-oJK"/>
+                            <constraint firstItem="W3I-iE-fmE" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="tMp-Aa-p20"/>
                         </constraints>
                     </view>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
-                        <outlet property="tableView" destination="Tcl-zi-cSg" id="bXs-Eo-N54"/>
-                        <outlet property="tableViewPredictiveSearchResults" destination="m5i-c4-dPa" id="r8r-MJ-yCV"/>
+                        <outlet property="dummyLabel" destination="zk5-eF-EDD" id="dtP-3E-9ey"/>
+                        <outlet property="dummyView" destination="W3I-iE-fmE" id="CXO-U7-Fea"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
