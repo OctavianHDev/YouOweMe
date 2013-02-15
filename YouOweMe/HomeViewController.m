@@ -16,12 +16,22 @@
 
 @implementation HomeViewController
 
-@synthesize dummyView, dummyLabel;
+@synthesize gestureRecognitionView, predictiveSearchResults;
 @synthesize inputView;
 
 UIPanGestureRecognizer *panGestureRecognizer;
 
 
+
+#pragma mark - DebtorNameTextInput delegate
+
+-(void)textChangedTo:(NSString *)text{
+    self.predictiveSearchResults.hidden=NO;
+}
+
+-(void)cancelPressed{
+    [self hideInputView];
+}
 
 
 #pragma mark - gesture handlers
@@ -30,7 +40,6 @@ BOOL labelIsDown=NO;
 BOOL isAnimating=NO;
 BOOL actionTakenForGesture=NO;
 -(void)handlePan:(UIPanGestureRecognizer*)gesture{
-    UIView *piece = [gesture view];
     
     if ([gesture state] == UIGestureRecognizerStateBegan) {
         actionTakenForGesture=NO;
@@ -42,46 +51,49 @@ BOOL actionTakenForGesture=NO;
     
     if([gesture state] != UIGestureRecognizerStateEnded){
         CGPoint velocity = [gesture velocityInView:[gesture view]];
+        
+        //move the view to the top of the visible screen
         if(velocity.y>0 && !labelIsDown && !isAnimating && !actionTakenForGesture){
-            self.dummyLabel.frame = CGRectOffset(self.dummyLabel.frame, 0, velocity.y/80);
-            if(CGRectIntersectsRect(dummyLabel.bounds, self.view.frame)){
-                NSLog(@"I can see youuu...");
-                labelIsDown=YES;
-                isAnimating=YES;
-                //actionTakenForGesture=YES;
-                [UIView animateWithDuration:0.2f animations:^{
-                    self.dummyLabel.frame = CGRectMake(0, 0, self.dummyLabel.frame.size.width, self.dummyLabel.frame.size.height);
-                } completion:^(BOOL finished) {
-                    isAnimating=NO;
-                }];
+            self.inputView.frame = CGRectOffset(self.inputView.frame, 0, velocity.y/80);
+            if(CGRectIntersectsRect(inputView.bounds, self.view.frame)){
+                [self showInputView];
             }
         }
+        
+        //move the view up above the screen
         if(velocity.y<0 && labelIsDown && !isAnimating && !actionTakenForGesture){
-            labelIsDown=NO;
-            isAnimating=YES;
-            actionTakenForGesture=YES;
-            [UIView animateWithDuration:0.2f animations:^{
-                self.dummyLabel.frame = CGRectMake(0, -53, self.dummyLabel.frame.size.width, self.dummyLabel.frame.size.height);
-            } completion:^(BOOL finished) {
-                isAnimating=NO;
-            }];
-            
+            [self hideInputView];
         }
-        
     }
 }
 
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        UIView *piece = gestureRecognizer.view;
-        CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
-        
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width, locationInView.y / piece.bounds.size.height);
-        piece.center = locationInSuperview;
-    }
+
+
+#pragma mark - moving the input view
+
+-(void)showInputView{
+    labelIsDown=YES;
+    isAnimating=YES;
+    //actionTakenForGesture=YES;
+    [UIView animateWithDuration:0.2f animations:^{
+        self.inputView.frame = CGRectMake(0, 0, self.inputView.frame.size.width, self.inputView.frame.size.height);
+    } completion:^(BOOL finished) {
+        isAnimating=NO;
+    }];
 }
 
+-(void)hideInputView{
+    self.predictiveSearchResults.hidden=YES;
+    labelIsDown=NO;
+    isAnimating=YES;
+    actionTakenForGesture=YES;
+    [UIView animateWithDuration:0.2f animations:^{
+        self.inputView.frame = CGRectMake(0, -60, self.inputView.frame.size.width, self.inputView.frame.size.height);
+        [((DebtorNameTextInputView*)self.inputView) resetVisualComponents];
+    } completion:^(BOOL finished) {
+        isAnimating=NO;
+    }];
+}
 
 #pragma mark - Address book stuff
 
@@ -129,11 +141,11 @@ BOOL actionTakenForGesture=NO;
 	// Do any additional setup after loading the view.
     
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    [self.dummyView addGestureRecognizer:panGestureRecognizer];
+    [self.gestureRecognitionView addGestureRecognizer:panGestureRecognizer];
     
-    inputView.layer.shadowColor=[[UIColor blueColor] CGColor];
-    inputView.layer.shadowOpacity=0.8f;
-    inputView.layer.shadowRadius=5.0f;
+    self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
+    ((DebtorNameTextInputView*)self.inputView).delegate = self;
+    [self.view addSubview:self.inputView];
 }
 
 - (void)didReceiveMemoryWarning
@@ -141,6 +153,8 @@ BOOL actionTakenForGesture=NO;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 
 #pragma mark - delete me

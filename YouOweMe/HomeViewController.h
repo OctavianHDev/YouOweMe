@@ -8,14 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <AddressBookUI/AddressBookUI.h>
-#import "DebtorNameInputCellView.h"
+#import "DebtorNameTextInputView.h"
 
-@interface HomeViewController : UIViewController   <UIGestureRecognizerDelegate>
+@interface HomeViewController : UIViewController <DebtorNameTextInputDelegate>
 
-@property (nonatomic, strong) IBOutlet UIView *dummyView;
-@property (nonatomic, strong) IBOutlet UILabel *dummyLabel;
-@property (nonatomic, strong) IBOutlet UIView *inputView;
--(IBAction)resetPressed:(id)sender;
+@property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
+@property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
+@property (nonatomic, strong) UIView *inputView;
+
+
+
 -(IBAction)showPicker:(id)sender;
 
 @end

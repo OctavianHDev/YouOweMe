@@ -20,10 +20,10 @@
 		0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */; };
 		0E6BEFC416BDD5E60050541B /* PrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFC316BDD5E60050541B /* PrototypeViewController.m */; };
 		0E6BEFCC16BDD6A50050541B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFCB16BDD6A50050541B /* HomeViewController.m */; };
-		0EEAB57716C5A3620064E6B9 /* DebtorNameInputCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EEAB57616C5A3620064E6B9 /* DebtorNameInputCellView.xib */; };
-		0EEAB57A16C5A42E0064E6B9 /* DebtorNameInputCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEAB57916C5A42E0064E6B9 /* DebtorNameInputCellView.m */; };
 		0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */; };
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
+		0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */; };
+		0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,11 +79,11 @@
 		0E6BEFEB16BDDA290050541B /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
 		0E6BEFEC16BDDA290050541B /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		0E6BEFED16BDDA290050541B /* SVPullToRefresh.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SVPullToRefresh.podspec; sourceTree = "<group>"; };
-		0EEAB57616C5A3620064E6B9 /* DebtorNameInputCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebtorNameInputCellView.xib; sourceTree = "<group>"; };
-		0EEAB57816C5A42E0064E6B9 /* DebtorNameInputCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebtorNameInputCellView.h; sourceTree = "<group>"; };
-		0EEAB57916C5A42E0064E6B9 /* DebtorNameInputCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebtorNameInputCellView.m; sourceTree = "<group>"; };
 		0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BugGx.jpg; sourceTree = "<group>"; };
 		0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebtorNameTextInputView.h; sourceTree = "<group>"; };
+		0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebtorNameTextInputView.m; sourceTree = "<group>"; };
+		0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebtorNameTextInputView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +102,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E015C5616CEE8B7007190D8 /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
 		0E6BEF9816BDD5E60050541B = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +142,7 @@
 		0E6BEFAD16BDD5E60050541B /* YouOweMe */ = {
 			isa = PBXGroup;
 			children = (
+				0E015C5616CEE8B7007190D8 /* model */,
 				0E6BEFCE16BDD8E80050541B /* Dependencies */,
 				0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */,
 				0E6BEFCD16BDD6AC0050541B /* Controllers */,
@@ -245,9 +253,9 @@
 		0EEAB57016C59EF60064E6B9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0EEAB57616C5A3620064E6B9 /* DebtorNameInputCellView.xib */,
-				0EEAB57816C5A42E0064E6B9 /* DebtorNameInputCellView.h */,
-				0EEAB57916C5A42E0064E6B9 /* DebtorNameInputCellView.m */,
+				0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */,
+				0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */,
+				0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -333,8 +341,8 @@
 				0E6BEFBC16BDD5E60050541B /* Default@2x.png in Resources */,
 				0E6BEFBE16BDD5E60050541B /* Default-568h@2x.png in Resources */,
 				0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */,
-				0EEAB57716C5A3620064E6B9 /* DebtorNameInputCellView.xib in Resources */,
 				0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */,
+				0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,7 +357,7 @@
 				0E6BEFB816BDD5E60050541B /* PrototypeAppDelegate.m in Sources */,
 				0E6BEFC416BDD5E60050541B /* PrototypeViewController.m in Sources */,
 				0E6BEFCC16BDD6A50050541B /* HomeViewController.m in Sources */,
-				0EEAB57A16C5A42E0064E6B9 /* DebtorNameInputCellView.m in Sources */,
+				0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
