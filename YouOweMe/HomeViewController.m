@@ -9,17 +9,40 @@
 #import "HomeViewController.h"
 #import <AddressBook/AddressBook.h>
 #import <QuartzCore/QuartzCore.h>
+#import "PersonPredictiveSearchModel.h"
 
 @interface HomeViewController ()
+    @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
 @end
 
 
 @implementation HomeViewController
 
+
+#pragma mark - getters/setters/synthesizers
+
 @synthesize gestureRecognitionView, predictiveSearchResults;
 @synthesize inputView;
+@synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
+
+-(PersonPredictiveSearchModel*)predictiveSearchDataSource{
+    if(!_predictiveSearchDataSource)
+        _predictiveSearchDataSource = [[PersonPredictiveSearchModel alloc] initWithSourcesFacebook:NO andAddress:YES];
+    return _predictiveSearchDataSource;
+}
+
+
+
+
+
+#pragma mark - instance vars
 
 UIPanGestureRecognizer *panGestureRecognizer;
+
+
+
+
+#pragma mark - UITableView delegate
 
 
 
@@ -34,16 +57,15 @@ UIPanGestureRecognizer *panGestureRecognizer;
 }
 
 
+
+
 #pragma mark - gesture handlers
 
 BOOL labelIsDown=NO;
 BOOL isAnimating=NO;
-BOOL actionTakenForGesture=NO;
+
 -(void)handlePan:(UIPanGestureRecognizer*)gesture{
     
-    if ([gesture state] == UIGestureRecognizerStateBegan) {
-        actionTakenForGesture=NO;
-    }
     
     if([gesture state] == UIGestureRecognizerStateChanged){
         //NSLog(@"deletmeInt: %d", deletemeInt);
@@ -53,7 +75,7 @@ BOOL actionTakenForGesture=NO;
         CGPoint velocity = [gesture velocityInView:[gesture view]];
         
         //move the view to the top of the visible screen
-        if(velocity.y>0 && !labelIsDown && !isAnimating && !actionTakenForGesture){
+        if(velocity.y>0 && !labelIsDown && !isAnimating){
             self.inputView.frame = CGRectOffset(self.inputView.frame, 0, velocity.y/80);
             if(CGRectIntersectsRect(inputView.bounds, self.view.frame)){
                 [self showInputView];
@@ -61,11 +83,13 @@ BOOL actionTakenForGesture=NO;
         }
         
         //move the view up above the screen
-        if(velocity.y<0 && labelIsDown && !isAnimating && !actionTakenForGesture){
+        if(velocity.y<0 && labelIsDown && !isAnimating ){
             [self hideInputView];
         }
     }
 }
+
+
 
 
 
@@ -86,7 +110,6 @@ BOOL actionTakenForGesture=NO;
     self.predictiveSearchResults.hidden=YES;
     labelIsDown=NO;
     isAnimating=YES;
-    actionTakenForGesture=YES;
     [UIView animateWithDuration:0.2f animations:^{
         self.inputView.frame = CGRectMake(0, -60, self.inputView.frame.size.width, self.inputView.frame.size.height);
         [((DebtorNameTextInputView*)self.inputView) resetVisualComponents];
@@ -95,57 +118,29 @@ BOOL actionTakenForGesture=NO;
     }];
 }
 
-#pragma mark - Address book stuff
-
-- (IBAction)showPicker:(id)sender
-{
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    __block BOOL accessGranted = NO;
-    if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-            accessGranted = granted;
-            dispatch_semaphore_signal(sema);
-        });
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        dispatch_release(sema);
-    }
-    else { // we're on iOS 5 or older
-        accessGranted = YES;
-        NSLog(@"ios 5 or older, address book access granted");
-    }
-    
-    if (accessGranted) {
-        // Do whatever you want here.
-        NSLog(@"ios 6+, address book access granted");
-    }
-}
 
 
 
 
 #pragma mark - view lifeCycle
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    //gesture
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.gestureRecognitionView addGestureRecognizer:panGestureRecognizer];
     
+    //text input view
     self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
     ((DebtorNameTextInputView*)self.inputView).delegate = self;
     [self.view addSubview:self.inputView];
+    
+    //predictive search
+    self.predictiveSearchResults.dataSource = self.predictiveSearchDataSource;
+    self.predictiveSearchResults.delegate=self.predictiveSearchDataSource;
 }
 
 - (void)didReceiveMemoryWarning
@@ -155,11 +150,5 @@ BOOL actionTakenForGesture=NO;
 }
 
 
-
-
-#pragma mark - delete me
--(void)resetPressed:(id)sender{
-    
-}
 
 @end

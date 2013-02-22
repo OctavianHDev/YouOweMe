@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E015C5916CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */; };
 		0E14154316C5FEC100467BED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E14154216C5FEC100467BED /* QuartzCore.framework */; };
 		0E6BEFA816BDD5E60050541B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA716BDD5E60050541B /* UIKit.framework */; };
 		0E6BEFAA16BDD5E60050541B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA916BDD5E60050541B /* Foundation.framework */; };
@@ -20,6 +21,9 @@
 		0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */; };
 		0E6BEFC416BDD5E60050541B /* PrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFC316BDD5E60050541B /* PrototypeViewController.m */; };
 		0E6BEFCC16BDD6A50050541B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFCB16BDD6A50050541B /* HomeViewController.m */; };
+		0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */; };
+		0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */; };
+		0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */; };
 		0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */; };
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
 		0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */; };
@@ -37,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E015C5816CEEF4E007190D8 /* DebtEntityModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DebtEntityModel.xcdatamodel; sourceTree = "<group>"; };
 		0E14154216C5FEC100467BED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0E6BEFA316BDD5E60050541B /* YouOweMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouOweMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E6BEFA716BDD5E60050541B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -79,6 +84,11 @@
 		0E6BEFEB16BDDA290050541B /* UIScrollView+SVPullToRefresh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+SVPullToRefresh.h"; sourceTree = "<group>"; };
 		0E6BEFEC16BDDA290050541B /* UIScrollView+SVPullToRefresh.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+SVPullToRefresh.m"; sourceTree = "<group>"; };
 		0E6BEFED16BDDA290050541B /* SVPullToRefresh.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SVPullToRefresh.podspec; sourceTree = "<group>"; };
+		0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonPredictiveSearchModel.h; sourceTree = "<group>"; };
+		0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonPredictiveSearchModel.m; sourceTree = "<group>"; };
+		0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveSearchResult.h; sourceTree = "<group>"; };
+		0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictiveSearchResult.m; sourceTree = "<group>"; };
+		0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PredictiveSearchResult.xib; sourceTree = "<group>"; };
 		0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BugGx.jpg; sourceTree = "<group>"; };
 		0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebtorNameTextInputView.h; sourceTree = "<group>"; };
@@ -105,6 +115,9 @@
 		0E015C5616CEE8B7007190D8 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */,
+				0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */,
+				0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -256,6 +269,9 @@
 				0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */,
 				0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */,
 				0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */,
+				0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */,
+				0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */,
+				0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -343,6 +359,7 @@
 				0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */,
 				0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */,
 				0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */,
+				0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +375,9 @@
 				0E6BEFC416BDD5E60050541B /* PrototypeViewController.m in Sources */,
 				0E6BEFCC16BDD6A50050541B /* HomeViewController.m in Sources */,
 				0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */,
+				0E015C5916CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld in Sources */,
+				0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */,
+				0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,6 +515,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0E015C5816CEEF4E007190D8 /* DebtEntityModel.xcdatamodel */,
+			);
+			currentVersion = 0E015C5816CEEF4E007190D8 /* DebtEntityModel.xcdatamodel */;
+			path = DebtEntityModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 0E6BEF9A16BDD5E60050541B /* Project object */;
 }

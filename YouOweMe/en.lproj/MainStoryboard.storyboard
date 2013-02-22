@@ -16,6 +16,10 @@
                                 <rect key="frame" x="0.0" y="57" width="320" height="192"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="2" id="7Ya-PQ-eH0"/>
+                                    <outlet property="delegate" destination="2" id="gCs-Y0-QPY"/>
+                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="W3I-iE-fmE">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>

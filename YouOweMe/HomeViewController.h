@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AddressBookUI/AddressBookUI.h>
 #import "DebtorNameTextInputView.h"
 
-@interface HomeViewController : UIViewController <DebtorNameTextInputDelegate>
+@interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
 @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
