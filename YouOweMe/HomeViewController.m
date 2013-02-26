@@ -7,9 +7,7 @@
 //
 
 #import "HomeViewController.h"
-#import <AddressBook/AddressBook.h>
 #import <QuartzCore/QuartzCore.h>
-#import "PersonPredictiveSearchModel.h"
 
 @interface HomeViewController ()
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
@@ -42,7 +40,12 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 
 
-#pragma mark - UITableView delegate
+#pragma mark - PredictiveSearchDelegate delegate
+
+-(void)didSelectPerson:(Person*)person{
+    NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
+}
+
 
 
 
@@ -50,6 +53,8 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 -(void)textChangedTo:(NSString *)text{
     self.predictiveSearchResults.hidden=NO;
+    self.predictiveSearchResults.userInteractionEnabled=YES;
+    self.predictiveSearchDataSource.inputString = text;
 }
 
 -(void)cancelPressed{
@@ -139,8 +144,7 @@ BOOL isAnimating=NO;
     [self.view addSubview:self.inputView];
     
     //predictive search
-    self.predictiveSearchResults.dataSource = self.predictiveSearchDataSource;
-    self.predictiveSearchResults.delegate=self.predictiveSearchDataSource;
+    [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
 }
 
 - (void)didReceiveMemoryWarning

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DebtorNameTextInputView.h"
+#import "PersonPredictiveSearchModel.h"
 
-@interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate>
+@interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate, PredictiveSearchDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
 @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;

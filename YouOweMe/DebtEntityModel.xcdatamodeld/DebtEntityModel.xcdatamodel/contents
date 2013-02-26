@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="11G63" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Debt" syncable="YES">
+    <entity name="Debt" representedClassName="Debt" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="debtId" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,16 +8,17 @@
         <relationship name="personOwedTo" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" syncable="YES"/>
         <relationship name="personOwing" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="debts" inverseEntity="Person" syncable="YES"/>
     </entity>
-    <entity name="Person" syncable="YES">
+    <entity name="Person" representedClassName="Person" syncable="YES">
         <attribute name="addressBookId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="avatar" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="facebookId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="debts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Debt" inverseName="personOwing" inverseEntity="Debt" syncable="YES"/>
+        <relationship name="debts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Debt" syncable="YES"/>
     </entity>
     <elements>
         <element name="Debt" positionX="-252" positionY="282" width="126" height="135"/>
-        <element name="Person" positionX="27" positionY="297" width="128" height="135"/>
+        <element name="Person" positionX="27" positionY="297" width="128" height="150"/>
     </elements>
 </model>

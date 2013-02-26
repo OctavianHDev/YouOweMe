@@ -10,6 +10,7 @@
 
 @interface PredictiveSearchResult : UITableViewCell
 
-@property (nonatomic, strong) UILabel *lblName;
-
+@property (nonatomic, strong) IBOutlet UILabel *lblName;
+@property (nonatomic, strong) IBOutlet UIImageView *avatar;
+@property (nonatomic, strong) NSString *name;
 @end
