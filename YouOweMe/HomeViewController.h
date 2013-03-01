@@ -15,7 +15,7 @@
 @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
 @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
 @property (nonatomic, strong) UIView *inputView;
-
+@property (nonatomic, strong) UIManagedDocument *debtDatabase;
 
 
 -(IBAction)showPicker:(id)sender;

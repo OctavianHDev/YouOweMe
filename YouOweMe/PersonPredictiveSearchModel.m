@@ -9,7 +9,8 @@
 #import "PersonPredictiveSearchModel.h"
 #import <AddressBook/AddressBook.h>
 #import "PredictiveSearchResult.h"
-
+#import <QuartzCore/QuartzCore.h>
+#import "Person+Create.h"
 
 #define MAX_NUM_PREDICTIVE_ROWS_VISIBLE 3
 
@@ -32,6 +33,13 @@
 @synthesize filteredResults=_filteredResults;
 @synthesize tableViewWeAreManipulating;
 @synthesize delegate;
+
+
+#pragma mark - instance vars
+
+int calculatedCellHeight=0;
+int originalTableHeight=0;
+
 
 -(void)setFilteredResults:(NSArray *)filteredResults{
     _filteredResults = filteredResults;
@@ -58,13 +66,23 @@
             if(record){
                 NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue((__bridge ABRecordRef)(record),kABPersonFirstNameProperty);
                 //NSLog(@"filtering, looking at first name: %@", firstName);
-                if ([firstName hasPrefix:_inputString]){
+                if ([[firstName lowercaseString] hasPrefix:[_inputString lowercaseString]]){
                     result = YES;
                 }
             }
             return result;
         }];
-        self.filteredResults = [self.allAddressbookContacts filteredArrayUsingPredicate:predicate];
+        if([_inputString length]>0){
+            self.filteredResults = [[self.allAddressbookContacts filteredArrayUsingPredicate:predicate] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                NSString* name1 = (__bridge_transfer NSString*)ABRecordCopyValue((__bridge ABRecordRef)(obj1),kABPersonFirstNameProperty);
+                NSString* name2 =(__bridge_transfer NSString*)ABRecordCopyValue((__bridge ABRecordRef)(obj2),kABPersonFirstNameProperty);
+                return (NSComparisonResult)[name1 compare:name2];
+                
+            }];
+        }else{
+            self.filteredResults = [[NSArray alloc] init];
+        }
+            
     }
     
     //filter facebook results
@@ -85,15 +103,27 @@
 #pragma makr - table view delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    Person *p = [[Person alloc] init];
-    p.firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
-    p.lastName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
-    p.avatar = (__bridge_transfer NSData *) ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
-    [self.delegate didSelectPerson:p];
-}
+    NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
+    if(!firstName)
+        firstName = @"";
+    NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
+    if(!lastName)
+        lastName=@"";
+    NSData *avatar = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
+    if(!avatar)
+        avatar = [NSNull null]; //[[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+    NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]))] stringValue];
 
--(void)gestureRecognizerHandler:(id)gesture{
-    NSLog(@"HELLO!");
+    NSLog(@"first name is %@",firstName);
+    NSLog(@"last name is %@",lastName);
+    NSLog(@"record id is %@",recordId);
+    
+    NSDictionary *attributes = [[NSDictionary alloc]
+                                initWithObjects:
+                                [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
+                                [NSArray arrayWithObjects:@"firstName", "lastName", "avatar", "recordId", "source", nil]];
+    Person *p = [Person personWithAttributes:attributes inManagedObjectContext:<#(NSManagedObjectContext *)#>];
+    //[self.delegate didSelectPerson:p];
 }
 
 #pragma mark - table view data source
@@ -106,38 +136,36 @@
         cell = [[PredictiveSearchResult alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
+    NSString* firstname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
+    NSString* lastname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
+    NSString *name;
+    
+    if(lastname)
+        name = [[firstname stringByAppendingString:@" "] stringByAppendingString:lastname];
+    else
+        name = firstname;
     
     NSData  *imgData = (__bridge_transfer NSData *) ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
     if(imgData){
         [cell.avatar setImage:[UIImage imageWithData:imgData]];
+        cell.avatar.layer.borderColor = [[UIColor colorWithRed:53.0f/255.0f green:130.0f/255.0f blue:189.0f/255.0f alpha:1.0f] CGColor];
+        cell.avatar.layer.borderWidth = 0.0f;
     }else{
-        NSLog(@"there was no image for %@", firstName);
+        NSLog(@"there was no image for %@", name);
     }
+        
+    cell.name=name;
+    cell.lblName.textColor = [UIColor colorWithRed:53.0f/255.0f green:121.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
+    cell.lblName.layer.shadowColor = [[UIColor colorWithWhite:1.0f alpha:0.5f] CGColor];
+    cell.lblName.layer.shadowOpacity=1.0f;
+    cell.lblName.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+    cell.lblName.layer.shadowRadius=1;
     
-    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gestureRecognizerHandler)];
-    [cell addGestureRecognizer:tapr];
-    
-    cell.name=firstName;
     return cell;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    int numResults = self.filteredResults.count;
-    if(numResults<1)
-        self.tableViewWeAreManipulating.hidden=YES;
-    else{
-        self.tableViewWeAreManipulating.hidden=NO;
-        if(numResults<MAX_NUM_PREDICTIVE_ROWS_VISIBLE){
-            CGRect newTableFrame = CGRectMake(self.tableViewWeAreManipulating.frame.origin.x,
-                                          self.tableViewWeAreManipulating.frame.origin.y,
-                                          self.tableViewWeAreManipulating.frame.size.width,
-                                          numResults * [self tableView:self.tableViewWeAreManipulating heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]
-                                          );
-            self.tableViewWeAreManipulating.frame=newTableFrame;
-        }
-    }
-    return numResults;
+    return self.filteredResults.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -146,12 +174,14 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult"
-                                                             owner:self
-                                                           options:nil];
-    UITableViewCell *cell = [topLevelObjects objectAtIndex:0];
-
-    return cell.frame.size.height;
+    if(calculatedCellHeight<1){
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult"
+                                                                 owner:self
+                                                               options:nil];
+        UITableViewCell *cell = [topLevelObjects objectAtIndex:0];
+        calculatedCellHeight = cell.frame.size.height;
+    }
+    return calculatedCellHeight;
 }
 
 
@@ -206,7 +236,7 @@
     for (int i=0; i<numPeople;i++){
         ABRecordRef ref = CFArrayGetValueAtIndex(allPeople, i);
         NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(ref,kABPersonFirstNameProperty);
-        NSLog(@"setup addressbook: looking at first name: %@", firstName);
+        //NSLog(@"setup addressbook: looking at first name: %@", firstName);
     }
     
     self.allAddressbookContacts = (__bridge_transfer NSArray *)allPeople;

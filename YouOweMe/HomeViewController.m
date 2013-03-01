@@ -22,6 +22,8 @@
 @synthesize gestureRecognitionView, predictiveSearchResults;
 @synthesize inputView;
 @synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
+@synthesize debtDatabase = _debtDatabase;
+
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
     if(!_predictiveSearchDataSource)
@@ -55,6 +57,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
     self.predictiveSearchResults.hidden=NO;
     self.predictiveSearchResults.userInteractionEnabled=YES;
     self.predictiveSearchDataSource.inputString = text;
+    self.gestureRecognitionView.hidden=YES;
 }
 
 -(void)cancelPressed{
@@ -120,14 +123,50 @@ BOOL isAnimating=NO;
         [((DebtorNameTextInputView*)self.inputView) resetVisualComponents];
     } completion:^(BOOL finished) {
         isAnimating=NO;
+        if(self.gestureRecognitionView.hidden)
+            self.gestureRecognitionView.hidden=NO;
     }];
 }
 
 
 
+#pragma mark - coredata stuff
 
+-(void)setupFetchedResultsController{
+
+}
+
+-(void)useDocument{
+    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.debtDatabase.fileURL path]]){
+        [self.debtDatabase saveToURL:self.debtDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            [self setupFetchedResultsController];
+        }];
+    }else if (self.debtDatabase.documentState ==UIDocumentStateClosed){
+            [self setupFetchedResultsController];
+    }else if (self.debtDatabase.documentState ==UIDocumentStateNormal){
+            [self setupFetchedResultsController];
+    }
+    
+}
+
+
+-(void)setDebtDatabase:(UIManagedDocument *)debtDatabase{
+    _debtDatabase = debtDatabase;
+    [self useDocument];
+}
 
 #pragma mark - view lifeCycle
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    if(!self.debtDatabase){
+        NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+        url = [url URLByAppendingPathComponent:@"Default Debt Database"];
+        self.debtDatabase = [[UIManagedDocument alloc]initWithFileURL:url];
+        
+    }
+}
 
 - (void)viewDidLoad
 {
@@ -142,6 +181,7 @@ BOOL isAnimating=NO;
     self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
     ((DebtorNameTextInputView*)self.inputView).delegate = self;
     [self.view addSubview:self.inputView];
+    //[self.view insertSubview:self.inputView aboveSubview:self.predictiveSearchResults];
     
     //predictive search
     [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
