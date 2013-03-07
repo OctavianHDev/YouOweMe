@@ -11,6 +11,7 @@
 #import "PredictiveSearchResult.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Person+Create.h"
+#import "CoreDataDBManager.h"
 
 #define MAX_NUM_PREDICTIVE_ROWS_VISIBLE 3
 
@@ -20,6 +21,7 @@
     @property (nonatomic, strong) NSArray *filteredResults;
     @property (nonatomic, strong) NSArray *allAddressbookContacts;
     @property (nonatomic, strong) UITableView *tableViewWeAreManipulating;
+    @property (nonatomic, strong) NSManagedObjectContext *moc;
 @end
 
 
@@ -32,6 +34,7 @@
 @synthesize isUsingFacebook;
 @synthesize filteredResults=_filteredResults;
 @synthesize tableViewWeAreManipulating;
+@synthesize moc;
 @synthesize delegate;
 
 
@@ -110,8 +113,11 @@ int originalTableHeight=0;
     if(!lastName)
         lastName=@"";
     NSData *avatar = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
-    if(!avatar)
-        avatar = [NSNull null]; //[[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+    if(!avatar){
+        //avatar = [[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+        UIImage *defaultAvatar = [UIImage imageNamed:@"default-user-image.png"];
+        avatar = UIImagePNGRepresentation(defaultAvatar);
+    }
     NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]))] stringValue];
 
     NSLog(@"first name is %@",firstName);
@@ -121,9 +127,11 @@ int originalTableHeight=0;
     NSDictionary *attributes = [[NSDictionary alloc]
                                 initWithObjects:
                                 [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
-                                [NSArray arrayWithObjects:@"firstName", "lastName", "avatar", "recordId", "source", nil]];
-    Person *p = [Person personWithAttributes:attributes inManagedObjectContext:<#(NSManagedObjectContext *)#>];
-    //[self.delegate didSelectPerson:p];
+                                [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
+
+    Person *p = [[CoreDataDBManager initAndRetrieveSharedInstance] createPersonWithAttributes:attributes];
+
+    [self.delegate didSelectPerson:p];
 }
 
 #pragma mark - table view data source
@@ -152,6 +160,7 @@ int originalTableHeight=0;
         cell.avatar.layer.borderWidth = 0.0f;
     }else{
         NSLog(@"there was no image for %@", name);
+        [cell.avatar setImage:[UIImage imageNamed:@"default-user-image.png"]];
     }
         
     cell.name=name;
@@ -222,6 +231,7 @@ int originalTableHeight=0;
             NSLog(@"the user has previously denied access");
         }
     }
+    
     return self;
 }
 

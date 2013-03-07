@@ -8,9 +8,13 @@
 
 #import "HomeViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CoreDataDBManager.h"
+#import "PersonDetailView.h"
 
 @interface HomeViewController ()
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
+    @property (nonatomic, strong) UIView *overlayView;
+    @property (nonatomic, strong) PersonDetailView *personDetailView;
 @end
 
 
@@ -22,7 +26,8 @@
 @synthesize gestureRecognitionView, predictiveSearchResults;
 @synthesize inputView;
 @synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
-@synthesize debtDatabase = _debtDatabase;
+@synthesize overlayView;
+@synthesize personDetailView;
 
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
@@ -30,7 +35,6 @@
         _predictiveSearchDataSource = [[PersonPredictiveSearchModel alloc] initWithSourcesFacebook:NO andAddress:YES];
     return _predictiveSearchDataSource;
 }
-
 
 
 
@@ -45,7 +49,20 @@ UIPanGestureRecognizer *panGestureRecognizer;
 #pragma mark - PredictiveSearchDelegate delegate
 
 -(void)didSelectPerson:(Person*)person{
+    [self hideInputView];
     NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
+    
+    NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PersonDetailView"
+                                                             owner:self
+                                                           options:nil];
+    UIView *cell = [topLevelObjects objectAtIndex:0];
+    int calculatedHeight = cell.frame.size.height;
+    int calculatedWidth = cell.frame.size.width;
+    
+    self.personDetailView = [[PersonDetailView alloc] initWithFrame:CGRectMake(20, 20, calculatedWidth, calculatedHeight)];
+    self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
+    self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
+    [self.view addSubview:self.personDetailView];
 }
 
 
@@ -130,42 +147,27 @@ BOOL isAnimating=NO;
 
 
 
-#pragma mark - coredata stuff
 
--(void)setupFetchedResultsController{
+#pragma mark - coredata setup
 
-}
-
--(void)useDocument{
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[self.debtDatabase.fileURL path]]){
-        [self.debtDatabase saveToURL:self.debtDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-            [self setupFetchedResultsController];
-        }];
-    }else if (self.debtDatabase.documentState ==UIDocumentStateClosed){
-            [self setupFetchedResultsController];
-    }else if (self.debtDatabase.documentState ==UIDocumentStateNormal){
-            [self setupFetchedResultsController];
+-(void)setupContextForMembersWithNotification:(NSNotification *)notice{
+    [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
+    self.predictiveSearchDataSource.delegate = self;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    NSLog(@"CONTEXT IS NOT NIL!!!");
+    if(overlayView){
+        [overlayView removeFromSuperview];
     }
-    
 }
 
 
--(void)setDebtDatabase:(UIManagedDocument *)debtDatabase{
-    _debtDatabase = debtDatabase;
-    [self useDocument];
-}
+
+
 
 #pragma mark - view lifeCycle
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    
-    if(!self.debtDatabase){
-        NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-        url = [url URLByAppendingPathComponent:@"Default Debt Database"];
-        self.debtDatabase = [[UIManagedDocument alloc]initWithFileURL:url];
-        
-    }
 }
 
 - (void)viewDidLoad
@@ -184,7 +186,25 @@ BOOL isAnimating=NO;
     //[self.view insertSubview:self.inputView aboveSubview:self.predictiveSearchResults];
     
     //predictive search
-    [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
+    //if the doc pointing to the database has not been instantiated yet start listening for when it gets instantiated
+    //then setup the predictiveSearchDataSource (and any other members that need the context)
+    if(![[CoreDataDBManager initAndRetrieveSharedInstance] getContext]){
+        [[NSNotificationCenter defaultCenter] addObserver:self
+        selector:@selector(setupContextForMembersWithNotification:)
+        name:@"CONTEXT_IS_NOT_NIL" object:nil];
+        NSLog(@"CONTEXT IS NIL, LISTENING FOR NOTIFCATION");
+        
+        //display overlay to freeze app, so as to prevent faulty input
+        //
+        //TODO: MAKE A BETTER OVERLAY
+        //
+        self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
+        self.overlayView.backgroundColor = [UIColor blackColor];
+        self.overlayView.alpha=0.5;
+        [self.view addSubview:overlayView];
+    }else{
+        [self setupContextForMembersWithNotification:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning

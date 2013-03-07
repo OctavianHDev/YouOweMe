@@ -7,12 +7,17 @@
 //
 
 #import "PrototypeAppDelegate.h"
+#import "CoreDataDBManager.h"
 
 @implementation PrototypeAppDelegate
+
+
+#pragma mark - lifecycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [CoreDataDBManager initAndRetrieveSharedInstance];
     return YES;
 }
 							

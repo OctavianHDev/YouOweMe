@@ -24,6 +24,10 @@
 		0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */; };
 		0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */; };
 		0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */; };
+		0EDD23CB16E7FD71008F46E3 /* CoreDataDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDD23CA16E7FD71008F46E3 /* CoreDataDBManager.m */; };
+		0EDD23CE16E81188008F46E3 /* default-user-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EDD23CD16E81188008F46E3 /* default-user-image.png */; };
+		0EDD23D316E8152B008F46E3 /* PersonDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDD23D216E8152B008F46E3 /* PersonDetailView.m */; };
+		0EDD23D516E81545008F46E3 /* PersonDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EDD23D416E81545008F46E3 /* PersonDetailView.xib */; };
 		0EE6D05B16E1506E00F2856C /* Person+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE6D05A16E1506E00F2856C /* Person+Create.m */; };
 		0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */; };
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
@@ -62,6 +66,12 @@
 		0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveSearchResult.h; sourceTree = "<group>"; };
 		0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PredictiveSearchResult.m; sourceTree = "<group>"; };
 		0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PredictiveSearchResult.xib; sourceTree = "<group>"; };
+		0EDD23C916E7FD71008F46E3 /* CoreDataDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataDBManager.h; sourceTree = "<group>"; };
+		0EDD23CA16E7FD71008F46E3 /* CoreDataDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataDBManager.m; sourceTree = "<group>"; };
+		0EDD23CD16E81188008F46E3 /* default-user-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-user-image.png"; sourceTree = "<group>"; };
+		0EDD23D116E8152B008F46E3 /* PersonDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonDetailView.h; sourceTree = "<group>"; };
+		0EDD23D216E8152B008F46E3 /* PersonDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonDetailView.m; sourceTree = "<group>"; };
+		0EDD23D416E81545008F46E3 /* PersonDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PersonDetailView.xib; sourceTree = "<group>"; };
 		0EE6D05916E1506E00F2856C /* Person+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Person+Create.h"; sourceTree = "<group>"; };
 		0EE6D05A16E1506E00F2856C /* Person+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Person+Create.m"; sourceTree = "<group>"; };
 		0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BugGx.jpg; sourceTree = "<group>"; };
@@ -186,6 +196,9 @@
 				0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */,
 				0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */,
 				0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */,
+				0EDD23D116E8152B008F46E3 /* PersonDetailView.h */,
+				0EDD23D216E8152B008F46E3 /* PersonDetailView.m */,
+				0EDD23D416E81545008F46E3 /* PersonDetailView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -193,6 +206,7 @@
 		0EEAB57B16C5BC410064E6B9 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				0EDD23CD16E81188008F46E3 /* default-user-image.png */,
 				0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */,
 				0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */,
 			);
@@ -218,6 +232,8 @@
 				0EEE22F716DD5BCF001A23D2 /* Person.m */,
 				0EEE22F316DD5BCF001A23D2 /* Debt.h */,
 				0EEE22F416DD5BCF001A23D2 /* Debt.m */,
+				0EDD23C916E7FD71008F46E3 /* CoreDataDBManager.h */,
+				0EDD23CA16E7FD71008F46E3 /* CoreDataDBManager.m */,
 			);
 			name = "core data";
 			sourceTree = "<group>";
@@ -283,6 +299,8 @@
 				0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */,
 				0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */,
 				0EEB87C316E00775002E2352 /* predictiveSearchBkg.png in Resources */,
+				0EDD23CE16E81188008F46E3 /* default-user-image.png in Resources */,
+				0EDD23D516E81545008F46E3 /* PersonDetailView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +323,8 @@
 				0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */,
 				0EEB87C716E00D34002E2352 /* ImageCache.m in Sources */,
 				0EE6D05B16E1506E00F2856C /* Person+Create.m in Sources */,
+				0EDD23CB16E7FD71008F46E3 /* CoreDataDBManager.m in Sources */,
+				0EDD23D316E8152B008F46E3 /* PersonDetailView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
