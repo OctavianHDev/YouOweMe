@@ -11,9 +11,10 @@
 
 @interface CoreDataDBManager : NSObject
 
+@property (readonly) NSManagedObjectContext *context;
+
 + (id)initAndRetrieveSharedInstance;
--(NSManagedObjectContext*)getContext;
 -(void)saveDB;
--(Person *)createPersonWithAttributes:(NSDictionary *)attributes;
--(Person *)getPersonWithId:(NSString*)uniqueId fromSource:(NSString *)source;
+-(Person *)personWithAttributes:(NSDictionary *)attributes;
+-(Person *)getPersonWithId:(NSString*)uniqueId inSource:(NSString*)source;
 @end

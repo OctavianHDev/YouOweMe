@@ -20,6 +20,10 @@
     NSError *error = nil;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
+    if([[attributes objectForKey:@"firstName"] isEqualToString:@"Alina"]){
+        NSLog(@"here");
+    }
+    
     if(!matches || matches.count>1){
         NSLog(@"!matches || matches.count>1");
     }else if(![matches count]){
@@ -39,25 +43,32 @@
     return person;
 }
 
-+(Person*)personFromId:(NSString*)uniqueId andSource:(NSString*)source inManagedObjectContext:(NSManagedObjectContext*)context{
++(Person*)personWithId:(NSString*)uniqueId inSource:(NSString*)source
+inManagedObjectContext:(NSManagedObjectContext*)context{
     Person *person = nil;
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Person"];
     if([source isEqualToString:SOURCE_ADDRESSBOOK]){
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Person"];
         request.predicate = [NSPredicate predicateWithFormat:@"addressBookId = %@", uniqueId];
-        NSError *error = nil;
-        NSArray *matches = [context executeFetchRequest:request error:&error];
-        
-        if(!matches || matches.count>1){
-            NSLog(@"!matches || matches.count>1");
-        }else if(![matches count]){
-            NSLog(@"no matches found");
-        }else{
-            person = [matches lastObject];
-        }
-        
+    }else if([source isEqualToString:SOURCE_FACEBOOK]){
+        request.predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", uniqueId];
+    }
+    
+    NSError *error = nil;
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    if(!matches || matches.count>1){
+        if(error)
+            NSLog(@"error: %@", [error description]);
+        NSLog(@"matches error or more than one match returned");
+    }else if(![matches count]){
+        NSLog(@"error, record %@ in %@ not found!!", uniqueId, source);
+    }else{
+        person = [matches lastObject];
     }
     
     return person;
 }
+
+
 
 @end

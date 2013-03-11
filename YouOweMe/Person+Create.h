@@ -12,8 +12,7 @@
 
 +(Person*)personWithAttributes:(NSDictionary*)attributes
         inManagedObjectContext:(NSManagedObjectContext*)context;
-+(Person*)personFromId:(NSString*)uniqueId
-             andSource:(NSString*)source
-inManagedObjectContext:(NSManagedObjectContext*)context;
++(Person*)personWithId:(NSString*)uniqueId inSource:(NSString*)source
+        inManagedObjectContext:(NSManagedObjectContext*)context;
 
 @end

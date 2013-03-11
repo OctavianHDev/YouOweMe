@@ -19,4 +19,5 @@
 @property (nonatomic, strong) NSString *uniqueIdSource;
 @property (nonatomic, weak) id<PredictiveSearchDelegate> delegate;
 
+
 @end

@@ -50,8 +50,36 @@ int originalTableHeight=0;
 -(void)setFilteredResults:(NSArray *)filteredResults{
     _filteredResults = filteredResults;
     for(int i=0;i<_filteredResults.count;i++){
-        NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([_filteredResults objectAtIndex:i]),kABPersonFirstNameProperty);
-        NSLog(@"filtered first name is: %@", firstName);
+       // NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([_filteredResults objectAtIndex:i]),kABPersonFirstNameProperty);
+       // NSLog(@"filtered first name is: %@", firstName);
+        
+            ABRecordRef ref = CFArrayGetValueAtIndex((__bridge CFArrayRef)(_filteredResults), i);
+            NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(ref,kABPersonFirstNameProperty);
+            if(!firstName)
+                firstName = @"";
+            NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(ref,kABPersonLastNameProperty);
+            if(!lastName)
+                lastName=@"";
+            NSData *avatar = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat(ref, kABPersonImageFormatThumbnail);
+            if(!avatar){
+                //avatar = [[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+                UIImage *defaultAvatar = [UIImage imageNamed:@"default-user-image.png"];
+                avatar = UIImagePNGRepresentation(defaultAvatar);
+            }
+            
+            NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID(ref)] stringValue];
+            
+            NSLog(@"first name is %@",firstName);
+            NSLog(@"last name is %@",lastName);
+            NSLog(@"record id is %@",recordId);
+            
+            NSDictionary *attributes = [[NSDictionary alloc]
+                                        initWithObjects:
+                                        [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
+                                        [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
+            
+            [[CoreDataDBManager initAndRetrieveSharedInstance] personWithAttributes:attributes];
+        
     }
     [self.tableViewWeAreManipulating reloadData];
 }
@@ -111,7 +139,7 @@ int originalTableHeight=0;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     NSLog(@"did select row at index path");
-    return;
+    //return;
     
     NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
     if(!firstName)
@@ -136,7 +164,7 @@ int originalTableHeight=0;
                                 [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
                                 [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
 
-    Person *p = [[CoreDataDBManager initAndRetrieveSharedInstance] createPersonWithAttributes:attributes];
+    Person *p = [[CoreDataDBManager initAndRetrieveSharedInstance] personWithAttributes:attributes];
 
     [self.delegate didSelectPerson:p];
 }
@@ -151,15 +179,9 @@ int originalTableHeight=0;
         cell = [[PredictiveSearchResult alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    NSString* firstname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
-    NSString* lastname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
     NSString *name;
     NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]))] stringValue];
     
-    if(lastname)
-        name = [[firstname stringByAppendingString:@" "] stringByAppendingString:lastname];
-    else
-        name = firstname;
     
     NSData  *imgData = (__bridge_transfer NSData *) ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
     if(imgData){
@@ -170,7 +192,33 @@ int originalTableHeight=0;
         NSLog(@"there was no image for %@", name);
         [cell.avatar setImage:[UIImage imageNamed:@"default-user-image.png"]];
     }
-        
+    
+    NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
+    if(!firstName)
+        firstName = @"";
+    NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
+    if(!lastName)
+        lastName=@"";
+    if(lastName)
+        name = [[firstName stringByAppendingString:@" "] stringByAppendingString:lastName];
+    else
+        name = firstName;
+    NSData *avatar = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]), kABPersonImageFormatThumbnail);
+    if(!avatar){
+        //avatar = [[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+        UIImage *defaultAvatar = [UIImage imageNamed:@"default-user-image.png"];
+        avatar = UIImagePNGRepresentation(defaultAvatar);
+    }
+    
+    NSLog(@"first name is %@",firstName);
+    NSLog(@"last name is %@",lastName);
+    NSLog(@"record id is %@",recordId);
+    
+    NSDictionary *attributes = [[NSDictionary alloc]
+                                initWithObjects:
+                                [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
+                                [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
+    
     cell.name=name;
     //cell.lblName.textColor = [UIColor colorWithRed:53.0f/255.0f green:121.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
 
@@ -259,12 +307,6 @@ int originalTableHeight=0;
     ABAddressBookRef *addressBook = ABAddressBookCreate();
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
     CFIndex numPeople = ABAddressBookGetPersonCount(addressBook);
-    
-    for (int i=0; i<numPeople;i++){
-        ABRecordRef ref = CFArrayGetValueAtIndex(allPeople, i);
-        NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(ref,kABPersonFirstNameProperty);
-        //NSLog(@"setup addressbook: looking at first name: %@", firstName);
-    }
     
     self.allAddressbookContacts = (__bridge_transfer NSArray *)allPeople;
 }

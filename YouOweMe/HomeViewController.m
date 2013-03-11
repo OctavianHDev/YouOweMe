@@ -69,7 +69,9 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 -(void)addPaymentForPerson:(Person *)person{}
 
--(void)addDebtForPerson:(Person *)person{}
+-(void)addDebtForPerson:(Person *)person{
+    NSLog(@"adding debt for: %@", person.firstName);
+}
 
 
 #pragma mark - DebtorNameTextInput delegate
@@ -154,7 +156,7 @@ BOOL isAnimating=NO;
 
 #pragma mark - coredata setup
 
--(void)setupContextForMembersWithNotification:(NSNotification *)notice{
+-(void)setupContext{
     [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
     self.predictiveSearchDataSource.delegate = self;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -192,25 +194,11 @@ BOOL isAnimating=NO;
     //predictive search
     //if the doc pointing to the database has not been instantiated yet start listening for when it gets instantiated
     //then setup the predictiveSearchDataSource (and any other members that need the context)
-    if(![[CoreDataDBManager initAndRetrieveSharedInstance] getContext]){
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(setupContextForMembersWithNotification:)
-                                                     name:@"CONTEXT_IS_NOT_NIL"
-                                                   object:nil];
-        
-        NSLog(@"CONTEXT IS NIL, LISTENING FOR NOTIFCATION");
-        
-        //display overlay to freeze app, so as to prevent faulty input
-        //
-        //TODO: MAKE A BETTER OVERLAY
-        //
-        self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
-        self.overlayView.backgroundColor = [UIColor blackColor];
-        self.overlayView.alpha=0.5;
-        [self.view addSubview:overlayView];
+    if(![[CoreDataDBManager initAndRetrieveSharedInstance] context]){
+        //TODO: better error handling here
+        NSLog(@"ERROR, context is nil! BAD!");
     }else{
-        [self setupContextForMembersWithNotification:nil];
+        [self setupContext];
     }
 }
 

@@ -72,6 +72,7 @@ UIView *bkgViewLeftSwipeIndicator;
 }
 
 -(void)maybeBringUpDebtView{
+
     if(bkgViewLeftSwipeIndicator.alpha>ALPHA_FOR_SELECTION){
         [UIView beginAnimations:nil context:NULL];
         
@@ -81,12 +82,12 @@ UIView *bkgViewLeftSwipeIndicator;
     //if(movedEnoughToRight){
     if(bkgViewRightSwipeIndicator.alpha>ALPHA_FOR_SELECTION){
         [UIView beginAnimations:nil context:NULL];
-        [self.delegate addDebtForPerson:[[CoreDataDBManager initAndRetrieveSharedInstance]
-                                            getPersonWithId:self.uniqueId
-                                            fromSource:self.uniqueIdSource]
+        [self.delegate addDebtForPerson:
+            [[CoreDataDBManager initAndRetrieveSharedInstance] getPersonWithId:self.uniqueId inSource:self.uniqueIdSource]
         ];
         [UIView commitAnimations];
     }
+    
     
     [UIView animateWithDuration:0.2 animations:^{
         bkgViewRightSwipeIndicator.alpha=0;
