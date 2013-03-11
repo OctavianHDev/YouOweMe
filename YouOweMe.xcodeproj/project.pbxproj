@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0E015C5916CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */; };
+		0E114B3716EE69770021DB61 /* LeftSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */; };
+		0E114B3A16EE6AA10021DB61 /* checkmark-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3916EE6AA10021DB61 /* checkmark-24.png */; };
+		0E114B3C16EE6B730021DB61 /* RightSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */; };
 		0E14154316C5FEC100467BED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E14154216C5FEC100467BED /* QuartzCore.framework */; };
 		0E6BEFA816BDD5E60050541B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA716BDD5E60050541B /* UIKit.framework */; };
 		0E6BEFAA16BDD5E60050541B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA916BDD5E60050541B /* Foundation.framework */; };
@@ -32,7 +35,6 @@
 		0EEAB57D16C5BC7E0064E6B9 /* BugGx.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */; };
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
 		0EEB87C316E00775002E2352 /* predictiveSearchBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */; };
-		0EEB87C716E00D34002E2352 /* ImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEB87C616E00D34002E2352 /* ImageCache.m */; };
 		0EEE22F516DD5BCF001A23D2 /* Debt.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F416DD5BCF001A23D2 /* Debt.m */; };
 		0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F716DD5BCF001A23D2 /* Person.m */; };
 		0EEE22FA16DD5DAD001A23D2 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEE22F916DD5DAD001A23D2 /* CoreData.framework */; };
@@ -42,6 +44,10 @@
 
 /* Begin PBXFileReference section */
 		0E015C5816CEEF4E007190D8 /* DebtEntityModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DebtEntityModel.xcdatamodel; sourceTree = "<group>"; };
+		0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftSwipeIndicator.xib; sourceTree = "<group>"; };
+		0E114B3916EE6AA10021DB61 /* checkmark-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark-24.png"; sourceTree = "<group>"; };
+		0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightSwipeIndicator.xib; sourceTree = "<group>"; };
+		0E114B3D16EE7CBC0021DB61 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		0E14154216C5FEC100467BED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0E6BEFA316BDD5E60050541B /* YouOweMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouOweMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E6BEFA716BDD5E60050541B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -77,8 +83,6 @@
 		0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = BugGx.jpg; sourceTree = "<group>"; };
 		0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = predictiveSearchBkg.png; path = ../../../../../Desktop/projects/youOweMe/predictiveSearchBkg.png; sourceTree = "<group>"; };
-		0EEB87C516E00D34002E2352 /* ImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache.h; sourceTree = "<group>"; };
-		0EEB87C616E00D34002E2352 /* ImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCache.m; sourceTree = "<group>"; };
 		0EEE22F316DD5BCF001A23D2 /* Debt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debt.h; sourceTree = "<group>"; };
 		0EEE22F416DD5BCF001A23D2 /* Debt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debt.m; sourceTree = "<group>"; };
 		0EEE22F616DD5BCF001A23D2 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
@@ -149,7 +153,7 @@
 		0E6BEFAD16BDD5E60050541B /* YouOweMe */ = {
 			isa = PBXGroup;
 			children = (
-				0EF3495E16DEDC0900AC300B /* utils */,
+				0E114B3D16EE7CBC0021DB61 /* Constants.h */,
 				0E015C5616CEE8B7007190D8 /* model */,
 				0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */,
 				0E6BEFCD16BDD6AC0050541B /* Controllers */,
@@ -196,9 +200,11 @@
 				0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */,
 				0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */,
 				0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */,
+				0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */,
 				0EDD23D116E8152B008F46E3 /* PersonDetailView.h */,
 				0EDD23D216E8152B008F46E3 /* PersonDetailView.m */,
 				0EDD23D416E81545008F46E3 /* PersonDetailView.xib */,
+				0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -206,20 +212,12 @@
 		0EEAB57B16C5BC410064E6B9 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				0E114B3916EE6AA10021DB61 /* checkmark-24.png */,
 				0EDD23CD16E81188008F46E3 /* default-user-image.png */,
 				0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */,
 				0EEAB57C16C5BC7E0064E6B9 /* BugGx.jpg */,
 			);
 			name = assets;
-			sourceTree = "<group>";
-		};
-		0EF3495E16DEDC0900AC300B /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				0EEB87C516E00D34002E2352 /* ImageCache.h */,
-				0EEB87C616E00D34002E2352 /* ImageCache.m */,
-			);
-			name = utils;
 			sourceTree = "<group>";
 		};
 		0EF3495F16DEDC1C00AC300B /* core data */ = {
@@ -301,6 +299,9 @@
 				0EEB87C316E00775002E2352 /* predictiveSearchBkg.png in Resources */,
 				0EDD23CE16E81188008F46E3 /* default-user-image.png in Resources */,
 				0EDD23D516E81545008F46E3 /* PersonDetailView.xib in Resources */,
+				0E114B3716EE69770021DB61 /* LeftSwipeIndicator.xib in Resources */,
+				0E114B3A16EE6AA10021DB61 /* checkmark-24.png in Resources */,
+				0E114B3C16EE6B730021DB61 /* RightSwipeIndicator.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,7 +322,6 @@
 				0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */,
 				0EEE22F516DD5BCF001A23D2 /* Debt.m in Sources */,
 				0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */,
-				0EEB87C716E00D34002E2352 /* ImageCache.m in Sources */,
 				0EE6D05B16E1506E00F2856C /* Person+Create.m in Sources */,
 				0EDD23CB16E7FD71008F46E3 /* CoreDataDBManager.m in Sources */,
 				0EDD23D316E8152B008F46E3 /* PersonDetailView.m in Sources */,

@@ -11,6 +11,8 @@
 
 @protocol PredictiveSearchDelegate <NSObject>
     -(void)didSelectPerson:(Person*)person;
+    -(void)addDebtForPerson:(Person*)person;
+    -(void)addPaymentForPerson:(Person*)person;
 @end
 
 @interface PersonPredictiveSearchModel : NSObject  <UITableViewDataSource,

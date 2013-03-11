@@ -10,6 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "CoreDataDBManager.h"
 #import "PersonDetailView.h"
+#import "PrototypeAppDelegate.h"
 
 @interface HomeViewController ()
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
@@ -29,10 +30,11 @@
 @synthesize overlayView;
 @synthesize personDetailView;
 
-
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
     if(!_predictiveSearchDataSource)
-        _predictiveSearchDataSource = [[PersonPredictiveSearchModel alloc] initWithSourcesFacebook:NO andAddress:YES];
+        _predictiveSearchDataSource = [[PersonPredictiveSearchModel alloc]
+                                       initWithSourcesFacebook:((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook
+                                       andAddress:((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingAddressBook];
     return _predictiveSearchDataSource;
 }
 
@@ -65,7 +67,9 @@ UIPanGestureRecognizer *panGestureRecognizer;
     [self.view addSubview:self.personDetailView];
 }
 
+-(void)addPaymentForPerson:(Person *)person{}
 
+-(void)addDebtForPerson:(Person *)person{}
 
 
 #pragma mark - DebtorNameTextInput delegate
@@ -174,24 +178,27 @@ BOOL isAnimating=NO;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
-    //gesture
+        
+    //gesture to swipe in text input for predictive search
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.gestureRecognitionView addGestureRecognizer:panGestureRecognizer];
     
-    //text input view
+    //text input view for predictive search
     self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
     ((DebtorNameTextInputView*)self.inputView).delegate = self;
     [self.view addSubview:self.inputView];
-    //[self.view insertSubview:self.inputView aboveSubview:self.predictiveSearchResults];
+
     
     //predictive search
     //if the doc pointing to the database has not been instantiated yet start listening for when it gets instantiated
     //then setup the predictiveSearchDataSource (and any other members that need the context)
     if(![[CoreDataDBManager initAndRetrieveSharedInstance] getContext]){
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(setupContextForMembersWithNotification:)
-        name:@"CONTEXT_IS_NOT_NIL" object:nil];
+                                                 selector:@selector(setupContextForMembersWithNotification:)
+                                                     name:@"CONTEXT_IS_NOT_NIL"
+                                                   object:nil];
+        
         NSLog(@"CONTEXT IS NIL, LISTENING FOR NOTIFCATION");
         
         //display overlay to freeze app, so as to prevent faulty input

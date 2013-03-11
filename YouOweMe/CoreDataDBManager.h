@@ -13,6 +13,7 @@
 
 + (id)initAndRetrieveSharedInstance;
 -(NSManagedObjectContext*)getContext;
+-(void)saveDB;
 -(Person *)createPersonWithAttributes:(NSDictionary *)attributes;
-
+-(Person *)getPersonWithId:(NSString*)uniqueId fromSource:(NSString *)source;
 @end

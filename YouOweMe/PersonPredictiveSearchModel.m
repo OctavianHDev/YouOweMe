@@ -12,6 +12,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Person+Create.h"
 #import "CoreDataDBManager.h"
+#import "Constants.h"
+
 
 #define MAX_NUM_PREDICTIVE_ROWS_VISIBLE 3
 
@@ -43,6 +45,7 @@
 int calculatedCellHeight=0;
 int originalTableHeight=0;
 
+#pragma mark - getters & setters
 
 -(void)setFilteredResults:(NSArray *)filteredResults{
     _filteredResults = filteredResults;
@@ -98,14 +101,18 @@ int originalTableHeight=0;
 -(void)setAsDataSourceAndDelegateFor:(UITableView*)tableView{
     self.tableViewWeAreManipulating = tableView;
     self.tableViewWeAreManipulating.userInteractionEnabled=YES;
+    self.tableViewWeAreManipulating.canCancelContentTouches=NO;
     self.tableViewWeAreManipulating.dataSource = self;
     self.tableViewWeAreManipulating.delegate = self;
 }
 
-
-#pragma makr - table view delegate
+#pragma mark - table view delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    NSLog(@"did select row at index path");
+    return;
+    
     NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
     if(!firstName)
         firstName = @"";
@@ -147,6 +154,7 @@ int originalTableHeight=0;
     NSString* firstname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
     NSString* lastname = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
     NSString *name;
+    NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]))] stringValue];
     
     if(lastname)
         name = [[firstname stringByAppendingString:@" "] stringByAppendingString:lastname];
@@ -164,11 +172,18 @@ int originalTableHeight=0;
     }
         
     cell.name=name;
-    cell.lblName.textColor = [UIColor colorWithRed:53.0f/255.0f green:121.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
+    //cell.lblName.textColor = [UIColor colorWithRed:53.0f/255.0f green:121.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
+
     cell.lblName.layer.shadowColor = [[UIColor colorWithWhite:1.0f alpha:0.5f] CGColor];
     cell.lblName.layer.shadowOpacity=1.0f;
     cell.lblName.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     cell.lblName.layer.shadowRadius=1;
+    
+    cell.uniqueId = recordId;
+    cell.uniqueIdSource = SOURCE_ADDRESSBOOK;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.delegate = self.delegate;
+    //cell.parentTableView=tableView;
     
     return cell;
 }
@@ -202,6 +217,7 @@ int originalTableHeight=0;
     if(!self) return nil;
     
     self.filteredResults = [[NSArray alloc] init];
+    NSLog(@"facebook: %d, addressbook:%d", facebookOn, addressOn);
     
     if(facebookOn){
         //initialise facebook
@@ -228,6 +244,7 @@ int originalTableHeight=0;
         else {
             // The user has previously denied access
             // Send an alert telling user to change privacy setting in settings app
+            //TODO: alert the user
             NSLog(@"the user has previously denied access");
         }
     }

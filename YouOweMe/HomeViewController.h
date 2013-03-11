@@ -16,6 +16,4 @@
 @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
 @property (nonatomic, strong) UIView *inputView;
 
--(IBAction)showPicker:(id)sender;
-
 @end

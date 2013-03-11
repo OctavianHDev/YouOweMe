@@ -11,5 +11,8 @@
 @interface PrototypeAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) BOOL isUsingAddressBook;
+@property (nonatomic) BOOL isUsingFacebook;
+
 
 @end
