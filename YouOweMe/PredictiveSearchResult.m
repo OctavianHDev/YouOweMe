@@ -21,11 +21,13 @@
 @synthesize uniqueId;
 @synthesize uniqueIdSource;
 @synthesize delegate;
+@synthesize person;
 
 //ivars
 CGPoint startTouchPoint;
 UIView *bkgViewRightSwipeIndicator;
 UIView *bkgViewLeftSwipeIndicator;
+BOOL isShowingOverlayView;
 //used for gesturepanrecognizer method
 //int firstX;
 //int firstY;
@@ -55,6 +57,9 @@ UIView *bkgViewLeftSwipeIndicator;
 
     [self addSubview:bkgViewLeftSwipeIndicator];
     [self addSubview:bkgViewRightSwipeIndicator];
+    
+    isShowingOverlayView = NO;
+    
     [super touchesBegan:touches withEvent:event];
 }
 
@@ -80,11 +85,13 @@ UIView *bkgViewLeftSwipeIndicator;
     }
     
     //if(movedEnoughToRight){
-    if(bkgViewRightSwipeIndicator.alpha>ALPHA_FOR_SELECTION){
+    if(bkgViewRightSwipeIndicator.alpha>ALPHA_FOR_SELECTION && !isShowingOverlayView){
+        isShowingOverlayView = YES;
         [UIView beginAnimations:nil context:NULL];
-        [self.delegate addDebtForPerson:
+        /*[self.delegate addDebtForPerson:
             [[CoreDataDBManager initAndRetrieveSharedInstance] getPersonWithId:self.uniqueId inSource:self.uniqueIdSource]
-        ];
+        ];*/
+        [self.delegate addDebtForPerson:self.person];
         [UIView commitAnimations];
     }
     
@@ -116,8 +123,22 @@ UIView *bkgViewLeftSwipeIndicator;
     
     if(touchDx>0 && bkgViewLeftSwipeIndicator.alpha<0.1){
         float newAlpha = MIN(touchDx,200)/200.0f;
+        
+        /*bkgViewLeftSwipeIndicator.frame = CGRectMake(
+                                                     bkgViewLeftSwipeIndicator.frame.origin.x,
+                                                     bkgViewLeftSwipeIndicator.frame.origin.y-touchDx,
+                                                     bkgViewLeftSwipeIndicator.frame.size.width,
+                                                     bkgViewLeftSwipeIndicator.frame.size.height+touchDx*2);
+        NSLog(@"changing y: %f", bkgViewLeftSwipeIndicator.frame.origin.y-touchDx);
+        NSLog(@"changing height: %f", bkgViewLeftSwipeIndicator.frame.size.height+touchDx*2);
+        */
+        
         NSLog(@"newAlpha (for right swipe): %f", newAlpha);
         bkgViewRightSwipeIndicator.alpha = newAlpha;
+        if(newAlpha>=1){
+            [self maybeBringUpDebtView];
+            [self touchesCancelled:nil withEvent:nil];
+        }
     }
     
     if(touchDx<0 && bkgViewRightSwipeIndicator.alpha<0.1){

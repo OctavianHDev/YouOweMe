@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PersonPredictiveSearchModel.h"
+#import "Person.h"
 
 @interface PredictiveSearchResult : UITableViewCell
 
@@ -18,6 +19,6 @@
 @property (nonatomic, strong) NSString *uniqueId;
 @property (nonatomic, strong) NSString *uniqueIdSource;
 @property (nonatomic, weak) id<PredictiveSearchDelegate> delegate;
-
+@property (nonatomic, strong) Person *person;
 
 @end

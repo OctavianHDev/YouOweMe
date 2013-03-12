@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/PersonPredictiveSearchModel.m"
-         timestampString = "384736389.988283"
+         timestampString = "384803915.628364"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "167"
-         endingLineNumber = "167"
+         startingLineNumber = "169"
+         endingLineNumber = "169"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -21,11 +21,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/HomeViewController.m"
-         timestampString = "384582182.998447"
+         timestampString = "384810222.029985"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
+         startingLineNumber = "58"
+         endingLineNumber = "58"
          landmarkName = "-didSelectPerson:"
          landmarkType = "5">
       </FileBreakpoint>

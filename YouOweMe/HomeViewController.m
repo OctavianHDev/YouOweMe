@@ -11,11 +11,13 @@
 #import "CoreDataDBManager.h"
 #import "PersonDetailView.h"
 #import "PrototypeAppDelegate.h"
+#import "DebtAddingView.h"
 
 @interface HomeViewController ()
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
     @property (nonatomic, strong) UIView *overlayView;
     @property (nonatomic, strong) PersonDetailView *personDetailView;
+    @property (nonatomic, strong) DebtAddingView *debtAddingView;
 @end
 
 
@@ -29,6 +31,7 @@
 @synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
 @synthesize overlayView;
 @synthesize personDetailView;
+@synthesize debtAddingView;
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
     if(!_predictiveSearchDataSource)
@@ -48,7 +51,8 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 
 
-#pragma mark - PredictiveSearchDelegate delegate
+#pragma mark - PredictiveSearchDelegate DELEGATE
+#pragma mark -
 
 -(void)didSelectPerson:(Person*)person{
     [self hideInputView];
@@ -71,7 +75,54 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 -(void)addDebtForPerson:(Person *)person{
     NSLog(@"adding debt for: %@", person.firstName);
+
+    [self.inputView.textField resignFirstResponder];
+
+    /*//add overlay
+    self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
+    self.overlayView.backgroundColor = [UIColor blackColor];
+    self.overlayView.alpha=0.5;
+    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
+    [self.overlayView addGestureRecognizer:tapr];
+    [self.view addSubview:self.overlayView];
+    */
+    
+    //add HUD
+    /*NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DebtAddingView" owner:self options:nil];
+    UIView *dummy = [nib objectAtIndex:0];
+    float hudWidth = dummy.frame.size.width;
+    float hudHeight = dummy.frame.size.height;
+    */
+    float hudWidth = 300;
+    self.debtAddingView= [[DebtAddingView alloc] initWithFrame:CGRectMake(hudWidth*-1,
+                                                                         0,
+                                                                         hudWidth, self.view.frame.size.height)];
+    self.debtAddingView.person=person;
+    [self.view addSubview:self.debtAddingView];
+    [UIView animateWithDuration:0.2 animations:^{
+        self.debtAddingView.frame = CGRectMake(0,
+                                               0,
+                                               self.view.frame.size.width, self.view.frame.size.height);
+    }];
 }
+
+/*
+-(void)handleOverlayTap:(UITapGestureRecognizer *)sender{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.overlayView.alpha=0.0f;
+        self.debtAddingView.frame = CGRectMake(-1000,
+                                               self.debtAddingView.frame.origin.y,
+                                               self.debtAddingView.frame.size.width,
+                                               self.debtAddingView.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.overlayView removeFromSuperview];
+        self.overlayView = nil;
+        
+        [self.debtAddingView removeFromSuperview];
+        self.debtAddingView = nil;
+    }];
+}*/
+
 
 
 #pragma mark - DebtorNameTextInput delegate
@@ -154,22 +205,6 @@ BOOL isAnimating=NO;
 
 
 
-#pragma mark - coredata setup
-
--(void)setupContext{
-    [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
-    self.predictiveSearchDataSource.delegate = self;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    NSLog(@"CONTEXT IS NOT NIL!!!");
-    if(overlayView){
-        [overlayView removeFromSuperview];
-    }
-}
-
-
-
-
-
 #pragma mark - view lifeCycle
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -198,7 +233,9 @@ BOOL isAnimating=NO;
         //TODO: better error handling here
         NSLog(@"ERROR, context is nil! BAD!");
     }else{
-        [self setupContext];
+        [self.predictiveSearchDataSource setAsDataSourceAndDelegateFor:self.predictiveSearchResults];
+        self.predictiveSearchDataSource.delegate = self;
+        NSLog(@"CONTEXT IS NOT NIL!!!");
     }
 }
 

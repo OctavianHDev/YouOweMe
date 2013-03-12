@@ -24,6 +24,7 @@
     @property (nonatomic, strong) NSArray *allAddressbookContacts;
     @property (nonatomic, strong) UITableView *tableViewWeAreManipulating;
     @property (nonatomic, strong) NSManagedObjectContext *moc;
+    @property (nonatomic, strong) NSMutableArray *filteredArrayOfPersonObjects;
 @end
 
 
@@ -38,7 +39,7 @@
 @synthesize tableViewWeAreManipulating;
 @synthesize moc;
 @synthesize delegate;
-
+@synthesize filteredArrayOfPersonObjects;
 
 #pragma mark - instance vars
 
@@ -49,6 +50,7 @@ int originalTableHeight=0;
 
 -(void)setFilteredResults:(NSArray *)filteredResults{
     _filteredResults = filteredResults;
+    self.filteredArrayOfPersonObjects = [[NSMutableArray alloc] init];
     for(int i=0;i<_filteredResults.count;i++){
        // NSString* firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([_filteredResults objectAtIndex:i]),kABPersonFirstNameProperty);
        // NSLog(@"filtered first name is: %@", firstName);
@@ -62,9 +64,9 @@ int originalTableHeight=0;
                 lastName=@"";
             NSData *avatar = (__bridge_transfer NSData *)ABPersonCopyImageDataWithFormat(ref, kABPersonImageFormatThumbnail);
             if(!avatar){
-                //avatar = [[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
-                UIImage *defaultAvatar = [UIImage imageNamed:@"default-user-image.png"];
-                avatar = UIImagePNGRepresentation(defaultAvatar);
+                avatar = [[NSData alloc] initWithBytes:[@"1" UTF8String] length:strlen([@"1" UTF8String])];
+                //UIImage *defaultAvatar = [UIImage imageNamed:@"default-user-image.png"];
+                //avatar = UIImagePNGRepresentation(defaultAvatar);
             }
             
             NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID(ref)] stringValue];
@@ -78,7 +80,7 @@ int originalTableHeight=0;
                                         [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
                                         [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
             
-            [[CoreDataDBManager initAndRetrieveSharedInstance] personWithAttributes:attributes];
+            [self.filteredArrayOfPersonObjects addObject:[[CoreDataDBManager initAndRetrieveSharedInstance] personWithAttributes:attributes]];
         
     }
     [self.tableViewWeAreManipulating reloadData];
@@ -139,7 +141,7 @@ int originalTableHeight=0;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     NSLog(@"did select row at index path");
-    //return;
+    return;
     
     NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
     if(!firstName)
@@ -179,7 +181,7 @@ int originalTableHeight=0;
         cell = [[PredictiveSearchResult alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    NSString *name;
+    /*NSString *name;
     NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID((__bridge ABRecordRef)([self.filteredResults objectAtIndex:indexPath.row]))] stringValue];
     
     
@@ -218,19 +220,26 @@ int originalTableHeight=0;
                                 initWithObjects:
                                 [NSArray arrayWithObjects:  firstName,    lastName,   avatar,   recordId, @"addressbook", nil]           forKeys:
                                 [NSArray arrayWithObjects:@"firstName", @"lastName", @"avatar", @"addressBookId", @"source", nil]];
+    */
+    Person *p = [self.filteredArrayOfPersonObjects objectAtIndex:indexPath.row];
     
-    cell.name=name;
+    cell.name=[[p.firstName stringByAppendingString:@" "] stringByAppendingString:p.lastName];
     //cell.lblName.textColor = [UIColor colorWithRed:53.0f/255.0f green:121.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
 
     cell.lblName.layer.shadowColor = [[UIColor colorWithWhite:1.0f alpha:0.5f] CGColor];
     cell.lblName.layer.shadowOpacity=1.0f;
     cell.lblName.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     cell.lblName.layer.shadowRadius=1;
-    
-    cell.uniqueId = recordId;
+    if(p.avatar.length>2)
+        [cell.avatar setImage:[UIImage imageWithData:p.avatar]];
+    else
+        [cell.avatar setImage:[UIImage imageNamed:@"default-user-image.png"]];
+    cell.uniqueId = p.addressBookId;
     cell.uniqueIdSource = SOURCE_ADDRESSBOOK;
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self.delegate;
+    cell.person = p;
     //cell.parentTableView=tableView;
     
     return cell;
@@ -306,7 +315,7 @@ int originalTableHeight=0;
     
     ABAddressBookRef *addressBook = ABAddressBookCreate();
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    CFIndex numPeople = ABAddressBookGetPersonCount(addressBook);
+    //CFIndex numPeople = ABAddressBookGetPersonCount(addressBook);
     
     self.allAddressbookContacts = (__bridge_transfer NSArray *)allPeople;
 }
