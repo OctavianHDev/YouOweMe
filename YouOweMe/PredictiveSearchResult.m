@@ -51,7 +51,7 @@ BOOL isShowingOverlayView;
 #pragma mark - moving
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-	NSLog(@"*touches began");
+	//NSLog(@"*touches began");
     UITouch *touch = [touches anyObject];
     startTouchPoint = [touch locationInView:self];
 
@@ -82,14 +82,14 @@ BOOL isShowingOverlayView;
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"*touches cancelled");
+    //NSLog(@"*touches cancelled");
     [self maybeBringUpDebtView];
     [super touchesCancelled:touches withEvent:event];
     
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    NSLog(@"*touches ended");
+    //NSLog(@"*touches ended");
     [self maybeBringUpDebtView];
     [super touchesEnded:touches withEvent:event];
 }
@@ -151,7 +151,7 @@ BOOL isShowingOverlayView;
         NSLog(@"changing height: %f", bkgViewLeftSwipeIndicator.frame.size.height+touchDx*2);
         */
         
-        NSLog(@"newAlpha (for right swipe): %f", newAlpha);
+        //NSLog(@"newAlpha (for right swipe): %f", newAlpha);
         bkgViewRightSwipeIndicator.alpha = newAlpha;
         if(newAlpha>=1){
             [self maybeBringUpDebtView];
@@ -161,13 +161,18 @@ BOOL isShowingOverlayView;
     
     if(touchDx<0 && bkgViewRightSwipeIndicator.alpha<0.1){
         float newAlpha = MIN(touchDx,200)/-200.0f;
-        NSLog(@"newAlpha (for left swipe): %f", newAlpha);
+        //NSLog(@"newAlpha (for left swipe): %f", newAlpha);
         bkgViewLeftSwipeIndicator.alpha = newAlpha;
     }
     
     [super touchesMoved:touches withEvent:event];
 }
 
+#pragma mark - long press gestureRecognizer
+-(void)handleLongPress:(UIGestureRecognizer*)sender{
+    NSLog(@"LONG PRESS!");
+    [self.delegate didSelectPerson:self.person];
+}
 
 #pragma mark - panning for gestureRecognizer
 /*
@@ -303,7 +308,7 @@ BOOL isShowingOverlayView;
         for(Debt *d in person.debts){
             totalAmount += [d.amount floatValue];
         }
-        NSLog(@"total debt amount: %f", totalAmount);
+        //NSLog(@"total debt amount: %f", totalAmount);
         self.lblDebtOwing.text = [CURRENCY_SYMBOL stringByAppendingString:[NSString stringWithFormat:@"%.2f", totalAmount]];
         self.lblDebtOwing.hidden=NO;
     }else{
@@ -323,6 +328,10 @@ BOOL isShowingOverlayView;
     return _person;
 }
 
+
+
+#pragma mark - SETUP
+#pragma mark -
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -331,6 +340,8 @@ BOOL isShowingOverlayView;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult" owner:self options:nil];
         self = [nib objectAtIndex:0];
         self.clipsToBounds = NO;
+        UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        [self addGestureRecognizer:lpgr];
     }
     return self;
 }

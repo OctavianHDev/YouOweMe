@@ -66,9 +66,9 @@
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *results = [self.context executeFetchRequest:request error:&error];
-    for(Person *p in results){
+    /*for(Person *p in results){
         NSLog(@"%@ pic is of size: %d, fbID: %@", p.firstName, [p.avatar length], p.facebookId);
-    }
+    }*/
     return results;
 }
 
@@ -93,6 +93,7 @@
 -(Debt *)insertDebtForPerson:(Person *)p ofAmount:(NSNumber *)amount withDescription:(NSString*)description{
     Debt *toReturn;
     toReturn = [Debt debtForPerson:p ofAmount:amount withDescription:description inManagedObjectContext:self.context];
+    [self saveDB];
     return toReturn;
 }
 

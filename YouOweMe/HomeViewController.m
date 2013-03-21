@@ -89,7 +89,25 @@ UIPanGestureRecognizer *panGestureRecognizer;
 #pragma mark -
 
 -(void)didSelectPerson:(Person*)person{
-    [self hideInputView];
+    //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
+    if(self.personDetailView)
+        return;
+    
+    //ADD DISMISS OVERLAY
+    //
+    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.overlayView.backgroundColor = [UIColor blackColor];
+    self.overlayView.alpha=0.0;
+    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
+    [self.overlayView addGestureRecognizer:tapr];
+    [self.view addSubview:self.overlayView];
+    [UIView animateWithDuration:0.2 animations:^{
+        self.overlayView.alpha=0.5;
+    }];
+    
+    
+    //ADD ACTUAL PERSON INFO
+    //
     NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
     
     NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PersonDetailView"
@@ -142,22 +160,25 @@ UIPanGestureRecognizer *panGestureRecognizer;
     }];
 }
 
-/*
+
 -(void)handleOverlayTap:(UITapGestureRecognizer *)sender{
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.15 animations:^{
+
         self.overlayView.alpha=0.0f;
-        self.debtAddingView.frame = CGRectMake(-1000,
-                                               self.debtAddingView.frame.origin.y,
-                                               self.debtAddingView.frame.size.width,
-                                               self.debtAddingView.frame.size.height);
+        self.personDetailView.alpha=0.0f;
+        
+        self.personDetailView.frame=CGRectMake(self.personDetailView.frame.origin.x+25,
+                                               self.personDetailView.frame.origin.y+25,
+                                               self.personDetailView.frame.size.width-50,
+                                               self.personDetailView.frame.size.height-50);
     } completion:^(BOOL finished) {
         [self.overlayView removeFromSuperview];
         self.overlayView = nil;
         
-        [self.debtAddingView removeFromSuperview];
-        self.debtAddingView = nil;
+        [self.personDetailView removeFromSuperview];
+        self.personDetailView = nil;
     }];
-}*/
+}
 
 
 
