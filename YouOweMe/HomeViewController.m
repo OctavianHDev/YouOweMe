@@ -18,6 +18,7 @@
     @property (nonatomic, strong) UIView *overlayView;
     @property (nonatomic, strong) PersonDetailView *personDetailView;
     @property (nonatomic, strong) DebtAddingView *debtAddingView;
+    @property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardHeight;
 @end
 
 
@@ -26,12 +27,15 @@
 
 #pragma mark - getters/setters/synthesizers
 
+CGRect predictiveSearchResultsOriginalFrame;
+
 @synthesize gestureRecognitionView, predictiveSearchResults;
 @synthesize inputView;
 @synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
 @synthesize overlayView;
 @synthesize personDetailView;
 @synthesize debtAddingView;
+@synthesize keyboardHeight;
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
     if(!_predictiveSearchDataSource)
@@ -47,6 +51,18 @@
 #pragma mark - instance vars
 
 UIPanGestureRecognizer *panGestureRecognizer;
+
+
+- (void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
+  
+}
+
+- (void)loginView:(FBLoginView *)loginView handleError:(NSError *)error {
+    // see https://developers.facebook.com/docs/reference/api/errors/ for general guidance on error handling for Facebook API
+    // our policy here is to let the login view handle errors, but to log the results
+    NSLog(@"FBLoginView encountered an error=%@", error);
+}
+
 
 
 
@@ -77,6 +93,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
     NSLog(@"adding debt for: %@", person.firstName);
 
     [self.inputView.textField resignFirstResponder];
+    [self growPredictiveSearch];
 
     /*//add overlay
     self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
@@ -125,6 +142,48 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 
 
+
+
+
+#pragma mark - Keyboard
+
+- (void)observeKeyboard {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    CGRect keyboardFrame = [kbFrame CGRectValue];
+    
+    CGFloat height = keyboardFrame.size.height;
+    
+    NSLog(@"Updating constraints.");
+    // Because the "space" is actually the difference between the bottom lines of the 2 views,
+    // we need to set a negative constant value here.
+    self.keyboardHeight.constant = height;
+    
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    self.keyboardHeight.constant = 0;
+    [UIView animateWithDuration:animationDuration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+
+
+
+
 #pragma mark - DebtorNameTextInput delegate
 
 -(void)textChangedTo:(NSString *)text{
@@ -138,6 +197,52 @@ UIPanGestureRecognizer *panGestureRecognizer;
     [self hideInputView];
 }
 
+-(void)shrinkPredictiveSearch{
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.predictiveSearchResults
+                                                          attribute:NSLayoutAttributeBottom
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeBottom
+                                                         multiplier:1
+                                                           constant:216]];
+
+    /*if(predictiveSearchResultsOriginalFrame.size.height){
+        [UIView animateWithDuration:0.2 animations:^{
+            self.predictiveSearchResults.frame =  predictiveSearchResultsOriginalFrame;
+        } completion:^(BOOL finished) {
+            NSLog(@"shrink: pred results height set to: %f", predictiveSearchResultsOriginalFrame.size.height);
+        }];
+    }*/
+}
+
+-(void)textFieldGainedFocus{
+    [self shrinkPredictiveSearch];
+}
+
+-(void)growPredictiveSearch{
+    
+    /*[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.predictiveSearchResults
+                                                          attribute:NSLayoutAttributeBottom
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeBottom
+                                                         multiplier:1
+                                                           constant:0]];
+    /*[self.predictiveSearchResults addConstraint:
+     [NSLayoutConstraint constraintWithItem:self.predictiveSearchResults attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:1]];
+    /*CGRect frm = self.predictiveSearchResults.frame;
+    predictiveSearchResultsOriginalFrame = frm;
+    if(frm.size.height!= (self.view.bounds.size.height - self.inputView.frame.size.height)){
+        [UIView animateWithDuration:0.2 animations:^{
+            self.predictiveSearchResults.frame = CGRectMake(self.predictiveSearchResults.frame.origin.x,
+                                                            self.predictiveSearchResults.frame.origin.y,
+                                                            self.predictiveSearchResults.frame.size.width,
+                                                            self.view.bounds.size.height - self.inputView.frame.size.height);
+        } completion:^(BOOL finished) {
+            NSLog(@"grow: pred results height set to: %f", self.view.bounds.size.height - self.inputView.frame.size.height);
+        }];
+    }*/
+}
 
 
 
@@ -202,9 +307,6 @@ BOOL isAnimating=NO;
     }];
 }
 
-
-
-
 #pragma mark - view lifeCycle
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -237,6 +339,30 @@ BOOL isAnimating=NO;
         self.predictiveSearchDataSource.delegate = self;
         NSLog(@"CONTEXT IS NOT NIL!!!");
     }
+
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookSessionChanged:) name:UIKeyboardWillChangeFrameNotification object:nil];
+
+    
+    
+    //login button
+    //PrototypeAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    // The user has initiated a login, so call the openSession method
+    // and show the login UX if necessary.
+    //[appDelegate openSessionWithAllowLoginUI:YES];
+    /*if(FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded){
+        NSLog(@"we're stil logged in");
+    }else{
+        NSLog(@"facebook session state: %u", FBSession.activeSession.state);
+        FBLoginView *loginview = [[FBLoginView alloc] init];
+        loginview.frame = CGRectOffset(loginview.frame, 5, 5);
+        loginview.delegate = self;
+        [self.view addSubview:loginview];
+        [loginview sizeToFit];
+    }*/
+    
+    [self observeKeyboard];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning

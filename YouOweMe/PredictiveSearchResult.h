@@ -12,13 +12,9 @@
 
 @interface PredictiveSearchResult : UITableViewCell
 
-@property (nonatomic, strong) IBOutlet UILabel *lblName;
-@property (nonatomic, strong) IBOutlet UIImageView *avatar;
-@property (nonatomic, strong) IBOutlet UIImageView *imgViewBackgroundImage;
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *uniqueId;
-@property (nonatomic, strong) NSString *uniqueIdSource;
+
 @property (nonatomic, weak) id<PredictiveSearchDelegate> delegate;
 @property (nonatomic, strong) Person *person;
+@property (nonatomic, strong) NSString *uniqueIdSource;
 
 @end

@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "DebtorNameTextInputView.h"
 #import "PersonPredictiveSearchModel.h"
+#import <FacebookSDK/FacebookSDK.h>
 
-@interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate, PredictiveSearchDelegate>
+@interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate,
+                                                    PredictiveSearchDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
 @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;

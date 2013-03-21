@@ -20,6 +20,10 @@
     [self.textField resignFirstResponder];
 }
 
+#pragma mark - textfield delegate
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self.delegate textFieldGainedFocus];
+}
 
 #pragma mark - actions
 
@@ -32,7 +36,6 @@
 -(void)textFieldDidChange:(id)sender{
     [self.delegate textChangedTo:self.textField.text];
 }
-
 
 #pragma mark - view lifecycle
 
@@ -62,11 +65,12 @@
 -(void)setup{
     NSLog(@"DebtorNameTextInputView.m: setup");
     
-    self.layer.shadowColor=[[UIColor blueColor] CGColor];
+    self.layer.shadowColor=[[UIColor blackColor] CGColor];
     self.layer.shadowOpacity=0.8f;
     self.layer.shadowRadius=5.0f;
    
     [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    self.textField.delegate = self;
 }
 
 

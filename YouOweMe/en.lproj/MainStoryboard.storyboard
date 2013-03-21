@@ -22,7 +22,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="W9a-aD-Px0" secondAttribute="bottom" priority="948" constant="216" type="user" id="3bC-q5-8FS"/>
+                            <constraint firstAttribute="bottom" secondItem="W9a-aD-Px0" secondAttribute="bottom" constant="216" type="user" id="3bC-q5-8FS"/>
                             <constraint firstItem="W3I-iE-fmE" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="88h-cq-fEW"/>
                             <constraint firstItem="W9a-aD-Px0" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="9vo-Hd-QpW"/>
                             <constraint firstItem="W9a-aD-Px0" firstAttribute="top" secondItem="3" secondAttribute="top" constant="57" type="user" id="Rf5-fe-Loc"/>
@@ -35,6 +35,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="gestureRecognitionView" destination="W3I-iE-fmE" id="cVc-go-tjs"/>
+                        <outlet property="keyboardHeight" destination="3bC-q5-8FS" id="vHh-nx-EZs"/>
                         <outlet property="predictiveSearchResults" destination="W9a-aD-Px0" id="uPM-CA-X8f"/>
                     </connections>
                 </viewController>

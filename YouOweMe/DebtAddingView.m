@@ -38,6 +38,12 @@
         [self.personAvatar setImage:[UIImage imageNamed:@"default-user-image.png"]];
     else
         [self.personAvatar setImage:[UIImage imageWithData:person.avatar]];
+    
+    CALayer *imageLayer = self.personAvatar.layer;
+    //[imageLayer setCornerRadius:4];
+    [imageLayer setCornerRadius:self.personAvatar.frame.size.height/2];
+    [imageLayer setMasksToBounds:YES];
+
 }
 
 -(Person*)person{
@@ -111,7 +117,7 @@
     CGPoint touchPoint = [touch locationInView:[self superview]];
     touchDx = touchPoint.x - self.startTouchPoint.x;
     
-    NSLog(@"touchDx: %f", touchDx);
+    //NSLog(@"touchDx: %f", touchDx);
     
     if(touchDx<MOVED_ENOUGH*-1){
         self.shouldDismissSelf=YES;

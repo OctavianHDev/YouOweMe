@@ -11,11 +11,15 @@
 
 @implementation Person (Create)
 
-+(Person*)personWithAttributes:(NSDictionary*)attributes
++(Person*)personWithAttributes:(NSDictionary*)attributes fromSource:(NSString *)source
         inManagedObjectContext:(NSManagedObjectContext*)context{
     Person *person = nil;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Person"];
-    request.predicate = [NSPredicate predicateWithFormat:@"addressBookId = %@", [attributes objectForKey:@"addressBookId"]];
+    if([source isEqualToString:SOURCE_ADDRESSBOOK]){
+        request.predicate = [NSPredicate predicateWithFormat:@"addressBookId = %@", [attributes objectForKey:@"addressBookId"]];
+    }else if ([source isEqualToString:SOURCE_FACEBOOK]){
+        request.predicate = [NSPredicate predicateWithFormat:@"facebookId = %@", [attributes objectForKey:@"facebookId"]];
+    }
     
     NSError *error = nil;
     NSArray *matches = [context executeFetchRequest:request error:&error];
@@ -37,13 +41,14 @@
         person.lastName = [attributes objectForKey:@"lastName"];
         person.debts = [attributes objectForKey:@"debts"];
 
+        NSLog(@"inserted %@ %@ with fb id:%@", person.firstName, person.lastName, person.facebookId);
     }else{
         person = [matches lastObject];
     }
     return person;
 }
 
-+(Person*)personWithId:(NSString*)uniqueId inSource:(NSString*)source
++(Person*)personWithId:(NSString*)uniqueId fromSource:(NSString*)source
 inManagedObjectContext:(NSManagedObjectContext*)context{
     Person *person = nil;
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Person"];

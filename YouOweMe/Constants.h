@@ -12,6 +12,6 @@
 
 #define SOURCE_FACEBOOK         @"facebook"
 #define SOURCE_ADDRESSBOOK      @"addressbook"
-
+#define ERROR_DOMAIN            @"oh.YouOweMe"
 
 #endif

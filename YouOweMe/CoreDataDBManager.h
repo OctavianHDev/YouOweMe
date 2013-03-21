@@ -15,6 +15,9 @@
 
 + (id)initAndRetrieveSharedInstance;
 -(void)saveDB;
--(Person *)personWithAttributes:(NSDictionary *)attributes;
+
+-(Person *)personWithAttributes:(NSDictionary *)attributes fromSource:(NSString*)source;
 -(Person *)getPersonWithId:(NSString*)uniqueId inSource:(NSString*)source;
+-(NSArray*)getPersonsWithPredicate:(NSPredicate*)predicate;
+-(void)insertIntoDBPersonsPicture:(UIImage*)picture ForId:(NSString*)personId fromSource:(NSString*)source;
 @end

@@ -12,7 +12,7 @@
 
     -(void)textChangedTo:(NSString*)text;
     -(void)cancelPressed;
-
+    -(void)textFieldGainedFocus;
 @end
 
 

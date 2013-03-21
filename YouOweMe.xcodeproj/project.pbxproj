@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0E015C5916CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */; };
 		0E114B3716EE69770021DB61 /* LeftSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */; };
-		0E114B3A16EE6AA10021DB61 /* checkmark-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3916EE6AA10021DB61 /* checkmark-24.png */; };
 		0E114B3C16EE6B730021DB61 /* RightSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */; };
 		0E14154316C5FEC100467BED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E14154216C5FEC100467BED /* QuartzCore.framework */; };
 		0E6BEFA816BDD5E60050541B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA716BDD5E60050541B /* UIKit.framework */; };
@@ -24,6 +23,9 @@
 		0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */; };
 		0E6BEFC416BDD5E60050541B /* PrototypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFC316BDD5E60050541B /* PrototypeViewController.m */; };
 		0E6BEFCC16BDD6A50050541B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E6BEFCB16BDD6A50050541B /* HomeViewController.m */; };
+		0E7DA6D416F804BA004A97B6 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E7DA6D316F804BA004A97B6 /* AdSupport.framework */; };
+		0E7DA6D616F804C1004A97B6 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E7DA6D516F804C1004A97B6 /* Social.framework */; };
+		0E7DA6D816F804CC004A97B6 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E7DA6D716F804CC004A97B6 /* Accounts.framework */; };
 		0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */; };
 		0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */; };
 		0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */; };
@@ -35,18 +37,27 @@
 		0EE9439216EFB5AE00F87C1E /* DebtAddingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE9439116EFB5AE00F87C1E /* DebtAddingView.m */; };
 		0EE9439516EFB6BA00F87C1E /* DebtAddingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EE9439416EFB6BA00F87C1E /* DebtAddingView.xib */; };
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
-		0EEB87C316E00775002E2352 /* predictiveSearchBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */; };
+		0EED784116F7B70B002793D2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EED784016F7B70B002793D2 /* FacebookSDK.framework */; };
+		0EED784316F7B78B002793D2 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EED784216F7B78B002793D2 /* FacebookSDKResources.bundle */; };
 		0EEE22F516DD5BCF001A23D2 /* Debt.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F416DD5BCF001A23D2 /* Debt.m */; };
 		0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F716DD5BCF001A23D2 /* Person.m */; };
 		0EEE22FA16DD5DAD001A23D2 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEE22F916DD5DAD001A23D2 /* CoreData.framework */; };
+		0EEED31716F1255700CE64F3 /* textInputBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEED31516F1255700CE64F3 /* textInputBkg.png */; };
+		0EEED31816F1255700CE64F3 /* lineWShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEED31616F1255700CE64F3 /* lineWShadow.png */; };
+		0EEED31A16F12F9700CE64F3 /* owesBanner.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEED31916F12F9700CE64F3 /* owesBanner.png */; };
+		0EF6697516F01F3F00EB85A4 /* debtAddingBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EF6697316F01F3F00EB85A4 /* debtAddingBkg.png */; };
+		0EF6697616F01F3F00EB85A4 /* predictiveSearchBkg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EF6697416F01F3F00EB85A4 /* predictiveSearchBkg2.png */; };
+		0EF6697916F026F000EB85A4 /* rowTopShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EF6697716F026F000EB85A4 /* rowTopShadow.png */; };
+		0EF6697A16F026F000EB85A4 /* rowBottomShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EF6697816F026F000EB85A4 /* rowBottomShadow.png */; };
 		0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */; };
 		0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */; };
+		0EFF81F316F425130085F565 /* btnBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F116F425130085F565 /* btnBkg.png */; };
+		0EFF81F416F425130085F565 /* owes2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F216F425130085F565 /* owes2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0E015C5816CEEF4E007190D8 /* DebtEntityModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DebtEntityModel.xcdatamodel; sourceTree = "<group>"; };
 		0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftSwipeIndicator.xib; sourceTree = "<group>"; };
-		0E114B3916EE6AA10021DB61 /* checkmark-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark-24.png"; sourceTree = "<group>"; };
 		0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightSwipeIndicator.xib; sourceTree = "<group>"; };
 		0E114B3D16EE7CBC0021DB61 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		0E14154216C5FEC100467BED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -68,6 +79,9 @@
 		0E6BEFC316BDD5E60050541B /* PrototypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrototypeViewController.m; sourceTree = "<group>"; };
 		0E6BEFCA16BDD6A50050541B /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		0E6BEFCB16BDD6A50050541B /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		0E7DA6D316F804BA004A97B6 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		0E7DA6D516F804C1004A97B6 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		0E7DA6D716F804CC004A97B6 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonPredictiveSearchModel.h; sourceTree = "<group>"; };
 		0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonPredictiveSearchModel.m; sourceTree = "<group>"; };
 		0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveSearchResult.h; sourceTree = "<group>"; };
@@ -85,15 +99,25 @@
 		0EE9439116EFB5AE00F87C1E /* DebtAddingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebtAddingView.m; sourceTree = "<group>"; };
 		0EE9439416EFB6BA00F87C1E /* DebtAddingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebtAddingView.xib; sourceTree = "<group>"; };
 		0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = predictiveSearchBkg.png; path = ../../../../../Desktop/projects/youOweMe/predictiveSearchBkg.png; sourceTree = "<group>"; };
+		0EED784016F7B70B002793D2 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../FacebookSDK/build/FacebookSDK.framework; sourceTree = "<group>"; };
+		0EED784216F7B78B002793D2 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../../../FacebookSDK/build/FacebookSDK.framework/Versions/A/Resources/FacebookSDKResources.bundle; sourceTree = "<group>"; };
 		0EEE22F316DD5BCF001A23D2 /* Debt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debt.h; sourceTree = "<group>"; };
 		0EEE22F416DD5BCF001A23D2 /* Debt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debt.m; sourceTree = "<group>"; };
 		0EEE22F616DD5BCF001A23D2 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		0EEE22F716DD5BCF001A23D2 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		0EEE22F916DD5DAD001A23D2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0EEED31516F1255700CE64F3 /* textInputBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = textInputBkg.png; sourceTree = "<group>"; };
+		0EEED31616F1255700CE64F3 /* lineWShadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lineWShadow.png; sourceTree = "<group>"; };
+		0EEED31916F12F9700CE64F3 /* owesBanner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = owesBanner.png; sourceTree = "<group>"; };
+		0EF6697316F01F3F00EB85A4 /* debtAddingBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debtAddingBkg.png; sourceTree = "<group>"; };
+		0EF6697416F01F3F00EB85A4 /* predictiveSearchBkg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = predictiveSearchBkg2.png; sourceTree = "<group>"; };
+		0EF6697716F026F000EB85A4 /* rowTopShadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rowTopShadow.png; sourceTree = "<group>"; };
+		0EF6697816F026F000EB85A4 /* rowBottomShadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rowBottomShadow.png; sourceTree = "<group>"; };
 		0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebtorNameTextInputView.h; sourceTree = "<group>"; };
 		0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebtorNameTextInputView.m; sourceTree = "<group>"; };
 		0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebtorNameTextInputView.xib; sourceTree = "<group>"; };
+		0EFF81F116F425130085F565 /* btnBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnBkg.png; sourceTree = "<group>"; };
+		0EFF81F216F425130085F565 /* owes2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = owes2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,12 +125,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E7DA6D816F804CC004A97B6 /* Accounts.framework in Frameworks */,
+				0E7DA6D616F804C1004A97B6 /* Social.framework in Frameworks */,
+				0E7DA6D416F804BA004A97B6 /* AdSupport.framework in Frameworks */,
 				0EEE22FA16DD5DAD001A23D2 /* CoreData.framework in Frameworks */,
 				0E14154316C5FEC100467BED /* QuartzCore.framework in Frameworks */,
 				0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */,
 				0E6BEFA816BDD5E60050541B /* UIKit.framework in Frameworks */,
 				0E6BEFAA16BDD5E60050541B /* Foundation.framework in Frameworks */,
 				0E6BEFAC16BDD5E60050541B /* CoreGraphics.framework in Frameworks */,
+				0EED784116F7B70B002793D2 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,8 +145,6 @@
 			isa = PBXGroup;
 			children = (
 				0EF3495F16DEDC1C00AC300B /* core data */,
-				0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */,
-				0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -143,6 +169,11 @@
 		0E6BEFA616BDD5E60050541B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0E7DA6D716F804CC004A97B6 /* Accounts.framework */,
+				0E7DA6D516F804C1004A97B6 /* Social.framework */,
+				0E7DA6D316F804BA004A97B6 /* AdSupport.framework */,
+				0EED784016F7B70B002793D2 /* FacebookSDK.framework */,
+				0EED784216F7B78B002793D2 /* FacebookSDKResources.bundle */,
 				0EEE22F916DD5DAD001A23D2 /* CoreData.framework */,
 				0E14154216C5FEC100467BED /* QuartzCore.framework */,
 				0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */,
@@ -188,6 +219,8 @@
 		0E6BEFCD16BDD6AC0050541B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */,
+				0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */,
 				0E6BEFCA16BDD6A50050541B /* HomeViewController.h */,
 				0E6BEFCB16BDD6A50050541B /* HomeViewController.m */,
 			);
@@ -226,9 +259,16 @@
 		0EEAB57B16C5BC410064E6B9 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				0E114B3916EE6AA10021DB61 /* checkmark-24.png */,
+				0EFF81F116F425130085F565 /* btnBkg.png */,
+				0EFF81F216F425130085F565 /* owes2.png */,
+				0EEED31916F12F9700CE64F3 /* owesBanner.png */,
+				0EEED31516F1255700CE64F3 /* textInputBkg.png */,
+				0EEED31616F1255700CE64F3 /* lineWShadow.png */,
+				0EF6697716F026F000EB85A4 /* rowTopShadow.png */,
+				0EF6697816F026F000EB85A4 /* rowBottomShadow.png */,
+				0EF6697316F01F3F00EB85A4 /* debtAddingBkg.png */,
+				0EF6697416F01F3F00EB85A4 /* predictiveSearchBkg2.png */,
 				0EDD23CD16E81188008F46E3 /* default-user-image.png */,
-				0EEB87C216E00775002E2352 /* predictiveSearchBkg.png */,
 			);
 			name = assets;
 			sourceTree = "<group>";
@@ -308,13 +348,21 @@
 				0E6BEFC116BDD5E60050541B /* MainStoryboard.storyboard in Resources */,
 				0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */,
 				0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */,
-				0EEB87C316E00775002E2352 /* predictiveSearchBkg.png in Resources */,
 				0EDD23CE16E81188008F46E3 /* default-user-image.png in Resources */,
 				0EDD23D516E81545008F46E3 /* PersonDetailView.xib in Resources */,
 				0E114B3716EE69770021DB61 /* LeftSwipeIndicator.xib in Resources */,
-				0E114B3A16EE6AA10021DB61 /* checkmark-24.png in Resources */,
 				0E114B3C16EE6B730021DB61 /* RightSwipeIndicator.xib in Resources */,
 				0EE9439516EFB6BA00F87C1E /* DebtAddingView.xib in Resources */,
+				0EF6697516F01F3F00EB85A4 /* debtAddingBkg.png in Resources */,
+				0EF6697616F01F3F00EB85A4 /* predictiveSearchBkg2.png in Resources */,
+				0EF6697916F026F000EB85A4 /* rowTopShadow.png in Resources */,
+				0EF6697A16F026F000EB85A4 /* rowBottomShadow.png in Resources */,
+				0EEED31716F1255700CE64F3 /* textInputBkg.png in Resources */,
+				0EEED31816F1255700CE64F3 /* lineWShadow.png in Resources */,
+				0EEED31A16F12F9700CE64F3 /* owesBanner.png in Resources */,
+				0EFF81F316F425130085F565 /* btnBkg.png in Resources */,
+				0EFF81F416F425130085F565 /* owes2.png in Resources */,
+				0EED784316F7B78B002793D2 /* FacebookSDKResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,10 +465,18 @@
 		0E6BEFC816BDD5E60050541B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../FacebookSDK/build\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouOweMe/YouOweMe-Prefix.pch";
 				INFOPLIST_FILE = "YouOweMe/YouOweMe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-lsqlite3.0",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -429,10 +485,18 @@
 		0E6BEFC916BDD5E60050541B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../FacebookSDK/build\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "YouOweMe/YouOweMe-Prefix.pch";
 				INFOPLIST_FILE = "YouOweMe/YouOweMe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-lsqlite3.0",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

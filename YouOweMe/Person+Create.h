@@ -10,9 +10,9 @@
 
 @interface Person (Create)
 
-+(Person*)personWithAttributes:(NSDictionary*)attributes
-        inManagedObjectContext:(NSManagedObjectContext*)context;
-+(Person*)personWithId:(NSString*)uniqueId inSource:(NSString*)source
++(Person*)personWithAttributes:(NSDictionary*)attributes fromSource:(NSString*)source inManagedObjectContext:(NSManagedObjectContext*)context;
+
++(Person*)personWithId:(NSString*)uniqueId fromSource:(NSString*)source
         inManagedObjectContext:(NSManagedObjectContext*)context;
 
 @end

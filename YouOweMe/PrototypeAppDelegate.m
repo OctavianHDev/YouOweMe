@@ -8,25 +8,122 @@
 
 #import "PrototypeAppDelegate.h"
 #import "CoreDataDBManager.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation PrototypeAppDelegate
 
 @synthesize isUsingAddressBook;
 @synthesize isUsingFacebook;
 
+//core data
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+NSString *const FBSessionStateChangedNotification =
+@"oh.YouOweMe.Login:FBSessionStateChangedNotification";
+
+
+
+
+#pragma mark - facebook stack
+
+/*
+ * Callback for session changes.
+ */
+- (void)sessionStateChanged:(FBSession *)session
+                      state:(FBSessionState) state
+                      error:(NSError *)error
+{
+    switch (state) {
+        case FBSessionStateOpen:
+            if (!error) {
+                // We have a valid session
+                NSLog(@"User session found");
+            }
+            break;
+        case FBSessionStateClosed:
+        case FBSessionStateClosedLoginFailed:
+            [FBSession.activeSession closeAndClearTokenInformation];
+            break;
+        default:
+            break;
+    }
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:FBSessionStateChangedNotification
+     object:session];
+    
+    if (error) {
+        UIAlertView *alertView = [[UIAlertView alloc]
+                                  initWithTitle:@"Error"
+                                  message:error.localizedDescription
+                                  delegate:nil
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+        [alertView show];
+    }
+}
+
+/*
+ * Opens a Facebook session and optionally shows the login UX.
+ */
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+    /*NSArray *permissions = [[NSArray alloc] initWithObjects:
+                            @"email",
+                            @"user_likes",
+                            nil];*/
+    return [FBSession openActiveSessionWithReadPermissions:nil
+                                              allowLoginUI:allowLoginUI
+                                         completionHandler:^(FBSession *session,
+                                                             FBSessionState state,
+                                                             NSError *error) {
+                                             [self sessionStateChanged:session
+                                                                 state:state
+                                                                 error:error];
+                                         }];
+}
+
+/*
+ * If we have a valid session at the time of openURL call, we handle
+ * Facebook transitions by passing the url argument to handleOpenURL
+ */
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    // attempt to extract a token from the url
+    return [FBSession.activeSession handleOpenURL:url];
+}
+
+
 
 
 #pragma mark - lifecycle
+- (void)setupSources{
+    
+    self.isUsingAddressBook=NO;
+    self.isUsingFacebook=YES;
+    
+    if(self.isUsingFacebook){
+        if (![self openSessionWithAllowLoginUI:NO]) {
+            [self openSessionWithAllowLoginUI:YES];
+        }
+    }
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    self.isUsingAddressBook=YES;
-    self.isUsingFacebook=NO;
+    [self setupSources];
+    /*[FBSession openActiveSessionWithPermissions:nil
+                                   allowLoginUI:YES
+                              completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
+                                 // [self sessionStateChanged:session state:state error:error];
+                                  if(error)
+                                      NSLog(@"error opening connection to fb");
+                                  else
+                                      NSLog(@"opening fb session was error-free");
+                              }];*/
     //[CoreDataDBManager initAndRetrieveSharedInstance];
     return YES;
 }
@@ -51,14 +148,25 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
+    
+    [FBSession.activeSession handleDidBecomeActive];
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
     [[CoreDataDBManager initAndRetrieveSharedInstance] saveDB];
+    [FBSession.activeSession close];
+
 }
 
+
+
+
+#pragma mark - Core Data stack
 
 - (void)saveContext
 {
@@ -73,10 +181,6 @@
         }
     }
 }
-
-
-
-#pragma mark - Core Data stack
 
 // Returns the managed object context for the application.
 // If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.

@@ -8,10 +8,23 @@
 
 #import "PredictiveSearchResult.h"
 #import "CoreDataDBManager.h"
+#import <QuartzCore/QuartzCore.h>
+#import "Constants.h"
+
 
 #define MOVE_THRESHOLD 200.0
 #define INDENTATION_AMOUNT 40.0
 #define ALPHA_FOR_SELECTION 0.8
+
+
+@interface PredictiveSearchResult()
+    @property (nonatomic, strong) IBOutlet UILabel *lblName;
+    @property (nonatomic, strong) IBOutlet UIImageView *avatar;
+    @property (nonatomic, strong) IBOutlet UIImageView *imgViewBackgroundImage;
+    @property (nonatomic, strong) NSString *name;
+    @property (nonatomic, strong) NSString *uniqueId;
+@end
+
 @implementation PredictiveSearchResult
 
 @synthesize lblName;
@@ -21,7 +34,7 @@
 @synthesize uniqueId;
 @synthesize uniqueIdSource;
 @synthesize delegate;
-@synthesize person;
+@synthesize person=_person;
 
 //ivars
 CGPoint startTouchPoint;
@@ -46,7 +59,10 @@ BOOL isShowingOverlayView;
     //bkgViewRightSwipeIndicator = [[UIView alloc] initWithFrame:self.bounds];
     bkgViewRightSwipeIndicator.backgroundColor = [UIColor redColor];
     bkgViewRightSwipeIndicator.alpha = 0;
-    
+    bkgViewRightSwipeIndicator.clipsToBounds = NO;
+    bkgViewRightSwipeIndicator.layer.shadowColor = [[UIColor blackColor] CGColor];
+    bkgViewRightSwipeIndicator.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
+    bkgViewRightSwipeIndicator.layer.shadowRadius = 2.0f;
     
     NSArray *nib2 = [[NSBundle mainBundle] loadNibNamed:@"LeftSwipeIndicator" owner:self options:nil];
     bkgViewLeftSwipeIndicator = [nib2 objectAtIndex:0];
@@ -226,12 +242,66 @@ BOOL isShowingOverlayView;
 
 -(void)setName:(NSString *)name{
     _name=name;
-    NSLog(@"just set name to: %@", name);
-    self.lblName.text=name;
+    //NSLog(@"just set name to: %@", name);
+    self.lblName.text=name;    
 }
 
 -(NSString*)name{
     return _name;
+}
+
+-(void)setPerson:(Person *)person{
+    _person = person;
+
+    self.name=[[person.firstName stringByAppendingString:@" "] stringByAppendingString:person.lastName];
+
+    if(person.avatar.length>2)
+        [self.avatar setImage:[UIImage imageWithData:person.avatar]];
+    else{
+        
+        //addressbook
+        [self.avatar setImage:[UIImage imageNamed:@"default-user-image.png"]];
+
+        //facebook
+        if([self.uniqueIdSource isEqualToString:SOURCE_FACEBOOK]){
+            NSString *strurl = [[NSString alloc] initWithFormat:@"https://graph.facebook.com/%@/picture",person.facebookId];
+            
+            dispatch_queue_t downloadImageQueue = dispatch_queue_create("image downloader", NULL);
+            dispatch_async(downloadImageQueue, ^{
+                NSURL * imgURL = [NSURL URLWithString:strurl];
+                NSData *imageData = [NSData dataWithContentsOfURL:imgURL];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImage *retrievedImage= [UIImage imageWithData:imageData];
+                    self.avatar.alpha=0;
+                    [self.avatar setImage:retrievedImage];
+                    [UIView animateWithDuration:0.15 animations:^{
+                        self.avatar.alpha=1;
+                    }];
+                    [[CoreDataDBManager initAndRetrieveSharedInstance] insertIntoDBPersonsPicture:retrievedImage ForId:person.facebookId fromSource:SOURCE_FACEBOOK];
+                    /*if(retrievedImage!=nil && fbId)
+                        [[ViewController defaultInstance].imageCache.cachedImages setObject:retrievedImage forKey:fbId];
+                    if(retrievedImage==nil && fbId){
+                        image.image = [UIImage imageNamed:@"defaultPerson"];
+                        [[ViewController defaultInstance].imageCache.cachedImages setObject:[UIImage imageNamed:@"defaultPerson"] forKey:fbId];
+                    }*/
+                });
+                //dispatch_release(dispatch_get_main_queue());
+            });
+            //dispatch_release(downloadImageQueue);
+            
+        }
+    }
+    CALayer *imageLayer = self.avatar.layer;
+    [imageLayer setCornerRadius:self.avatar.frame.size.height/2];
+    //[imageLayer setCornerRadius:4];
+    [imageLayer setMasksToBounds:YES];
+    
+    if([self.uniqueIdSource isEqualToString:SOURCE_ADDRESSBOOK])
+        self.uniqueId = person.addressBookId;
+}
+
+-(Person*)person{
+    return _person;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -241,6 +311,7 @@ BOOL isShowingOverlayView;
         // Initialization code
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult" owner:self options:nil];
         self = [nib objectAtIndex:0];
+        self.clipsToBounds = NO;
     }
     return self;
 }

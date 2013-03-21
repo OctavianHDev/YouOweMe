@@ -15,11 +15,21 @@
 @property (nonatomic) BOOL isUsingAddressBook;
 @property (nonatomic) BOOL isUsingFacebook;
 
+//core data
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+
+//public API
+
+//facebook
+extern NSString *const FBSessionStateChangedNotification;
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI;
+
+//coredata
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+
 
 @end
