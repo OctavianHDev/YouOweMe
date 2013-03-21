@@ -19,6 +19,7 @@
 
 @interface PredictiveSearchResult()
     @property (nonatomic, strong) IBOutlet UILabel *lblName;
+    @property (nonatomic, strong) IBOutlet UILabel *lblDebtOwing;
     @property (nonatomic, strong) IBOutlet UIImageView *avatar;
     @property (nonatomic, strong) IBOutlet UIImageView *imgViewBackgroundImage;
     @property (nonatomic, strong) NSString *name;
@@ -35,6 +36,7 @@
 @synthesize uniqueIdSource;
 @synthesize delegate;
 @synthesize person=_person;
+@synthesize lblDebtOwing;
 
 //ivars
 CGPoint startTouchPoint;
@@ -253,8 +255,14 @@ BOOL isShowingOverlayView;
 -(void)setPerson:(Person *)person{
     _person = person;
 
+    
+    //NAME
+    //
     self.name=[[person.firstName stringByAppendingString:@" "] stringByAppendingString:person.lastName];
 
+    
+    //IMAGE
+    //
     if(person.avatar.length>2)
         [self.avatar setImage:[UIImage imageWithData:person.avatar]];
     else{
@@ -278,17 +286,8 @@ BOOL isShowingOverlayView;
                         self.avatar.alpha=1;
                     }];
                     [[CoreDataDBManager initAndRetrieveSharedInstance] insertIntoDBPersonsPicture:retrievedImage ForId:person.facebookId fromSource:SOURCE_FACEBOOK];
-                    /*if(retrievedImage!=nil && fbId)
-                        [[ViewController defaultInstance].imageCache.cachedImages setObject:retrievedImage forKey:fbId];
-                    if(retrievedImage==nil && fbId){
-                        image.image = [UIImage imageNamed:@"defaultPerson"];
-                        [[ViewController defaultInstance].imageCache.cachedImages setObject:[UIImage imageNamed:@"defaultPerson"] forKey:fbId];
-                    }*/
                 });
-                //dispatch_release(dispatch_get_main_queue());
             });
-            //dispatch_release(downloadImageQueue);
-            
         }
     }
     CALayer *imageLayer = self.avatar.layer;
@@ -296,8 +295,28 @@ BOOL isShowingOverlayView;
     //[imageLayer setCornerRadius:4];
     [imageLayer setMasksToBounds:YES];
     
+    
+    //DEBT
+    //
+    if(person.debts.count>0){
+        float totalAmount = 0;
+        for(Debt *d in person.debts){
+            totalAmount += [d.amount floatValue];
+        }
+        NSLog(@"total debt amount: %f", totalAmount);
+        self.lblDebtOwing.text = [CURRENCY_SYMBOL stringByAppendingString:[NSString stringWithFormat:@"%.2f", totalAmount]];
+        self.lblDebtOwing.hidden=NO;
+    }else{
+        self.lblDebtOwing.hidden=YES;
+    }
+    
+    
+    //SOURCE
+    //
     if([self.uniqueIdSource isEqualToString:SOURCE_ADDRESSBOOK])
         self.uniqueId = person.addressBookId;
+    if([self.uniqueIdSource isEqualToString:SOURCE_FACEBOOK])
+        self.uniqueId = person.facebookId;
 }
 
 -(Person*)person{

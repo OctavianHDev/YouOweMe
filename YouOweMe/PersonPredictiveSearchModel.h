@@ -26,5 +26,5 @@
 -(id)initWithSourcesFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn;
 -(void)setAsDataSourceAndDelegateFor:(UITableView*)tableView;
 -(void)getFacebookFriends;
-
+-(void)refreshTable;
 @end

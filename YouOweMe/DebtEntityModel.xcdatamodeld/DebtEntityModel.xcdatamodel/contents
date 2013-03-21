@@ -3,7 +3,7 @@
     <entity name="Debt" representedClassName="Debt" syncable="YES">
         <attribute name="amount" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="debtId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="debtDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="paidOff" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="personOwedTo" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" syncable="YES"/>
         <relationship name="personOwing" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="debts" inverseEntity="Person" syncable="YES"/>
@@ -19,6 +19,6 @@
     </entity>
     <elements>
         <element name="Debt" positionX="-252" positionY="282" width="126" height="135"/>
-        <element name="Person" positionX="27" positionY="297" width="128" height="150"/>
+        <element name="Person" positionX="72" positionY="291" width="128" height="150"/>
     </elements>
 </model>

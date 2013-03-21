@@ -9,8 +9,18 @@
 #import <UIKit/UIKit.h>
 #import "Person.h"
 
+@class DebtAddingView;
+
+@protocol DebtAddingDelegate <NSObject>
+    -(void)dissmissView:(DebtAddingView*)debtAddingView andRefreshDebts:(BOOL)shouldRefresh;
+@end
+
+
 @interface DebtAddingView : UIView
 
 @property (nonatomic, strong) Person* person;
+@property (nonatomic, weak)id<DebtAddingDelegate> delegate;
+
+-(IBAction)donePressed:(id)sender;
 
 @end

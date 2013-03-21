@@ -2,7 +2,7 @@
 //  Debt.m
 //  YouOweMe
 //
-//  Created by o on 13-02-26.
+//  Created by o on 13-03-21.
 //  Copyright (c) 2013 o. All rights reserved.
 //
 
@@ -14,8 +14,8 @@
 
 @dynamic amount;
 @dynamic date;
-@dynamic debtId;
 @dynamic paidOff;
+@dynamic debtDescription;
 @dynamic personOwedTo;
 @dynamic personOwing;
 

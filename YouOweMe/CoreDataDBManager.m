@@ -90,4 +90,10 @@
     }
 }
 
+-(Debt *)insertDebtForPerson:(Person *)p ofAmount:(NSNumber *)amount withDescription:(NSString*)description{
+    Debt *toReturn;
+    toReturn = [Debt debtForPerson:p ofAmount:amount withDescription:description inManagedObjectContext:self.context];
+    return toReturn;
+}
+
 @end

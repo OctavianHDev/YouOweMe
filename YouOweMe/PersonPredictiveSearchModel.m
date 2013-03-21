@@ -39,6 +39,7 @@
 @synthesize tableViewWeAreManipulating;
 @synthesize delegate;
 @synthesize filteredArrayOfPersonObjects;
+
 //@synthesize facebookFriends;
 
 #pragma mark - instance vars
@@ -154,6 +155,10 @@ int originalTableHeight=0;
     self.tableViewWeAreManipulating.delegate = self;
 }
 
+-(void)refreshTable{
+    [self.tableViewWeAreManipulating reloadData];
+}
+
 #pragma mark - SETUP
 #pragma mark - initialiser
 
@@ -230,6 +235,8 @@ int originalTableHeight=0;
     
     self.allAddressbookContacts = (__bridge_transfer NSArray *)allPeople;
 }
+
+
 
 
 

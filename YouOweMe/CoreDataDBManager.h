@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Person+Create.h"
+#import "Debt+Create.h"
 
 @interface CoreDataDBManager : NSObject
 
@@ -20,4 +21,7 @@
 -(Person *)getPersonWithId:(NSString*)uniqueId inSource:(NSString*)source;
 -(NSArray*)getPersonsWithPredicate:(NSPredicate*)predicate;
 -(void)insertIntoDBPersonsPicture:(UIImage*)picture ForId:(NSString*)personId fromSource:(NSString*)source;
+-(Debt *)insertDebtForPerson:(Person *)p ofAmount:(NSNumber *)amount withDescription:(NSString*)description;
+
+
 @end

@@ -39,7 +39,6 @@
 		0EEAB57F16C5C9B60064E6B9 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */; };
 		0EED784116F7B70B002793D2 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EED784016F7B70B002793D2 /* FacebookSDK.framework */; };
 		0EED784316F7B78B002793D2 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0EED784216F7B78B002793D2 /* FacebookSDKResources.bundle */; };
-		0EEE22F516DD5BCF001A23D2 /* Debt.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F416DD5BCF001A23D2 /* Debt.m */; };
 		0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE22F716DD5BCF001A23D2 /* Person.m */; };
 		0EEE22FA16DD5DAD001A23D2 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EEE22F916DD5DAD001A23D2 /* CoreData.framework */; };
 		0EEED31716F1255700CE64F3 /* textInputBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EEED31516F1255700CE64F3 /* textInputBkg.png */; };
@@ -51,6 +50,8 @@
 		0EF6697A16F026F000EB85A4 /* rowBottomShadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EF6697816F026F000EB85A4 /* rowBottomShadow.png */; };
 		0EF96E2D16C6F51B00915E29 /* DebtorNameTextInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */; };
 		0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */; };
+		0EF9F30A16FB802300699273 /* Debt+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9F30916FB802300699273 /* Debt+Create.m */; };
+		0EF9F31116FB834300699273 /* Debt.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9F31016FB834300699273 /* Debt.m */; };
 		0EFF81F316F425130085F565 /* btnBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F116F425130085F565 /* btnBkg.png */; };
 		0EFF81F416F425130085F565 /* owes2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F216F425130085F565 /* owes2.png */; };
 /* End PBXBuildFile section */
@@ -101,8 +102,6 @@
 		0EEAB57E16C5C9B60064E6B9 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0EED784016F7B70B002793D2 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../FacebookSDK/build/FacebookSDK.framework; sourceTree = "<group>"; };
 		0EED784216F7B78B002793D2 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FacebookSDKResources.bundle; path = ../../../FacebookSDK/build/FacebookSDK.framework/Versions/A/Resources/FacebookSDKResources.bundle; sourceTree = "<group>"; };
-		0EEE22F316DD5BCF001A23D2 /* Debt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debt.h; sourceTree = "<group>"; };
-		0EEE22F416DD5BCF001A23D2 /* Debt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debt.m; sourceTree = "<group>"; };
 		0EEE22F616DD5BCF001A23D2 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		0EEE22F716DD5BCF001A23D2 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
 		0EEE22F916DD5DAD001A23D2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -116,6 +115,10 @@
 		0EF96E2B16C6F51B00915E29 /* DebtorNameTextInputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebtorNameTextInputView.h; sourceTree = "<group>"; };
 		0EF96E2C16C6F51B00915E29 /* DebtorNameTextInputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebtorNameTextInputView.m; sourceTree = "<group>"; };
 		0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DebtorNameTextInputView.xib; sourceTree = "<group>"; };
+		0EF9F30816FB802300699273 /* Debt+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Debt+Create.h"; sourceTree = "<group>"; };
+		0EF9F30916FB802300699273 /* Debt+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Debt+Create.m"; sourceTree = "<group>"; };
+		0EF9F30F16FB834300699273 /* Debt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debt.h; sourceTree = "<group>"; };
+		0EF9F31016FB834300699273 /* Debt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debt.m; sourceTree = "<group>"; };
 		0EFF81F116F425130085F565 /* btnBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnBkg.png; sourceTree = "<group>"; };
 		0EFF81F216F425130085F565 /* owes2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = owes2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -277,14 +280,16 @@
 			isa = PBXGroup;
 			children = (
 				0E015C5716CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld */,
+				0EF9F30F16FB834300699273 /* Debt.h */,
+				0EF9F31016FB834300699273 /* Debt.m */,
 				0EEE22F616DD5BCF001A23D2 /* Person.h */,
 				0EE6D05916E1506E00F2856C /* Person+Create.h */,
 				0EE6D05A16E1506E00F2856C /* Person+Create.m */,
 				0EEE22F716DD5BCF001A23D2 /* Person.m */,
-				0EEE22F316DD5BCF001A23D2 /* Debt.h */,
-				0EEE22F416DD5BCF001A23D2 /* Debt.m */,
 				0EDD23C916E7FD71008F46E3 /* CoreDataDBManager.h */,
 				0EDD23CA16E7FD71008F46E3 /* CoreDataDBManager.m */,
+				0EF9F30816FB802300699273 /* Debt+Create.h */,
+				0EF9F30916FB802300699273 /* Debt+Create.m */,
 			);
 			name = "core data";
 			sourceTree = "<group>";
@@ -381,12 +386,13 @@
 				0E015C5916CEEF4E007190D8 /* DebtEntityModel.xcdatamodeld in Sources */,
 				0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */,
 				0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */,
-				0EEE22F516DD5BCF001A23D2 /* Debt.m in Sources */,
 				0EEE22F816DD5BCF001A23D2 /* Person.m in Sources */,
 				0EE6D05B16E1506E00F2856C /* Person+Create.m in Sources */,
 				0EDD23CB16E7FD71008F46E3 /* CoreDataDBManager.m in Sources */,
 				0EDD23D316E8152B008F46E3 /* PersonDetailView.m in Sources */,
 				0EE9439216EFB5AE00F87C1E /* DebtAddingView.m in Sources */,
+				0EF9F30A16FB802300699273 /* Debt+Create.m in Sources */,
+				0EF9F31116FB834300699273 /* Debt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -67,6 +67,24 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 
 
+#pragma mark - debt adding delegate
+#pragma mark -
+-(void)dissmissView:(DebtAddingView*)debtAddingView andRefreshDebts:(BOOL)shouldRefresh{
+    if(shouldRefresh){
+        [self.predictiveSearchDataSource refreshTable];
+    }
+    [UIView animateWithDuration:0.2 animations:^{
+        self.debtAddingView.frame = CGRectMake(-300,
+                                               0,
+                                               self.view.frame.size.width, self.view.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.debtAddingView removeFromSuperview];
+        self.debtAddingView = nil;
+    }];
+}
+
+
+
 #pragma mark - PredictiveSearchDelegate DELEGATE
 #pragma mark -
 
@@ -115,6 +133,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
                                                                          0,
                                                                          hudWidth, self.view.frame.size.height)];
     self.debtAddingView.person=person;
+    self.debtAddingView.delegate=self;
     [self.view addSubview:self.debtAddingView];
     [UIView animateWithDuration:0.2 animations:^{
         self.debtAddingView.frame = CGRectMake(0,
