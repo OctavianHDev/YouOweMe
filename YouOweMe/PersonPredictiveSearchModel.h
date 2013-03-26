@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Person.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "Person.h"
 
 @protocol PredictiveSearchDelegate <NSObject>
-    -(void)didSelectPerson:(Person*)person;
+    -(void)didSelectPerson:(UIView*)personCell;
     -(void)addDebtForPerson:(Person*)person;
     -(void)addPaymentForPerson:(Person*)person;
 @end
@@ -21,7 +21,7 @@
                                                     FBLoginViewDelegate>
 
 @property (nonatomic, strong) NSString *inputString;
-@property (nonatomic, weak)id<PredictiveSearchDelegate> delegate;
+@property (nonatomic, weak) id<PredictiveSearchDelegate> delegate;
 
 -(id)initWithSourcesFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn;
 -(void)setAsDataSourceAndDelegateFor:(UITableView*)tableView;

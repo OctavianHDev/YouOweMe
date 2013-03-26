@@ -12,6 +12,7 @@
 #import "PersonDetailView.h"
 #import "PrototypeAppDelegate.h"
 #import "DebtAddingView.h"
+#import "PredictiveSearchResult.h"
 
 @interface HomeViewController ()
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
@@ -69,17 +70,37 @@ UIPanGestureRecognizer *panGestureRecognizer;
 
 #pragma mark - debt adding delegate
 #pragma mark -
--(void)dissmissView:(DebtAddingView*)debtAddingView andRefreshDebts:(BOOL)shouldRefresh{
+
+-(void)animatedViewToOriginalPosition{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.overlayView.alpha=0.5;
+    }];
+}
+
+-(void)draggingViewByDelta:(NSNumber*)delta{
+    NSLog(@"detla is: %@", delta);
+    float newAlpha = 50 + [delta floatValue];
+    if(newAlpha<50 && newAlpha>8)
+        self.overlayView.alpha=newAlpha/100;
+}
+
+
+-(void)dissmissView:(PersonDetailView*)debtAddingView andRefreshDebts:(BOOL)shouldRefresh{
     if(shouldRefresh){
         [self.predictiveSearchDataSource refreshTable];
     }
     [UIView animateWithDuration:0.2 animations:^{
-        self.debtAddingView.frame = CGRectMake(-300,
-                                               0,
+        self.personDetailView.frame = CGRectMake(0,
+                                               -300,
                                                self.view.frame.size.width, self.view.frame.size.height);
+        self.overlayView.alpha=0.0;
     } completion:^(BOOL finished) {
-        [self.debtAddingView removeFromSuperview];
-        self.debtAddingView = nil;
+        
+        [self.personDetailView removeFromSuperview];
+        self.personDetailView = nil;
+
+        [self.overlayView removeFromSuperview];
+        self.overlayView = nil;
     }];
 }
 
@@ -88,7 +109,68 @@ UIPanGestureRecognizer *panGestureRecognizer;
 #pragma mark - PredictiveSearchDelegate DELEGATE
 #pragma mark -
 
--(void)didSelectPerson:(Person*)person{
+-(void)didSelectPerson:(UIView*)personCell{
+    //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
+    if(self.personDetailView)
+        return;
+    
+    //ADD DISMISS OVERLAY
+    //
+    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.overlayView.backgroundColor = [UIColor blackColor];
+    self.overlayView.alpha=0.0;
+    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
+    [self.overlayView addGestureRecognizer:tapr];
+    [self.view addSubview:self.overlayView];
+    [UIView animateWithDuration:0.2 animations:^{
+        self.overlayView.alpha=0.5;
+    }];
+    
+    Person *person = ((PredictiveSearchResult*)personCell).person;
+    CGPoint originPoint = [personCell.superview convertPoint:personCell.frame.origin toView:self.view];
+    //CGRect animatedViewFrame = [personCell.superview convertRect:personCell.frame toView:self.view];
+    CGRect startingFrame = CGRectMake(originPoint.x, originPoint.y, personCell.frame.size.width, personCell.frame.size.height);
+    PredictiveSearchResult *addedCell = [[PredictiveSearchResult alloc] initWithFrame:startingFrame];
+    NSLog(@"adding at: %f",originPoint.y);
+    addedCell.person = person;
+    addedCell.userInteractionEnabled=NO;
+    [self.view addSubview:addedCell];
+    addedCell.frame=startingFrame;
+    
+    [UIView animateWithDuration:0.23 animations:^{
+        
+        addedCell.frame = CGRectMake(20,
+                                     20,
+                                     addedCell.frame.size.width-40,
+                                     addedCell.frame.size.height-40);
+        
+    } completion:^(BOOL finished) {
+        [addedCell removeFromSuperview];
+        //ADD ACTUAL PERSON INFO
+        //
+        NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
+        
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PersonDetailView"
+                                                                 owner:self
+                                                               options:nil];
+        UIView *cell = [topLevelObjects objectAtIndex:0];
+        int calculatedHeight = cell.frame.size.height;
+        int calculatedWidth = cell.frame.size.width;
+        
+        self.personDetailView = [[PersonDetailView alloc] initWithFrame:CGRectMake(20, 20, calculatedWidth, addedCell.frame.size.height)];
+        self.personDetailView.cell = addedCell;
+        [self.personDetailView setAsDebtViewingMode];
+        
+        //self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
+        //self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
+        [self.view addSubview:self.personDetailView];
+        [UIView animateWithDuration:0.25 animations:^{
+            
+            self.personDetailView.frame=CGRectMake(20, 20, calculatedWidth, calculatedHeight);
+        }];
+    }];
+}
+/*-(void)didSelectPerson:(Person*)person{
     //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
     if(self.personDetailView)
         return;
@@ -121,15 +203,84 @@ UIPanGestureRecognizer *panGestureRecognizer;
     self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
     self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
     [self.view addSubview:self.personDetailView];
-}
-
--(void)addPaymentForPerson:(Person *)person{}
+}*/
 
 -(void)addDebtForPerson:(Person *)person{
-    NSLog(@"adding debt for: %@", person.firstName);
+    //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
+    if(self.personDetailView)
+        return;
+    
+    //ADD DISMISS OVERLAY
+    //
+    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
+    self.overlayView.backgroundColor = [UIColor blackColor];
+    self.overlayView.alpha=0.0;
+    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
+    [self.overlayView addGestureRecognizer:tapr];
+    [self.view addSubview:self.overlayView];
+    [UIView animateWithDuration:0.2 animations:^{
+        self.overlayView.alpha=0.5;
+    }];
+    
+    CGPoint originPoint = CGPointMake(20, -30);
+    NSArray *topLevelObjects1 = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult"
+                                                             owner:self
+                                                           options:nil];
+    UIView *cell = [topLevelObjects1 objectAtIndex:0];
+    int calculatedHeight = cell.frame.size.height;
+    int calculatedWidth = cell.frame.size.width;
 
-    [self.inputView.textField resignFirstResponder];
-    [self growPredictiveSearch];
+    //CGRect animatedViewFrame = [personCell.superview convertRect:personCell.frame toView:self.view];
+    //CGRect startingFrame = CGRectMake(originPoint.x, originPoint.y, cell.frame.size.width, cell.frame.size.height);
+    CGRect startingFrame = CGRectMake(originPoint.x, -30, cell.frame.size.width, cell.frame.size.height);
+    PredictiveSearchResult *addedCell = [[PredictiveSearchResult alloc] initWithFrame:startingFrame];
+    addedCell.person = person;
+    addedCell.userInteractionEnabled=NO;
+    [addedCell setAsMiniMode];
+    [self.view addSubview:addedCell];
+    addedCell.frame=startingFrame;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        addedCell.frame = CGRectMake(20,
+                                     20,
+                                     addedCell.frame.size.width-40,
+                                     addedCell.frame.size.height-40);
+        
+    } completion:^(BOOL finished) {
+        [addedCell removeFromSuperview];
+        //ADD ACTUAL PERSON INFO
+        //
+        NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
+        
+        NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PersonDetailView"
+                                                                 owner:self
+                                                               options:nil];
+        UIView *cell = [topLevelObjects objectAtIndex:0];
+        int calculatedHeight = cell.frame.size.height;
+        int calculatedWidth = cell.frame.size.width;
+        
+        self.personDetailView = [[PersonDetailView alloc] initWithFrame:CGRectMake(20, 20, calculatedWidth, addedCell.frame.size.height)];
+        self.personDetailView.cell = addedCell;
+        self.personDetailView.delegate = self;
+        [self.personDetailView setAsDebtAddingMode];
+        
+        //self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
+        //self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
+        [self.view addSubview:self.personDetailView];
+        [UIView animateWithDuration:0.25 animations:^{
+            
+            self.personDetailView.frame=CGRectMake(20, 20, calculatedWidth, calculatedHeight);
+        }];
+    }];
+
+}
+
+//-(void)addDebtForPerson:(Person *)person{
+  //  NSLog(@"adding debt for: %@", person.firstName);
+
+    //[self.inputView.textField resignFirstResponder];
+    //[self growPredictiveSearch];
 
     /*//add overlay
     self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
@@ -146,7 +297,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
     float hudWidth = dummy.frame.size.width;
     float hudHeight = dummy.frame.size.height;
     */
-    float hudWidth = 300;
+    /*float hudWidth = 300;
     self.debtAddingView= [[DebtAddingView alloc] initWithFrame:CGRectMake(hudWidth*-1,
                                                                          0,
                                                                          hudWidth, self.view.frame.size.height)];
@@ -157,13 +308,14 @@ UIPanGestureRecognizer *panGestureRecognizer;
         self.debtAddingView.frame = CGRectMake(0,
                                                0,
                                                self.view.frame.size.width, self.view.frame.size.height);
-    }];
-}
+    }];*/
+//}
 
 
 -(void)handleOverlayTap:(UITapGestureRecognizer *)sender{
-    [UIView animateWithDuration:0.15 animations:^{
-
+    [self.personDetailView preapareForDismissal];
+    [UIView animateWithDuration:0.15 delay:0.15 options:nil animations:^{
+        
         self.overlayView.alpha=0.0f;
         self.personDetailView.alpha=0.0f;
         
@@ -171,6 +323,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
                                                self.personDetailView.frame.origin.y+25,
                                                self.personDetailView.frame.size.width-50,
                                                self.personDetailView.frame.size.height-50);
+        
     } completion:^(BOOL finished) {
         [self.overlayView removeFromSuperview];
         self.overlayView = nil;

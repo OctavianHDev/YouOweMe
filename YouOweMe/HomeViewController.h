@@ -11,6 +11,7 @@
 #import "PersonPredictiveSearchModel.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "DebtAddingView.h"
+#import "PersonDetailView.h"
 
 @interface HomeViewController : UIViewController   <DebtorNameTextInputDelegate,
                                                     PredictiveSearchDelegate,

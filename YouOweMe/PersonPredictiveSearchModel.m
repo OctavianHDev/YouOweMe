@@ -252,7 +252,7 @@ int originalTableHeight=0;
     NSLog(@"did select row at index path");
     return;
     
-    NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
+    /*NSString *firstName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonFirstNameProperty);
     if(!firstName)
         firstName = @"";
     NSString *lastName = (__bridge_transfer NSString*)ABRecordCopyValue(CFBridgingRetain([self.filteredResults objectAtIndex:indexPath.row]),kABPersonLastNameProperty);
@@ -277,7 +277,7 @@ int originalTableHeight=0;
 
     Person *p = [[CoreDataDBManager initAndRetrieveSharedInstance] personWithAttributes:attributes fromSource:SOURCE_ADDRESSBOOK];
 
-    [self.delegate didSelectPerson:p];
+    [self.delegate didSelectPerson:p];*/
 }
 
 #pragma mark - table view data source

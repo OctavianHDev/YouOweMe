@@ -102,8 +102,8 @@ NSString *const FBSessionStateChangedNotification =
 #pragma mark - lifecycle
 - (void)setupSources{
     
-    self.isUsingAddressBook=NO;
-    self.isUsingFacebook=YES;
+    self.isUsingAddressBook=YES;
+    self.isUsingFacebook=NO;
     
     if(self.isUsingFacebook){
         if (![self openSessionWithAllowLoginUI:NO]) {

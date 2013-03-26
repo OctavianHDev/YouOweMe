@@ -11,15 +11,15 @@
 
 @class DebtAddingView;
 
-@protocol DebtAddingDelegate <NSObject>
+/*@protocol DebtAddingDelegate <NSObject>
     -(void)dissmissView:(DebtAddingView*)debtAddingView andRefreshDebts:(BOOL)shouldRefresh;
 @end
-
+*/
 
 @interface DebtAddingView : UIView
 
 @property (nonatomic, strong) Person* person;
-@property (nonatomic, weak)id<DebtAddingDelegate> delegate;
+/*@property (nonatomic, weak)id<DebtAddingDelegate> delegate;*/
 
 -(IBAction)donePressed:(id)sender;
 

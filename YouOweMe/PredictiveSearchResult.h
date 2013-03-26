@@ -17,4 +17,6 @@
 @property (nonatomic, strong) Person *person;
 @property (nonatomic, strong) NSString *uniqueIdSource;
 
+-(void)setAsMiniMode;
+
 @end

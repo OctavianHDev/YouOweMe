@@ -7,13 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PredictiveSearchResult.h"
+
+
+@class PersonDetailView;
+
+@protocol DebtAddingDelegate <NSObject>
+    -(void)dissmissView:(PersonDetailView*)detailView andRefreshDebts:(BOOL)shouldRefresh;
+    -(void)draggingViewByDelta:(NSNumber*)delta;
+    -(void)animatedViewToOriginalPosition;
+@end
 
 @interface PersonDetailView : UIView
 
-@property IBOutlet UILabel *lblName;
-@property IBOutlet UIImageView *imgViewAvatar;
-@property IBOutlet UIButton *btnClose;
+@property (nonatomic, strong) PredictiveSearchResult* cell;
+@property (nonatomic, weak)id<DebtAddingDelegate> delegate;
+
 
 -(IBAction)closePressed:(id)sender;
-
+-(void)preapareForDismissal;
+-(void)setAsDebtAddingMode;
+-(void)setAsDebtViewingMode;
 @end

@@ -32,7 +32,7 @@
 @synthesize personlastName;
 @synthesize txtFieldAmount;
 @synthesize txtFieldDescription;
-@synthesize delegate;
+//@synthesize delegate;
 
 @synthesize startTouchPoint, shouldDismissSelf;
 
@@ -71,7 +71,7 @@
             desc = @"";
         }
         [[CoreDataDBManager initAndRetrieveSharedInstance]insertDebtForPerson:self.person ofAmount:amount withDescription:desc];
-        [self.delegate dissmissView:self andRefreshDebts:YES];
+        //[self.delegate dissmissView:self andRefreshDebts:YES];
 
     }else{
         //TODO: alert the user of invalid input
@@ -136,7 +136,7 @@
             self.frame = CGRectMake(-2*self.frame.size.width,self.frame.origin.y, self.frame.size.width, self.frame.size.height);
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
-            [self.delegate dissmissView:self andRefreshDebts:NO];
+            //[self.delegate dissmissView:self andRefreshDebts:NO];
         }];
     }else{
         [UIView animateWithDuration:0.2 animations:^{

@@ -43,10 +43,17 @@ CGPoint startTouchPoint;
 UIView *bkgViewRightSwipeIndicator;
 UIView *bkgViewLeftSwipeIndicator;
 BOOL isShowingOverlayView;
+BOOL isLongTouching=FALSE;
 //used for gesturepanrecognizer method
 //int firstX;
 //int firstY;
 
+
+#pragma mark - PUBLIC API
+#pragma mark -
+-(void)setAsMiniMode{
+    self.lblDebtOwing.hidden=YES;
+}
 
 #pragma mark - moving
 
@@ -78,12 +85,15 @@ BOOL isShowingOverlayView;
     
     isShowingOverlayView = NO;
     
+    isLongTouching = YES;
+    
     [super touchesBegan:touches withEvent:event];
 }
 
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
     //NSLog(@"*touches cancelled");
     [self maybeBringUpDebtView];
+    isLongTouching=NO;
     [super touchesCancelled:touches withEvent:event];
     
 }
@@ -91,6 +101,7 @@ BOOL isShowingOverlayView;
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     //NSLog(@"*touches ended");
     [self maybeBringUpDebtView];
+    isLongTouching=NO;
     [super touchesEnded:touches withEvent:event];
 }
 
@@ -171,7 +182,11 @@ BOOL isShowingOverlayView;
 #pragma mark - long press gestureRecognizer
 -(void)handleLongPress:(UIGestureRecognizer*)sender{
     NSLog(@"LONG PRESS!");
-    [self.delegate didSelectPerson:self.person];
+    if(isLongTouching){
+        //[self.delegate didSelectPerson:self.person];
+        [self.delegate didSelectPerson:self];
+        isLongTouching=NO;
+    }
 }
 
 #pragma mark - panning for gestureRecognizer
@@ -332,6 +347,12 @@ BOOL isShowingOverlayView;
 
 #pragma mark - SETUP
 #pragma mark -
+
+-(id)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    return self;
+}
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];

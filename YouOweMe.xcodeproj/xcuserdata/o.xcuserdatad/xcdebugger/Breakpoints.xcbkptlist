@@ -21,13 +21,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/HomeViewController.m"
-         timestampString = "385602370.045662"
+         timestampString = "385963228.140664"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "96"
-         endingLineNumber = "96"
-         landmarkName = "-didSelectPerson:"
-         landmarkType = "5">
+         startingLineNumber = "178"
+         endingLineNumber = "178"
+         landmarkName = "@implementation HomeViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -60,11 +60,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/HomeViewController.m"
-         timestampString = "385602580.234263"
+         timestampString = "385963228.140664"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "241"
-         endingLineNumber = "241"
+         startingLineNumber = "394"
+         endingLineNumber = "394"
          landmarkName = "-shrinkPredictiveSearch"
          landmarkType = "5">
       </FileBreakpoint>
@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/HomeViewController.m"
-         timestampString = "385602580.234263"
+         timestampString = "385963228.140664"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "196"
-         endingLineNumber = "196"
+         startingLineNumber = "349"
+         endingLineNumber = "349"
          landmarkName = "-keyboardWillShow:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/HomeViewController.m"
-         timestampString = "385602580.234263"
+         timestampString = "385963228.140664"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "214"
-         endingLineNumber = "214"
+         startingLineNumber = "367"
+         endingLineNumber = "367"
          landmarkName = "-keyboardWillHide:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -177,11 +177,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/PredictiveSearchResult.m"
-         timestampString = "385601634.511529"
+         timestampString = "385949969.75037"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "261"
-         endingLineNumber = "261"
+         startingLineNumber = "276"
+         endingLineNumber = "276"
          landmarkName = "-setPerson:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -281,11 +281,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "YouOweMe/PredictiveSearchResult.m"
-         timestampString = "385601634.511529"
+         timestampString = "385949969.75037"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "306"
-         endingLineNumber = "306"
+         startingLineNumber = "321"
+         endingLineNumber = "321"
          landmarkName = "-setPerson:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -352,6 +352,45 @@
          startingLineNumber = "138"
          endingLineNumber = "138"
          landmarkName = "-maybeDismissSelf"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "YouOweMe/HomeViewController.m"
+         timestampString = "385963228.140664"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "135"
+         endingLineNumber = "135"
+         landmarkName = "-didSelectPerson:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "YouOweMe/HomeViewController.m"
+         timestampString = "385963228.140664"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "210"
+         endingLineNumber = "210"
+         landmarkName = "-addDebtForPerson:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "YouOweMe/HomeViewController.m"
+         timestampString = "385963228.140664"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "89"
+         endingLineNumber = "89"
+         landmarkName = "-dissmissView:andRefreshDebts:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
