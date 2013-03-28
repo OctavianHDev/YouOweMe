@@ -10,18 +10,23 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Person.h"
 #import "CoreDataDBManager.h"
+#import "HUDhint.h"
 
 #define MOVED_ENOUGH 40
-
-
+#define MSG_FOOTER @"SWIPE UP TO DISMISS"
+#define CALCULATED_SELF_HEIGHT 173
 
 @interface PersonDetailView()
     @property (nonatomic, strong) Person* person;
     @property (nonatomic, strong) IBOutlet UIButton *btnDone;
-    @property (nonatomic, strong) IBOutlet UIImageView *txtBkg1;
-    @property (nonatomic, strong) IBOutlet UIImageView *txtBkg2;
+    @property (nonatomic, strong) IBOutlet UIImageView *txtBkgDebt;
+    @property (nonatomic, strong) IBOutlet UIImageView *txtBkgDescription;
     @property (nonatomic, strong) IBOutlet UITextField *txtFieldDebt;
-    @property (nonatomic, strong) IBOutlet UITextField *txtFeidlDescription;
+    @property (nonatomic, strong) IBOutlet UITextField *txtFieldDescription;
+    @property (nonatomic, strong) UIImageView *owesBanner;
+    @property (nonatomic, strong) HUDhint *hudHint;
+    @property (nonatomic, strong) IBOutlet UILabel *errorCorrectionLabel;
+    @property (nonatomic, strong) IBOutlet UIImageView *errorCorrectionImage;
 
     //moving
     @property CGPoint startTouchPoint;
@@ -36,8 +41,11 @@
 
 @synthesize cell=_cell;
 @synthesize person;
-@synthesize btnDone,txtBkg1,txtBkg2,txtFeidlDescription,txtFieldDebt;
+@synthesize btnDone,txtBkgDebt,txtBkgDescription,txtFieldDescription,txtFieldDebt;
 @synthesize shouldDismissSelf,startTouchPoint;
+@synthesize owesBanner;
+@synthesize shouldAddDebtOnRelease;
+@synthesize hudHint;
 
 #pragma mark - PUBLIC API
 #pragma mark -
@@ -61,24 +69,63 @@
     }];
 }
 
+-(void)fadeOutControls{
+    [UIView animateWithDuration:0.3 delay:0.0 options:nil animations:^{
+
+        self.txtFieldDebt.alpha=0;
+        self.txtFieldDescription.alpha=0;
+        self.hudHint.alpha=0;
+        self.errorCorrectionImage.alpha=0;
+        self.errorCorrectionLabel.alpha=0;
+
+    } completion:^(BOOL finished) {
+        
+        //
+        /*self.owesBanner = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"owesBanner"]];
+         self.owesBanner.contentMode = UIViewContentModeScaleAspectFill;
+         self.owesBanner.frame = CGRectMake(0, 20, 80, 40);
+         self.owesBanner.clipsToBounds=YES;
+         [self addSubview:self.owesBanner];*/
+        
+    }];
+
+}
+
 -(void)fadeInControls{
-    self.txtBkg1.alpha=0;
+    self.txtBkgDebt.alpha=0;
     self.txtFieldDebt.alpha=0;
-    self.btnDone.alpha=0;
+    self.txtFieldDescription.alpha=0;
+
+    CGRect hintFrame = CGRectMake(0,CALCULATED_SELF_HEIGHT+5, self.frame.size.width, 30);
+    self.hudHint = [[HUDhint alloc]initWithFrame:hintFrame];
+    self.hudHint.label.text = MSG_FOOTER;
+    self.hudHint.alpha=0;
+    [self addSubview:self.hudHint];
+
+    //self.btnDone.alpha=0;
     [UIView animateWithDuration:0.3 delay:0.2 options:nil animations:^{
-        //self.txtBkg1.alpha=1;
+        //self.txtBkgDebt.alpha=1;
         self.txtFieldDebt.alpha=1;
-        self.btnDone.alpha=1;
+        self.txtFieldDescription.alpha=1;
+        self.hudHint.alpha=1;
+        //self.btnDone.alpha=1;
     } completion:^(BOOL finished) {
         //
+        /*self.owesBanner = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"owesBanner"]];
+        self.owesBanner.contentMode = UIViewContentModeScaleAspectFill;
+        self.owesBanner.frame = CGRectMake(0, 20, 80, 40);
+        self.owesBanner.clipsToBounds=YES;
+        [self addSubview:self.owesBanner];*/
+
     }];
 }
 
 -(void)setAsDebtAddingMode{
     self.isInDebtMode=YES;
-    self.txtBkg1.hidden=NO;
+    self.txtBkgDebt.hidden=NO;
     self.txtFieldDebt.hidden=NO;
-    self.btnDone.hidden=NO;
+    self.txtFieldDescription.hidden=NO;
+    //self.btnDone.hidden=NO;
     
     [self fadeInControls];
 }
@@ -121,6 +168,10 @@
             [self removeFromSuperview];
             [self.delegate dissmissView:self andRefreshDebts:NO];
         }];
+    
+    //ok so we're not dismissing ourselves, meaning that either we weren't pulled up far enough,
+    //or we were pulled down, in which case we're going to add the debt, if this view
+    //was pulled down far enough
     }else{
         [UIView animateWithDuration:0.2 animations:^{
             self.frame = CGRectMake(self.firstOrigin.x,
@@ -128,7 +179,48 @@
                                     self.frame.size.width,
                                     self.frame.size.height);
         } completion:^(BOOL finished) {
-            [self.delegate animatedViewToOriginalPosition];
+            if(self.shouldAddDebtOnRelease){
+                NSLog(@"adding that debt");
+                NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+                [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                NSNumber *amount = [f numberFromString:self.txtFieldDebt.text];
+                if(amount){
+                    NSString *desc = self.txtFieldDescription.text;
+                    if(!desc || desc.length<1){
+                        desc = @"";
+                    }
+                    [[CoreDataDBManager initAndRetrieveSharedInstance]insertDebtForPerson:self.person ofAmount:amount withDescription:desc];
+                    [self.delegate dissmissView:self andRefreshDebts:YES];
+                
+                    //TODO: have some animation indicating that the debt is added
+                    //once that's completed, go ahead and...
+                    [self fadeOutControls];
+
+                //user didn't input a number for a debt. come on now
+                }else{
+                    self.errorCorrectionLabel.hidden=NO;
+                    self.errorCorrectionImage.hidden=NO;
+                    
+                    [UIView animateWithDuration:0.4 delay:3.0 options:nil animations:^{
+                        self.errorCorrectionLabel.alpha=0;
+                        self.errorCorrectionImage.alpha=0;
+                    } completion:^(BOOL finished) {
+                        self.errorCorrectionImage.hidden=YES;
+                        self.errorCorrectionLabel.hidden=YES;
+                        self.errorCorrectionLabel.alpha=1;
+                        self.errorCorrectionImage.alpha=1;
+                    }];
+                }
+
+                //alert the parent view that we're animating to the original position
+                //this is done so that the black overlay can animate smoothly to its original alpha
+                [self.delegate animatedViewToOriginalPosition];
+
+            }else{
+                //alert the parent view that we're animating to the original position
+                //this is done so that the black overlay can animate smoothly to its original alpha
+                [self.delegate animatedViewToOriginalPosition];
+            }
         }];
     }
 }
@@ -142,7 +234,7 @@
     CGPoint touchPoint = [touch locationInView:[self superview]];
     touchDy = touchPoint.y - self.startTouchPoint.y;
     
-    //NSLog(@"touchDx: %f", touchDx);
+    //NSLog(@"touchDy: %f", touchDy);
     
     if(touchDy<MOVED_ENOUGH*-1){
         self.shouldDismissSelf=YES;
@@ -150,12 +242,12 @@
         self.shouldDismissSelf=NO;
     }
     
-    if(touchDy<0){
+    //if(touchDy<self.startTouchPoint.y){
         self.frame = CGRectMake(self.frame.origin.x,
                                 touchDy,
                                 self.frame.size.width,
                                 self.frame.size.height);
-    }
+   // }
     [self.delegate draggingViewByDelta:[NSNumber numberWithFloat:touchDy]];
     [super touchesMoved:touches withEvent:event];
 }
@@ -168,21 +260,7 @@
 #pragma mark - ACTIONS
 #pragma mark -
 -(IBAction)donePressed:(id)sender{
-    NSLog(@"here");
-    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-    [f setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSNumber *amount = [f numberFromString:self.txtFieldDebt.text];
-    if(amount){
-        NSString *desc = self.txtFeidlDescription.text;
-        if(!desc || desc.length<1){
-            desc = @"";
-        }
-        [[CoreDataDBManager initAndRetrieveSharedInstance]insertDebtForPerson:self.person ofAmount:amount withDescription:desc];
-        [self.delegate dissmissView:self andRefreshDebts:YES];
-        
-    }else{
-        //TODO: alert the user of invalid input
-    }
+    NSLog(@"done pressed");
 }
 
 #pragma mark - SETUP
@@ -207,6 +285,12 @@
     self.layer.shadowColor=[[UIColor blackColor] CGColor];
     self.layer.shadowOpacity=0.3f;
     self.layer.shadowRadius=3.0f;
+    
+    self.txtFieldDebt.textColor = [UIColor darkGrayColor];
+    self.txtFieldDescription.textColor = [UIColor darkGrayColor];
+    [self.txtFieldDebt becomeFirstResponder];
+    self.errorCorrectionImage.hidden=YES;
+    self.errorCorrectionLabel.hidden=YES;
 }
 
 

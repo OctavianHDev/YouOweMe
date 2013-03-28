@@ -46,13 +46,14 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{320, 75}</string>
 								<reference key="NSSuperview" ref="724022811"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="130461586"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">predictiveSearchBkg2.png</string>
+									<string key="NSResourceName">predictiveSearchBkgGray.png</string>
 								</object>
 							</object>
 							<object class="IBUIImageView" id="130461586">
@@ -60,6 +61,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{5, 4}, {66, 66}}</string>
 								<reference key="NSSuperview" ref="724022811"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="825543159"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -70,6 +72,8 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{100, 27}, {198, 21}}</string>
 								<reference key="NSSuperview" ref="724022811"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<string key="NSAntiCompressionPriority">{243, 750}</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -111,6 +115,7 @@
 								<int key="NSvFlags">-2147483356</int>
 								<string key="NSFrame">{{210, 4}, {96, 21}}</string>
 								<reference key="NSSuperview" ref="724022811"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="163201339"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -142,6 +147,7 @@
 						</array>
 						<string key="NSFrameSize">{320, 74}</string>
 						<reference key="NSSuperview" ref="593744893"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="62928719"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -157,6 +163,7 @@
 				</array>
 				<string key="NSFrameSize">{320, 75}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="724022811"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<reference key="IBUIBackgroundColor" ref="74236556"/>
@@ -656,13 +663,56 @@
 			<nil key="sourceID"/>
 			<int key="maxID">173</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">NSLayoutConstraint</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">PredictiveSearchResult</string>
+					<string key="superclassName">UITableViewCell</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="avatar">UIImageView</string>
+						<string key="imgViewBackgroundImage">UIImageView</string>
+						<string key="lblDebtOwing">UILabel</string>
+						<string key="lblName">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="avatar">
+							<string key="name">avatar</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="imgViewBackgroundImage">
+							<string key="name">imgViewBackgroundImage</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lblDebtOwing">
+							<string key="name">lblDebtOwing</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="lblName">
+							<string key="name">lblName</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/PredictiveSearchResult.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">predictiveSearchBkg2.png</string>
+			<string key="NS.key.0">predictiveSearchBkgGray.png</string>
 			<string key="NS.object.0">{640, 150}</string>
 		</object>
 		<bool key="IBDocument.UseAutolayout">YES</bool>

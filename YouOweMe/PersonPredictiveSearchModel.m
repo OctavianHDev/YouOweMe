@@ -68,9 +68,9 @@ int originalTableHeight=0;
             
             NSString *recordId = [[NSNumber numberWithInteger:ABRecordGetRecordID(ref)] stringValue];
             
-            NSLog(@"first name is %@",firstName);
-            NSLog(@"last name is %@",lastName);
-            NSLog(@"record id is %@",recordId);
+            //NSLog(@"first name is %@",firstName);
+            //NSLog(@"last name is %@",lastName);
+            //NSLog(@"record id is %@",recordId);
             
             NSDictionary *attributes = [[NSDictionary alloc]
                                         initWithObjects:
@@ -140,7 +140,7 @@ int originalTableHeight=0;
     //filter facebook results
     //
     if(self.isUsingFacebook){
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"firstName BEGINSWITH[cd] %@",inputString];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(firstName BEGINSWITH[cd] %@) AND (source == %@)",inputString, SOURCE_FACEBOOK];
 
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"facebookId == '100004292588508'"];
         self.filteredResults = [[CoreDataDBManager initAndRetrieveSharedInstance] getPersonsWithPredicate:predicate];
@@ -159,6 +159,16 @@ int originalTableHeight=0;
     [self.tableViewWeAreManipulating reloadData];
 }
 
+-(void)refreshSourcesWithFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn;{
+    if(facebookOn == self.isUsingFacebook && addressOn==self.isUsingAddressBook){
+        NSLog(@"source didn't change, ignore");
+    }else{
+        NSLog(@"source changed, have to reinitialize");
+        [self setupSourcesWithFacebook:facebookOn andAddress:addressOn];
+    }
+}
+
+
 #pragma mark - SETUP
 #pragma mark - initialiser
 
@@ -168,6 +178,15 @@ int originalTableHeight=0;
     
     self.filteredResults = [[NSArray alloc] init];
     NSLog(@"facebook: %d, addressbook:%d", facebookOn, addressOn);
+
+    [self setupSourcesWithFacebook:facebookOn andAddress:addressOn];
+    
+    return self;
+}
+
+-(void)setupSourcesWithFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn{
+    self.isUsingAddressBook=addressOn;
+    self.isUsingFacebook=facebookOn;
     
     if(facebookOn){
         //ok so here's an extended explanation of the workflow for fetching the fb friend data:
@@ -180,8 +199,8 @@ int originalTableHeight=0;
         //But for now:
         //Either get the friends (if the session has been properly initialised) OR start listening for when
         //the session has been properly initalised, and then go about our business.
-
-        self.isUsingFacebook=YES;
+        
+        //self.isUsingFacebook=YES;
         
         [self getFacebookFriendsWithCompletionBlock:^(BOOL success, NSError *error) {
             if(success){
@@ -192,11 +211,12 @@ int originalTableHeight=0;
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookSessionChanged:) name:FBSessionDidBecomeOpenActiveSessionNotification object:nil];
             }
         }];
+    }else{
+        self.isUsingFacebook=NO;
     }
     
     if(addressOn){
-        //initialise addressbook
-        
+        //initialise addressbook        
         if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
             ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
             ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
@@ -219,16 +239,15 @@ int originalTableHeight=0;
             //TODO: alert the user
             NSLog(@"the user has previously denied access");
         }
+    }else{
+        self.isUsingAddressBook=NO;
     }
-    
-    return self;
 }
-
 
 #pragma mark - addressbook
 -(void)setupAddressbookAccess{
     
-    self.isUsingAddressBook=YES;
+    //self.isUsingAddressBook=YES;
     
     ABAddressBookRef *addressBook = ABAddressBookCreate();
     CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);

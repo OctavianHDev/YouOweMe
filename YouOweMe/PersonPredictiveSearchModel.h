@@ -24,6 +24,7 @@
 @property (nonatomic, weak) id<PredictiveSearchDelegate> delegate;
 
 -(id)initWithSourcesFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn;
+-(void)refreshSourcesWithFacebook:(BOOL)facebookOn andAddress:(BOOL)addressOn;
 -(void)setAsDataSourceAndDelegateFor:(UITableView*)tableView;
 -(void)getFacebookFriends;
 -(void)refreshTable;

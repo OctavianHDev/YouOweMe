@@ -13,13 +13,35 @@
 #import "PrototypeAppDelegate.h"
 #import "DebtAddingView.h"
 #import "PredictiveSearchResult.h"
+#import "HUDhint.h"
+
+#define OVERLAY_ALPHA 0.6
+#define OVERLAY_BELOW_PREDICTIVESEARCH_ALPHA 0.8
+#define MOVING_DOWN_THRESHOLD_FOR_ADDING_DEBT 68
+#define DEBT_ADDING_VIEW_ORIGINAL_Y 34
+#define DEBT_ADDING_VIEW_ORIGINAL_X 20
+#define MSG_PULL_TO_ADD_DEBT @"PULL TO ADD DEBT"
+#define MSG_RELEASE_TO_ADD_DEBT @"RELEASE TO ADD DEBT"
+
+#define ICON_ALPHA_OFF 0.3
 
 @interface HomeViewController ()
+
+    @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
+    @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
+    @property (nonatomic, strong) DebtorNameTextInputView *inputView;
+    @property (nonatomic, strong) IBOutlet UISwitch *inputSourceSwitch;
+
+    @property (nonatomic, strong) IBOutlet UIImageView *iconFB;
+    @property (nonatomic, strong) IBOutlet UIImageView *iconAddressbook;
+    @property (nonatomic, strong) IBOutlet UIView *overlayBelowPredictiveSearch;
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
     @property (nonatomic, strong) UIView *overlayView;
     @property (nonatomic, strong) PersonDetailView *personDetailView;
-    @property (nonatomic, strong) DebtAddingView *debtAddingView;
+
+    @property (nonatomic, strong) HUDhint *hintView;
     @property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardHeight;
+
 @end
 
 
@@ -35,8 +57,12 @@ CGRect predictiveSearchResultsOriginalFrame;
 @synthesize predictiveSearchDataSource=_predictiveSearchDataSource;
 @synthesize overlayView;
 @synthesize personDetailView;
-@synthesize debtAddingView;
+@synthesize iconAddressbook, iconFB;
 @synthesize keyboardHeight;
+@synthesize hintView;
+@synthesize inputSourceSwitch;
+@synthesize overlayBelowPredictiveSearch;
+
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
     if(!_predictiveSearchDataSource)
@@ -54,34 +80,30 @@ CGRect predictiveSearchResultsOriginalFrame;
 UIPanGestureRecognizer *panGestureRecognizer;
 
 
-- (void)loginViewShowingLoggedOutUser:(FBLoginView *)loginView {
-  
-}
-
-- (void)loginView:(FBLoginView *)loginView handleError:(NSError *)error {
-    // see https://developers.facebook.com/docs/reference/api/errors/ for general guidance on error handling for Facebook API
-    // our policy here is to let the login view handle errors, but to log the results
-    NSLog(@"FBLoginView encountered an error=%@", error);
-}
-
-
-
-
 
 #pragma mark - debt adding delegate
 #pragma mark -
 
 -(void)animatedViewToOriginalPosition{
     [UIView animateWithDuration:0.2 animations:^{
-        self.overlayView.alpha=0.5;
+        self.overlayView.alpha=OVERLAY_ALPHA;
     }];
+    self.hintView.label.text = MSG_PULL_TO_ADD_DEBT;
 }
 
 -(void)draggingViewByDelta:(NSNumber*)delta{
-    NSLog(@"detla is: %@", delta);
-    float newAlpha = 50 + [delta floatValue];
-    if(newAlpha<50 && newAlpha>8)
+    NSLog(@"delta is: %@", delta);
+    float newAlpha = OVERLAY_ALPHA*100 + ([delta floatValue]*1.5);
+    if(newAlpha<OVERLAY_ALPHA*100 && newAlpha>8)
         self.overlayView.alpha=newAlpha/100;
+    //self.hintView.alpha = [delta floatValue]/100;
+    if([delta floatValue]>MOVING_DOWN_THRESHOLD_FOR_ADDING_DEBT){
+        self.hintView.label.text = MSG_RELEASE_TO_ADD_DEBT;
+        self.personDetailView.shouldAddDebtOnRelease=YES;
+    }else{
+        self.hintView.label.text = MSG_PULL_TO_ADD_DEBT;
+        self.personDetailView.shouldAddDebtOnRelease=NO;
+    }
 }
 
 
@@ -89,6 +111,12 @@ UIPanGestureRecognizer *panGestureRecognizer;
     if(shouldRefresh){
         [self.predictiveSearchDataSource refreshTable];
     }
+
+    if(self.hintView){
+        [self.hintView removeFromSuperview];
+        self.hintView = nil;
+    }
+    
     [UIView animateWithDuration:0.2 animations:^{
         self.personDetailView.frame = CGRectMake(0,
                                                -300,
@@ -123,7 +151,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
     [self.overlayView addGestureRecognizer:tapr];
     [self.view addSubview:self.overlayView];
     [UIView animateWithDuration:0.2 animations:^{
-        self.overlayView.alpha=0.5;
+        self.overlayView.alpha=OVERLAY_ALPHA;
     }];
     
     Person *person = ((PredictiveSearchResult*)personCell).person;
@@ -170,40 +198,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
         }];
     }];
 }
-/*-(void)didSelectPerson:(Person*)person{
-    //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
-    if(self.personDetailView)
-        return;
-    
-    //ADD DISMISS OVERLAY
-    //
-    self.overlayView = [[UIView alloc] initWithFrame:self.view.bounds];
-    self.overlayView.backgroundColor = [UIColor blackColor];
-    self.overlayView.alpha=0.0;
-    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
-    [self.overlayView addGestureRecognizer:tapr];
-    [self.view addSubview:self.overlayView];
-    [UIView animateWithDuration:0.2 animations:^{
-        self.overlayView.alpha=0.5;
-    }];
-    
-    
-    //ADD ACTUAL PERSON INFO
-    //
-    NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
-    
-    NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"PersonDetailView"
-                                                             owner:self
-                                                           options:nil];
-    UIView *cell = [topLevelObjects objectAtIndex:0];
-    int calculatedHeight = cell.frame.size.height;
-    int calculatedWidth = cell.frame.size.width;
-    
-    self.personDetailView = [[PersonDetailView alloc] initWithFrame:CGRectMake(20, 20, calculatedWidth, calculatedHeight)];
-    self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
-    self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
-    [self.view addSubview:self.personDetailView];
-}*/
+
 
 -(void)addDebtForPerson:(Person *)person{
     //DON'T DO THIS MORE THAN ONCE PER LONG PRESS
@@ -219,10 +214,10 @@ UIPanGestureRecognizer *panGestureRecognizer;
     [self.overlayView addGestureRecognizer:tapr];
     [self.view addSubview:self.overlayView];
     [UIView animateWithDuration:0.2 animations:^{
-        self.overlayView.alpha=0.5;
+        self.overlayView.alpha=OVERLAY_ALPHA;
     }];
     
-    CGPoint originPoint = CGPointMake(20, -30);
+    CGPoint originPoint = CGPointMake(DEBT_ADDING_VIEW_ORIGINAL_X, -30);
     NSArray *topLevelObjects1 = [[NSBundle mainBundle] loadNibNamed:@"PredictiveSearchResult"
                                                              owner:self
                                                            options:nil];
@@ -230,8 +225,8 @@ UIPanGestureRecognizer *panGestureRecognizer;
     int calculatedHeight = cell.frame.size.height;
     int calculatedWidth = cell.frame.size.width;
 
-    //CGRect animatedViewFrame = [personCell.superview convertRect:personCell.frame toView:self.view];
-    //CGRect startingFrame = CGRectMake(originPoint.x, originPoint.y, cell.frame.size.width, cell.frame.size.height);
+
+    //MOVE USER CELL 
     CGRect startingFrame = CGRectMake(originPoint.x, -30, cell.frame.size.width, cell.frame.size.height);
     PredictiveSearchResult *addedCell = [[PredictiveSearchResult alloc] initWithFrame:startingFrame];
     addedCell.person = person;
@@ -242,13 +237,17 @@ UIPanGestureRecognizer *panGestureRecognizer;
     
     [UIView animateWithDuration:0.3 animations:^{
         
-        addedCell.frame = CGRectMake(20,
-                                     20,
+        addedCell.frame = CGRectMake(DEBT_ADDING_VIEW_ORIGINAL_X,
+                                     DEBT_ADDING_VIEW_ORIGINAL_Y,
                                      addedCell.frame.size.width-40,
                                      addedCell.frame.size.height-40);
         
     } completion:^(BOOL finished) {
+        
+        //remove the cell we just moved around; it'll be in the exact same spot as the cell
+        //that will be added automatically by the personDetailView
         [addedCell removeFromSuperview];
+
         //ADD ACTUAL PERSON INFO
         //
         NSLog(@"selected person: %@ %@", person.firstName, person.lastName);
@@ -260,56 +259,54 @@ UIPanGestureRecognizer *panGestureRecognizer;
         int calculatedHeight = cell.frame.size.height;
         int calculatedWidth = cell.frame.size.width;
         
-        self.personDetailView = [[PersonDetailView alloc] initWithFrame:CGRectMake(20, 20, calculatedWidth, addedCell.frame.size.height)];
+        self.personDetailView = [[PersonDetailView alloc]
+                                 initWithFrame:CGRectMake(
+                                                          DEBT_ADDING_VIEW_ORIGINAL_X,
+                                                          DEBT_ADDING_VIEW_ORIGINAL_Y,
+                                                          calculatedWidth,
+                                                          addedCell.frame.size.height
+                                                          )
+                                 ];
         self.personDetailView.cell = addedCell;
         self.personDetailView.delegate = self;
         [self.personDetailView setAsDebtAddingMode];
         
-        //self.personDetailView.lblName.text = [NSString stringWithFormat:@"%@ %@", person.firstName, person.lastName];
-        //self.personDetailView.imgViewAvatar.image = [UIImage imageWithData:person.avatar];
         [self.view addSubview:self.personDetailView];
+
+        // ANIMATE THE DROP DOWN EFFECT
         [UIView animateWithDuration:0.25 animations:^{
             
-            self.personDetailView.frame=CGRectMake(20, 20, calculatedWidth, calculatedHeight);
+            self.personDetailView.frame=CGRectMake(
+                                                   DEBT_ADDING_VIEW_ORIGINAL_X,
+                                                   DEBT_ADDING_VIEW_ORIGINAL_Y,
+                                                   calculatedWidth,
+                                                   calculatedHeight
+                                                   );
+            
+        } completion:^(BOOL finished) {
+            
+            CGRect hintRect = CGRectMake(self.personDetailView.frame.origin.x,
+                                         0,
+                                         self.personDetailView.frame.size.width,
+                                         30);
+            
+            self.hintView = [[HUDhint alloc] initWithFrame:hintRect];
+            
+            self.hintView.label.text = MSG_PULL_TO_ADD_DEBT;
+
+            //((UILabel*)self.hintView).layer.shadowColor = [[UIColor blackColor] CGColor];
+            //((UILabel*)self.hintView).layer.shadowRadius = 4.0f;
+            //((UILabel*)self.hintView).backgroundColor = [UIColor clearColor];
+            //[self.view addSubview:self.hintView];
+
+            [self.view insertSubview:self.hintView belowSubview:self.personDetailView];
+            //self.hintView.alpha=0;
+            self.hintView.opaque=YES;
+            
         }];
     }];
 
 }
-
-//-(void)addDebtForPerson:(Person *)person{
-  //  NSLog(@"adding debt for: %@", person.firstName);
-
-    //[self.inputView.textField resignFirstResponder];
-    //[self growPredictiveSearch];
-
-    /*//add overlay
-    self.overlayView = [[UIView alloc] initWithFrame:self.view.frame];
-    self.overlayView.backgroundColor = [UIColor blackColor];
-    self.overlayView.alpha=0.5;
-    UITapGestureRecognizer *tapr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleOverlayTap:)];
-    [self.overlayView addGestureRecognizer:tapr];
-    [self.view addSubview:self.overlayView];
-    */
-    
-    //add HUD
-    /*NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"DebtAddingView" owner:self options:nil];
-    UIView *dummy = [nib objectAtIndex:0];
-    float hudWidth = dummy.frame.size.width;
-    float hudHeight = dummy.frame.size.height;
-    */
-    /*float hudWidth = 300;
-    self.debtAddingView= [[DebtAddingView alloc] initWithFrame:CGRectMake(hudWidth*-1,
-                                                                         0,
-                                                                         hudWidth, self.view.frame.size.height)];
-    self.debtAddingView.person=person;
-    self.debtAddingView.delegate=self;
-    [self.view addSubview:self.debtAddingView];
-    [UIView animateWithDuration:0.2 animations:^{
-        self.debtAddingView.frame = CGRectMake(0,
-                                               0,
-                                               self.view.frame.size.width, self.view.frame.size.height);
-    }];*/
-//}
 
 
 -(void)handleOverlayTap:(UITapGestureRecognizer *)sender{
@@ -330,10 +327,18 @@ UIPanGestureRecognizer *panGestureRecognizer;
         
         [self.personDetailView removeFromSuperview];
         self.personDetailView = nil;
+        
+        if(self.hintView){
+            [self.hintView removeFromSuperview];
+            self.hintView=nil;
+        }
     }];
 }
 
 
+-(void)dismissTextInput:(id)sender{
+    [self hideInputView];
+}
 
 
 
@@ -346,31 +351,51 @@ UIPanGestureRecognizer *panGestureRecognizer;
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification {
+    
+    CGRect newFrame = CGRectMake(0, 57, self.view.frame.size.width, self.view.frame.size.height-216-57);
+
     NSDictionary *info = [notification userInfo];
+    NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.predictiveSearchResults.frame = newFrame;
+    }];
+    
+    /*NSDictionary *info = [notification userInfo];
     NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     CGRect keyboardFrame = [kbFrame CGRectValue];
     
     CGFloat height = keyboardFrame.size.height;
     
-    NSLog(@"Updating constraints.");
+    NSLog(@"Updating constraints to:%f",height);
     // Because the "space" is actually the difference between the bottom lines of the 2 views,
     // we need to set a negative constant value here.
-    self.keyboardHeight.constant = height;
+    self.keyboardHeight.constant = height*-1;
     
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
-    }];
+    }];*/
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *info = [notification userInfo];
-    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
-    self.keyboardHeight.constant = 0;
+    CGRect newFrame = CGRectMake(0, 57, self.view.frame.size.width, self.view.frame.size.height-57);
+  
+    self.predictiveSearchResults.frame = newFrame;
+    
+    /*NSDictionary *info = [notification userInfo];
+    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    CGFloat height = 116;//(self.view.frame.size.height-57);
+    self.keyboardHeight.constant = height*-1;
+    NSLog(@"Updating constraints to:%f",height);
+
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
-    }];
+    } completion:^(BOOL finished) {
+        // [self.predictiveSearchResults];
+    }];*/
 }
 
 
@@ -390,51 +415,8 @@ UIPanGestureRecognizer *panGestureRecognizer;
     [self hideInputView];
 }
 
--(void)shrinkPredictiveSearch{
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.predictiveSearchResults
-                                                          attribute:NSLayoutAttributeBottom
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeBottom
-                                                         multiplier:1
-                                                           constant:216]];
-
-    /*if(predictiveSearchResultsOriginalFrame.size.height){
-        [UIView animateWithDuration:0.2 animations:^{
-            self.predictiveSearchResults.frame =  predictiveSearchResultsOriginalFrame;
-        } completion:^(BOOL finished) {
-            NSLog(@"shrink: pred results height set to: %f", predictiveSearchResultsOriginalFrame.size.height);
-        }];
-    }*/
-}
-
 -(void)textFieldGainedFocus{
-    [self shrinkPredictiveSearch];
-}
-
--(void)growPredictiveSearch{
-    
-    /*[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.predictiveSearchResults
-                                                          attribute:NSLayoutAttributeBottom
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.view
-                                                          attribute:NSLayoutAttributeBottom
-                                                         multiplier:1
-                                                           constant:0]];
-    /*[self.predictiveSearchResults addConstraint:
-     [NSLayoutConstraint constraintWithItem:self.predictiveSearchResults attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:1]];
-    /*CGRect frm = self.predictiveSearchResults.frame;
-    predictiveSearchResultsOriginalFrame = frm;
-    if(frm.size.height!= (self.view.bounds.size.height - self.inputView.frame.size.height)){
-        [UIView animateWithDuration:0.2 animations:^{
-            self.predictiveSearchResults.frame = CGRectMake(self.predictiveSearchResults.frame.origin.x,
-                                                            self.predictiveSearchResults.frame.origin.y,
-                                                            self.predictiveSearchResults.frame.size.width,
-                                                            self.view.bounds.size.height - self.inputView.frame.size.height);
-        } completion:^(BOOL finished) {
-            NSLog(@"grow: pred results height set to: %f", self.view.bounds.size.height - self.inputView.frame.size.height);
-        }];
-    }*/
+    //remove this
 }
 
 
@@ -479,10 +461,18 @@ BOOL isAnimating=NO;
     labelIsDown=YES;
     isAnimating=YES;
     //actionTakenForGesture=YES;
+    self.overlayBelowPredictiveSearch.alpha=0;
+    self.overlayBelowPredictiveSearch.hidden=NO;
+    
     [UIView animateWithDuration:0.2f animations:^{
         self.inputView.frame = CGRectMake(0, 0, self.inputView.frame.size.width, self.inputView.frame.size.height);
+        self.overlayBelowPredictiveSearch.alpha=OVERLAY_BELOW_PREDICTIVESEARCH_ALPHA;
     } completion:^(BOOL finished) {
         isAnimating=NO;
+        
+        [self.predictiveSearchDataSource
+         refreshSourcesWithFacebook:((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook
+         andAddress:((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingAddressBook];
     }];
 }
 
@@ -490,13 +480,16 @@ BOOL isAnimating=NO;
     self.predictiveSearchResults.hidden=YES;
     labelIsDown=NO;
     isAnimating=YES;
+    
     [UIView animateWithDuration:0.2f animations:^{
         self.inputView.frame = CGRectMake(0, -60, self.inputView.frame.size.width, self.inputView.frame.size.height);
         [((DebtorNameTextInputView*)self.inputView) resetVisualComponents];
+        self.overlayBelowPredictiveSearch.alpha=0;
     } completion:^(BOOL finished) {
         isAnimating=NO;
         if(self.gestureRecognitionView.hidden)
             self.gestureRecognitionView.hidden=NO;
+        self.overlayBelowPredictiveSearch.hidden=YES;
     }];
 }
 
@@ -509,13 +502,14 @@ BOOL isAnimating=NO;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
         
     //gesture to swipe in text input for predictive search
+    //
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.gestureRecognitionView addGestureRecognizer:panGestureRecognizer];
     
     //text input view for predictive search
+    //
     self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
     ((DebtorNameTextInputView*)self.inputView).delegate = self;
     [self.view addSubview:self.inputView];
@@ -532,38 +526,85 @@ BOOL isAnimating=NO;
         self.predictiveSearchDataSource.delegate = self;
         NSLog(@"CONTEXT IS NOT NIL!!!");
     }
-
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(facebookSessionChanged:) name:UIKeyboardWillChangeFrameNotification object:nil];
-
+    
+    //set up the source swtich
+    self.inputSourceSwitch.offImage = [UIImage imageNamed:@"textInputBkg.png"];
+    self.inputSourceSwitch.onImage = [UIImage imageNamed:@"textInputBkg.png"];
+    [self.inputSourceSwitch addTarget:self action:@selector(switchedSource:) forControlEvents:UIControlEventValueChanged];
+    UITapGestureRecognizer *tapFb = [[UITapGestureRecognizer alloc]
+                                     initWithTarget:self
+                                     action:@selector(selectIconFB:)];
+    [self.iconFB addGestureRecognizer:tapFb];
+    
+    UITapGestureRecognizer *tapAddr = [[UITapGestureRecognizer alloc]
+                                       initWithTarget:self
+                                       action:@selector(selectIconAddr:)];
+    [self.iconAddressbook addGestureRecognizer:tapAddr];
+    
+    /*self.keyboardHeight =[NSLayoutConstraint constraintWithItem:self.predictiveSearchResults
+                                                      attribute:NSLayoutAttributeBottom
+                                                      relatedBy:NSLayoutRelationEqual
+                                                         toItem:self.view
+                                                      attribute:NSLayoutAttributeBottom
+                                                     multiplier:1
+                                                       constant:0];
+    [self.view addConstraint:self.keyboardHeight];
+    */
     
     
-    //login button
-    //PrototypeAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    // The user has initiated a login, so call the openSession method
-    // and show the login UX if necessary.
-    //[appDelegate openSessionWithAllowLoginUI:YES];
-    /*if(FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded){
-        NSLog(@"we're stil logged in");
-    }else{
-        NSLog(@"facebook session state: %u", FBSession.activeSession.state);
-        FBLoginView *loginview = [[FBLoginView alloc] init];
-        loginview.frame = CGRectOffset(loginview.frame, 5, 5);
-        loginview.delegate = self;
-        [self.view addSubview:loginview];
-        [loginview sizeToFit];
-    }*/
+    //overlay
+    //
+    self.overlayBelowPredictiveSearch.hidden=YES;
+    self.overlayBelowPredictiveSearch.backgroundColor = [UIColor blackColor];
+    self.overlayBelowPredictiveSearch.alpha=OVERLAY_ALPHA;
+    UITapGestureRecognizer *t = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTextInput:)];
+    [self.overlayBelowPredictiveSearch addGestureRecognizer:t];
     
     [self observeKeyboard];
-    
-    
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+#pragma mark - SOURCE SWITCHER
+#pragma mark -
+
+//switcher
+//
+-(void)switchedSource:(id)sender{
+    if(self.inputSourceSwitch.isOn){
+        [self selectAddressBookAsSource];
+    }else{
+        [self selectFaceBookAsSource];
+    }
 }
 
+//fb
+//
+-(void)selectIconFB:(id)sender{
+    [self selectFaceBookAsSource];
+    [self.inputSourceSwitch setOn:NO animated:YES];
+}
+
+-(void)selectFaceBookAsSource{
+    self.iconFB.alpha=1;
+    self.iconAddressbook.alpha = ICON_ALPHA_OFF;
+    ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook=YES;
+    ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingAddressBook=NO;
+}
+
+//addressbook
+//
+-(void)selectAddressBookAsSource{
+    self.iconAddressbook.alpha=1;
+    self.iconFB.alpha = ICON_ALPHA_OFF;
+    ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook=NO;
+    ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingAddressBook=YES;
+
+}
+
+-(void)selectIconAddr:(id)sender{
+    [self selectAddressBookAsSource];
+    [self.inputSourceSwitch setOn:YES animated:YES];
+}
 
 
 @end

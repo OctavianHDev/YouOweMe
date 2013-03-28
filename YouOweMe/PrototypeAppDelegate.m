@@ -13,7 +13,7 @@
 @implementation PrototypeAppDelegate
 
 @synthesize isUsingAddressBook;
-@synthesize isUsingFacebook;
+@synthesize isUsingFacebook=_isUsingFacebook;
 
 //core data
 @synthesize managedObjectContext = _managedObjectContext;
@@ -25,6 +25,15 @@ NSString *const FBSessionStateChangedNotification =
 
 
 
+#pragma mark - getters and setters
+-(void)setIsUsingFacebook:(BOOL)isUsingFacebook{
+    _isUsingFacebook=isUsingFacebook;
+    [self setupFacebookLogin];
+}
+
+-(BOOL)isUsingFacebook{
+    return _isUsingFacebook;
+}
 
 #pragma mark - facebook stack
 
@@ -100,11 +109,7 @@ NSString *const FBSessionStateChangedNotification =
 
 
 #pragma mark - lifecycle
-- (void)setupSources{
-    
-    self.isUsingAddressBook=YES;
-    self.isUsingFacebook=NO;
-    
+- (void)setupFacebookLogin{
     if(self.isUsingFacebook){
         if (![self openSessionWithAllowLoginUI:NO]) {
             [self openSessionWithAllowLoginUI:YES];
@@ -114,7 +119,10 @@ NSString *const FBSessionStateChangedNotification =
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [self setupSources];
+    self.isUsingAddressBook=YES;
+    self.isUsingFacebook=NO;
+
+    [self setupFacebookLogin];
     /*[FBSession openActiveSessionWithPermissions:nil
                                    allowLoginUI:YES
                               completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {

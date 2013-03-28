@@ -11,6 +11,7 @@
 		0E114B3716EE69770021DB61 /* LeftSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3616EE69770021DB61 /* LeftSwipeIndicator.xib */; };
 		0E114B3C16EE6B730021DB61 /* RightSwipeIndicator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */; };
 		0E14154316C5FEC100467BED /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E14154216C5FEC100467BED /* QuartzCore.framework */; };
+		0E5612791704051A00C5B231 /* LatestDebtsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E5612781704051A00C5B231 /* LatestDebtsDataSource.m */; };
 		0E6BEFA816BDD5E60050541B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA716BDD5E60050541B /* UIKit.framework */; };
 		0E6BEFAA16BDD5E60050541B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFA916BDD5E60050541B /* Foundation.framework */; };
 		0E6BEFAC16BDD5E60050541B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6BEFAB16BDD5E60050541B /* CoreGraphics.framework */; };
@@ -28,6 +29,8 @@
 		0E7DA6D816F804CC004A97B6 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E7DA6D716F804CC004A97B6 /* Accounts.framework */; };
 		0EAB6CB81701308C00AD956B /* cirlceButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EAB6CB71701308C00AD956B /* cirlceButton.png */; };
 		0EAB6CBB17014B1900AD956B /* squareButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EAB6CBA17014B1900AD956B /* squareButton.png */; };
+		0ED376801703974C00225A43 /* icon-facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ED3767E1703974C00225A43 /* icon-facebook.png */; };
+		0ED376811703974C00225A43 /* icon-addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = 0ED3767F1703974C00225A43 /* icon-addressbook.png */; };
 		0EDA380916D7046C00BED89D /* PersonPredictiveSearchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */; };
 		0EDA380C16D70CDC00BED89D /* PredictiveSearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDA380B16D70CDC00BED89D /* PredictiveSearchResult.m */; };
 		0EDA380E16D70D0B00BED89D /* PredictiveSearchResult.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EDA380D16D70D0B00BED89D /* PredictiveSearchResult.xib */; };
@@ -54,6 +57,10 @@
 		0EF96E2F16C6F53A00915E29 /* DebtorNameTextInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EF96E2E16C6F53A00915E29 /* DebtorNameTextInputView.xib */; };
 		0EF9F30A16FB802300699273 /* Debt+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9F30916FB802300699273 /* Debt+Create.m */; };
 		0EF9F31116FB834300699273 /* Debt.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EF9F31016FB834300699273 /* Debt.m */; };
+		0EFD906917023224005DE084 /* predictiveSearchBkgGray.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFD906817023224005DE084 /* predictiveSearchBkgGray.png */; };
+		0EFD906C17024AF6005DE084 /* HUDhint.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0EFD906B17024AF6005DE084 /* HUDhint.xib */; };
+		0EFD906F17024BB7005DE084 /* HUDhint.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EFD906E17024BB7005DE084 /* HUDhint.m */; };
+		0EFD907117025E15005DE084 /* redArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFD907017025E15005DE084 /* redArrow.png */; };
 		0EFF81F316F425130085F565 /* btnBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F116F425130085F565 /* btnBkg.png */; };
 		0EFF81F416F425130085F565 /* owes2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EFF81F216F425130085F565 /* owes2.png */; };
 /* End PBXBuildFile section */
@@ -64,6 +71,8 @@
 		0E114B3B16EE6B730021DB61 /* RightSwipeIndicator.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightSwipeIndicator.xib; sourceTree = "<group>"; };
 		0E114B3D16EE7CBC0021DB61 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		0E14154216C5FEC100467BED /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0E5612771704051A00C5B231 /* LatestDebtsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatestDebtsDataSource.h; sourceTree = "<group>"; };
+		0E5612781704051A00C5B231 /* LatestDebtsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatestDebtsDataSource.m; sourceTree = "<group>"; };
 		0E6BEFA316BDD5E60050541B /* YouOweMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouOweMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E6BEFA716BDD5E60050541B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		0E6BEFA916BDD5E60050541B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -87,6 +96,8 @@
 		0E7DA6D716F804CC004A97B6 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		0EAB6CB71701308C00AD956B /* cirlceButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cirlceButton.png; sourceTree = "<group>"; };
 		0EAB6CBA17014B1900AD956B /* squareButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = squareButton.png; sourceTree = "<group>"; };
+		0ED3767E1703974C00225A43 /* icon-facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-facebook.png"; sourceTree = "<group>"; };
+		0ED3767F1703974C00225A43 /* icon-addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-addressbook.png"; sourceTree = "<group>"; };
 		0EDA380716D7046C00BED89D /* PersonPredictiveSearchModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonPredictiveSearchModel.h; sourceTree = "<group>"; };
 		0EDA380816D7046C00BED89D /* PersonPredictiveSearchModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonPredictiveSearchModel.m; sourceTree = "<group>"; };
 		0EDA380A16D70CDC00BED89D /* PredictiveSearchResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PredictiveSearchResult.h; sourceTree = "<group>"; };
@@ -123,6 +134,11 @@
 		0EF9F30916FB802300699273 /* Debt+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Debt+Create.m"; sourceTree = "<group>"; };
 		0EF9F30F16FB834300699273 /* Debt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debt.h; sourceTree = "<group>"; };
 		0EF9F31016FB834300699273 /* Debt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Debt.m; sourceTree = "<group>"; };
+		0EFD906817023224005DE084 /* predictiveSearchBkgGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = predictiveSearchBkgGray.png; sourceTree = "<group>"; };
+		0EFD906B17024AF6005DE084 /* HUDhint.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HUDhint.xib; sourceTree = "<group>"; };
+		0EFD906D17024BB7005DE084 /* HUDhint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDhint.h; sourceTree = "<group>"; };
+		0EFD906E17024BB7005DE084 /* HUDhint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUDhint.m; sourceTree = "<group>"; };
+		0EFD907017025E15005DE084 /* redArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redArrow.png; sourceTree = "<group>"; };
 		0EFF81F116F425130085F565 /* btnBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnBkg.png; sourceTree = "<group>"; };
 		0EFF81F216F425130085F565 /* owes2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = owes2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				0EF3495F16DEDC1C00AC300B /* core data */,
+				0E5612771704051A00C5B231 /* LatestDebtsDataSource.h */,
+				0E5612781704051A00C5B231 /* LatestDebtsDataSource.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -195,8 +213,8 @@
 			isa = PBXGroup;
 			children = (
 				0E114B3D16EE7CBC0021DB61 /* Constants.h */,
-				0E015C5616CEE8B7007190D8 /* model */,
 				0E6BEFBF16BDD5E60050541B /* MainStoryboard.storyboard */,
+				0E015C5616CEE8B7007190D8 /* model */,
 				0E6BEFCD16BDD6AC0050541B /* Controllers */,
 				0EEAB57016C59EF60064E6B9 /* Views */,
 				0E6BEFB716BDD5E60050541B /* PrototypeAppDelegate.m */,
@@ -259,6 +277,9 @@
 				0EE9439016EFB5AE00F87C1E /* DebtAddingView.h */,
 				0EE9439116EFB5AE00F87C1E /* DebtAddingView.m */,
 				0EE9439416EFB6BA00F87C1E /* DebtAddingView.xib */,
+				0EFD906B17024AF6005DE084 /* HUDhint.xib */,
+				0EFD906D17024BB7005DE084 /* HUDhint.h */,
+				0EFD906E17024BB7005DE084 /* HUDhint.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -266,7 +287,11 @@
 		0EEAB57B16C5BC410064E6B9 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				0EFD907017025E15005DE084 /* redArrow.png */,
+				0EFD906817023224005DE084 /* predictiveSearchBkgGray.png */,
 				0EAB6CBA17014B1900AD956B /* squareButton.png */,
+				0ED3767E1703974C00225A43 /* icon-facebook.png */,
+				0ED3767F1703974C00225A43 /* icon-addressbook.png */,
 				0EAB6CB71701308C00AD956B /* cirlceButton.png */,
 				0EFF81F116F425130085F565 /* btnBkg.png */,
 				0EFF81F216F425130085F565 /* owes2.png */,
@@ -376,6 +401,11 @@
 				0EED784316F7B78B002793D2 /* FacebookSDKResources.bundle in Resources */,
 				0EAB6CB81701308C00AD956B /* cirlceButton.png in Resources */,
 				0EAB6CBB17014B1900AD956B /* squareButton.png in Resources */,
+				0EFD906917023224005DE084 /* predictiveSearchBkgGray.png in Resources */,
+				0EFD906C17024AF6005DE084 /* HUDhint.xib in Resources */,
+				0EFD907117025E15005DE084 /* redArrow.png in Resources */,
+				0ED376801703974C00225A43 /* icon-facebook.png in Resources */,
+				0ED376811703974C00225A43 /* icon-addressbook.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +431,8 @@
 				0EE9439216EFB5AE00F87C1E /* DebtAddingView.m in Sources */,
 				0EF9F30A16FB802300699273 /* Debt+Create.m in Sources */,
 				0EF9F31116FB834300699273 /* Debt.m in Sources */,
+				0EFD906F17024BB7005DE084 /* HUDhint.m in Sources */,
+				0E5612791704051A00C5B231 /* LatestDebtsDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) PredictiveSearchResult* cell;
 @property (nonatomic, weak)id<DebtAddingDelegate> delegate;
-
+@property (nonatomic) BOOL shouldAddDebtOnRelease;
 
 -(IBAction)closePressed:(id)sender;
 -(void)preapareForDismissal;
