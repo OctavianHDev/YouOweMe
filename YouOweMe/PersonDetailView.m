@@ -6,18 +6,24 @@
 //  Copyright (c) 2013 o. All rights reserved.
 //
 
-#import "PersonDetailView.h"
+
 #import <QuartzCore/QuartzCore.h>
+
+#import "PersonDetailView.h"
 #import "Person.h"
 #import "CoreDataDBManager.h"
 #import "HUDhint.h"
+#import "DebtRowCell.h"
 
 #define MOVED_ENOUGH 40
 #define MSG_FOOTER @"SWIPE UP TO DISMISS"
 #define CALCULATED_SELF_HEIGHT 173
 
 @interface PersonDetailView()
+
     @property (nonatomic, strong) Person* person;
+
+    //debt adding
     @property (nonatomic, strong) IBOutlet UIButton *btnDone;
     @property (nonatomic, strong) IBOutlet UIImageView *txtBkgDebt;
     @property (nonatomic, strong) IBOutlet UIImageView *txtBkgDescription;
@@ -27,6 +33,10 @@
     @property (nonatomic, strong) HUDhint *hudHint;
     @property (nonatomic, strong) IBOutlet UILabel *errorCorrectionLabel;
     @property (nonatomic, strong) IBOutlet UIImageView *errorCorrectionImage;
+
+    //debt viewing
+    @property (nonatomic, strong) IBOutlet UITableView *tableDebts;
+    @property (nonatomic, strong) NSArray *sortedDebts;
 
     //moving
     @property CGPoint startTouchPoint;
@@ -46,6 +56,25 @@
 @synthesize owesBanner;
 @synthesize shouldAddDebtOnRelease;
 @synthesize hudHint;
+@synthesize tableDebts;
+@synthesize sortedDebts=_sortedDebts;
+
+
+#pragma mark - getters/setters
+
+-(NSArray *)sortedDebts{
+    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES];
+    NSArray *sorted = [self.person.debts sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
+    _sortedDebts = sorted;
+    return _sortedDebts;
+}
+
+
+-(void)setSortedDebts:(NSArray *)sortedDebts{
+    _sortedDebts=sortedDebts;
+}
+
+
 
 #pragma mark - PUBLIC API
 #pragma mark -
@@ -125,6 +154,7 @@
     self.txtBkgDebt.hidden=NO;
     self.txtFieldDebt.hidden=NO;
     self.txtFieldDescription.hidden=NO;
+    self.tableDebts.hidden=YES;
     //self.btnDone.hidden=NO;
     
     [self fadeInControls];
@@ -132,7 +162,44 @@
 
 -(void)setAsDebtViewingMode{
     self.isInDebtMode=NO;
+    self.txtBkgDebt.hidden=YES;
+    self.txtFieldDebt.hidden=YES;
+    self.txtFieldDescription.hidden=YES;
+    self.tableDebts.hidden=NO;
+    self.tableDebts.dataSource = self;
 }
+
+
+
+
+#pragma mark - UITABLEVIEW DELEGATE
+#pragma mark -
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSString *CellIdentifier = @"DebtCell";
+    DebtRowCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if(!cell){
+        cell = [[DebtRowCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    cell.debt = (Debt*)[self.sortedDebts objectAtIndex:indexPath.row];
+    return cell;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.person.debts.count;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 58;
+}
+
 
 
 

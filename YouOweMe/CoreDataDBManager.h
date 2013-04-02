@@ -20,6 +20,7 @@
 -(Person *)personWithAttributes:(NSDictionary *)attributes fromSource:(NSString*)source;
 -(Person *)getPersonWithId:(NSString*)uniqueId inSource:(NSString*)source;
 -(NSArray*)getPersonsWithPredicate:(NSPredicate*)predicate;
+-(NSArray*)getPersonsWithMostRecentDebts:(NSNumber*)numberOfPeople fromSource:(NSString*)source;
 -(void)insertIntoDBPersonsPicture:(UIImage*)picture ForId:(NSString*)personId fromSource:(NSString*)source;
 -(Debt *)insertDebtForPerson:(Person *)p ofAmount:(NSNumber *)amount withDescription:(NSString*)description;
 

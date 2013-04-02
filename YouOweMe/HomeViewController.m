@@ -14,11 +14,12 @@
 #import "DebtAddingView.h"
 #import "PredictiveSearchResult.h"
 #import "HUDhint.h"
+#import "LatestDebtsDataSource.h"
 
 #define OVERLAY_ALPHA 0.6
 #define OVERLAY_BELOW_PREDICTIVESEARCH_ALPHA 0.8
 #define MOVING_DOWN_THRESHOLD_FOR_ADDING_DEBT 68
-#define DEBT_ADDING_VIEW_ORIGINAL_Y 34
+#define DEBT_ADDING_VIEW_ORIGINAL_Y 20
 #define DEBT_ADDING_VIEW_ORIGINAL_X 20
 #define MSG_PULL_TO_ADD_DEBT @"PULL TO ADD DEBT"
 #define MSG_RELEASE_TO_ADD_DEBT @"RELEASE TO ADD DEBT"
@@ -29,6 +30,7 @@
 
     @property (nonatomic, strong) IBOutlet UIView *gestureRecognitionView;
     @property (nonatomic, strong) IBOutlet UITableView *predictiveSearchResults;
+    @property (nonatomic, strong) IBOutlet UITableView *latestDebts;
     @property (nonatomic, strong) DebtorNameTextInputView *inputView;
     @property (nonatomic, strong) IBOutlet UISwitch *inputSourceSwitch;
 
@@ -36,6 +38,7 @@
     @property (nonatomic, strong) IBOutlet UIImageView *iconAddressbook;
     @property (nonatomic, strong) IBOutlet UIView *overlayBelowPredictiveSearch;
     @property (nonatomic, strong) PersonPredictiveSearchModel *predictiveSearchDataSource;
+    @property (nonatomic, strong) LatestDebtsDataSource *latestDebtsDataSource;
     @property (nonatomic, strong) UIView *overlayView;
     @property (nonatomic, strong) PersonDetailView *personDetailView;
 
@@ -62,6 +65,7 @@ CGRect predictiveSearchResultsOriginalFrame;
 @synthesize hintView;
 @synthesize inputSourceSwitch;
 @synthesize overlayBelowPredictiveSearch;
+@synthesize latestDebtsDataSource, latestDebts;
 
 
 -(PersonPredictiveSearchModel*)predictiveSearchDataSource{
@@ -164,13 +168,14 @@ UIPanGestureRecognizer *panGestureRecognizer;
     addedCell.userInteractionEnabled=NO;
     [self.view addSubview:addedCell];
     addedCell.frame=startingFrame;
+    [addedCell setAsSelected];
     
     [UIView animateWithDuration:0.23 animations:^{
         
-        addedCell.frame = CGRectMake(20,
-                                     20,
+        addedCell.frame = CGRectMake(DEBT_ADDING_VIEW_ORIGINAL_X,
+                                     DEBT_ADDING_VIEW_ORIGINAL_Y,
                                      addedCell.frame.size.width-40,
-                                     addedCell.frame.size.height-40);
+                                     addedCell.frame.size.height-20);
         
     } completion:^(BOOL finished) {
         [addedCell removeFromSuperview];
@@ -222,9 +227,6 @@ UIPanGestureRecognizer *panGestureRecognizer;
                                                              owner:self
                                                            options:nil];
     UIView *cell = [topLevelObjects1 objectAtIndex:0];
-    int calculatedHeight = cell.frame.size.height;
-    int calculatedWidth = cell.frame.size.width;
-
 
     //MOVE USER CELL 
     CGRect startingFrame = CGRectMake(originPoint.x, -30, cell.frame.size.width, cell.frame.size.height);
@@ -240,7 +242,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
         addedCell.frame = CGRectMake(DEBT_ADDING_VIEW_ORIGINAL_X,
                                      DEBT_ADDING_VIEW_ORIGINAL_Y,
                                      addedCell.frame.size.width-40,
-                                     addedCell.frame.size.height-40);
+                                     addedCell.frame.size.height-20);
         
     } completion:^(BOOL finished) {
         
@@ -355,7 +357,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
     CGRect newFrame = CGRectMake(0, 57, self.view.frame.size.width, self.view.frame.size.height-216-57);
 
     NSDictionary *info = [notification userInfo];
-    NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+    //NSValue *kbFrame = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
     [UIView animateWithDuration:animationDuration animations:^{
@@ -416,7 +418,7 @@ UIPanGestureRecognizer *panGestureRecognizer;
 }
 
 -(void)textFieldGainedFocus{
-    //remove this
+    [self showInputView];
 }
 
 
@@ -458,17 +460,28 @@ BOOL isAnimating=NO;
 #pragma mark - moving the input view
 
 -(void)showInputView{
+    if(labelIsDown)
+        return;
+    
     labelIsDown=YES;
     isAnimating=YES;
-    //actionTakenForGesture=YES;
+
     self.overlayBelowPredictiveSearch.alpha=0;
     self.overlayBelowPredictiveSearch.hidden=NO;
     
     [UIView animateWithDuration:0.2f animations:^{
         self.inputView.frame = CGRectMake(0, 0, self.inputView.frame.size.width, self.inputView.frame.size.height);
+        self.inputView.doneButton.alpha=1;
         self.overlayBelowPredictiveSearch.alpha=OVERLAY_BELOW_PREDICTIVESEARCH_ALPHA;
     } completion:^(BOOL finished) {
         isAnimating=NO;
+        
+        [UIView animateWithDuration:0.2f animations:^{
+            self.inputView.backgroundImage.alpha=1;
+            self.inputView.layer.shadowColor=[[UIColor blackColor] CGColor];
+            self.inputView.layer.shadowOpacity=0.8f;
+            self.inputView.layer.shadowRadius=5.0f;
+        }];
         
         [self.predictiveSearchDataSource
          refreshSourcesWithFacebook:((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook
@@ -480,11 +493,16 @@ BOOL isAnimating=NO;
     self.predictiveSearchResults.hidden=YES;
     labelIsDown=NO;
     isAnimating=YES;
-    
+
+    self.inputView.layer.shadowOpacity=0.0f;
+    self.inputView.layer.shadowRadius=0.0f;
+
     [UIView animateWithDuration:0.2f animations:^{
-        self.inputView.frame = CGRectMake(0, -60, self.inputView.frame.size.width, self.inputView.frame.size.height);
+        self.inputView.frame = CGRectMake(20, 50, self.inputView.frame.size.width, self.inputView.frame.size.height);
         [((DebtorNameTextInputView*)self.inputView) resetVisualComponents];
         self.overlayBelowPredictiveSearch.alpha=0;
+        self.inputView.backgroundImage.alpha=0;
+        self.inputView.doneButton.alpha=0;
     } completion:^(BOOL finished) {
         isAnimating=NO;
         if(self.gestureRecognitionView.hidden)
@@ -510,7 +528,9 @@ BOOL isAnimating=NO;
     
     //text input view for predictive search
     //
-    self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(0, -60, self.view.bounds.size.width, 57)];
+    self.inputView = [[DebtorNameTextInputView alloc] initWithFrame:CGRectMake(20, 60, self.view.bounds.size.width, 57)];
+    self.inputView.backgroundImage.alpha=0;
+    self.inputView.doneButton.alpha=0;
     ((DebtorNameTextInputView*)self.inputView).delegate = self;
     [self.view addSubview:self.inputView];
 
@@ -559,6 +579,15 @@ BOOL isAnimating=NO;
     self.overlayBelowPredictiveSearch.alpha=OVERLAY_ALPHA;
     UITapGestureRecognizer *t = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTextInput:)];
     [self.overlayBelowPredictiveSearch addGestureRecognizer:t];
+    
+    //latest debts
+    //
+    self.latestDebtsDataSource = [[LatestDebtsDataSource alloc]init];
+    [self.latestDebtsDataSource setAsUsingFacebook:
+     ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingFacebook
+                                    andAddressBook:
+     ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isUsingAddressBook];
+    self.latestDebts.dataSource=self.latestDebtsDataSource;
     
     [self observeKeyboard];
 }

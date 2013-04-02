@@ -10,10 +10,9 @@
 #import "CoreDataDBManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "Constants.h"
-
+#import "RightSwipeIndicator.h"
 
 #define MOVE_THRESHOLD 200.0
-#define INDENTATION_AMOUNT 40.0
 #define ALPHA_FOR_SELECTION 0.8
 
 
@@ -22,8 +21,10 @@
     @property (nonatomic, strong) IBOutlet UILabel *lblDebtOwing;
     @property (nonatomic, strong) IBOutlet UIImageView *avatar;
     @property (nonatomic, strong) IBOutlet UIImageView *imgViewBackgroundImage;
+    @property (nonatomic, strong) IBOutlet UIImageView *imgLeftSlider;
     @property (nonatomic, strong) NSString *name;
     @property (nonatomic, strong) NSString *uniqueId;
+
 @end
 
 @implementation PredictiveSearchResult
@@ -37,10 +38,11 @@
 @synthesize delegate;
 @synthesize person=_person;
 @synthesize lblDebtOwing;
+@synthesize imgLeftSlider;
 
 //ivars
 CGPoint startTouchPoint;
-UIView *bkgViewRightSwipeIndicator;
+RightSwipeIndicator *bkgViewRightSwipeIndicator;
 UIView *bkgViewLeftSwipeIndicator;
 BOOL isShowingOverlayView;
 BOOL isLongTouching=FALSE;
@@ -53,6 +55,44 @@ BOOL isLongTouching=FALSE;
 #pragma mark -
 -(void)setAsMiniMode{
     self.lblDebtOwing.hidden=YES;
+    self.imgLeftSlider.hidden=YES;
+}
+
+-(void)setAsSelected{
+    bkgViewRightSwipeIndicator.hidden=YES;
+    //self.lblDebtOwing.hidden=YES;
+    self.imgLeftSlider.hidden=YES;
+}
+
+-(void)animateSliderHintWithDelay:(CGFloat)delayTime{
+    NSLog(@"animating intro");
+    CGFloat goTo = 120;
+    
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RightSwipeIndicator" owner:self options:nil];
+    bkgViewRightSwipeIndicator = [nib objectAtIndex:0];
+    bkgViewRightSwipeIndicator.frame = CGRectMake(0, 0, goTo, self.bounds.size.height);
+    bkgViewRightSwipeIndicator.clipsToBounds=YES;
+    bkgViewRightSwipeIndicator.bkgView.alpha=1;
+    bkgViewRightSwipeIndicator.bkgView.backgroundColor=[UIColor redColor];
+    [self addSubview:bkgViewRightSwipeIndicator];
+    
+    self.imgLeftSlider.frame = CGRectMake(goTo,
+                                          self.imgLeftSlider.frame.origin.y,
+                                          self.imgLeftSlider.frame.size.width,
+                                          self.imgLeftSlider.frame.size.height);
+    
+    [UIView animateWithDuration:0.4 delay:(delayTime) options:(UIViewAnimationOptionCurveEaseOut) animations:^{
+        bkgViewRightSwipeIndicator.frame = CGRectMake(0, 0, 1, bkgViewRightSwipeIndicator.frame.size.height);
+        self.imgLeftSlider.frame = CGRectMake(0,
+                                              self.imgLeftSlider.frame.origin.y,
+                                              self.imgLeftSlider.frame.size.width,
+                                              self.imgLeftSlider.frame.size.height);
+    } completion:^(BOOL finished) {
+        NSLog(@"tutorial animation finished");
+        bkgViewRightSwipeIndicator.hidden=YES;
+        [bkgViewRightSwipeIndicator removeFromSuperview];
+        bkgViewRightSwipeIndicator = nil;
+    }];
 }
 
 #pragma mark - moving
@@ -64,11 +104,11 @@ BOOL isLongTouching=FALSE;
 
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RightSwipeIndicator" owner:self options:nil];
     bkgViewRightSwipeIndicator = [nib objectAtIndex:0];
-    bkgViewRightSwipeIndicator.frame = self.bounds;
+    bkgViewRightSwipeIndicator.frame = CGRectMake(0,0,0,self.bounds.size.height);
     //bkgViewRightSwipeIndicator = [[UIView alloc] initWithFrame:self.bounds];
-    bkgViewRightSwipeIndicator.backgroundColor = [UIColor redColor];
-    bkgViewRightSwipeIndicator.alpha = 0;
-    bkgViewRightSwipeIndicator.clipsToBounds = NO;
+    //bkgViewRightSwipeIndicator.backgroundColor = [UIColor redColor];
+    bkgViewRightSwipeIndicator.bkgView.alpha = 0;
+    bkgViewRightSwipeIndicator.clipsToBounds = YES;
     bkgViewRightSwipeIndicator.layer.shadowColor = [[UIColor blackColor] CGColor];
     bkgViewRightSwipeIndicator.layer.shadowOffset = CGSizeMake(1.0f, 1.0f);
     bkgViewRightSwipeIndicator.layer.shadowRadius = 2.0f;
@@ -79,7 +119,6 @@ BOOL isLongTouching=FALSE;
     //bkgViewLeftSwipeIndicator = [[UIView alloc] initWithFrame:self.bounds];
     bkgViewLeftSwipeIndicator.backgroundColor = [UIColor greenColor];
     bkgViewLeftSwipeIndicator.alpha = 0;
-
     [self addSubview:bkgViewLeftSwipeIndicator];
     [self addSubview:bkgViewRightSwipeIndicator];
     
@@ -114,30 +153,47 @@ BOOL isLongTouching=FALSE;
     }
     
     //if(movedEnoughToRight){
-    if(bkgViewRightSwipeIndicator.alpha>ALPHA_FOR_SELECTION && !isShowingOverlayView){
+    if(bkgViewRightSwipeIndicator.bkgView.alpha>ALPHA_FOR_SELECTION && !isShowingOverlayView){
         isShowingOverlayView = YES;
-        [UIView beginAnimations:nil context:NULL];
+        self.userInteractionEnabled=NO;
+
+        //[UIView beginAnimations:nil context:NULL];
         /*[self.delegate addDebtForPerson:
             [[CoreDataDBManager initAndRetrieveSharedInstance] getPersonWithId:self.uniqueId inSource:self.uniqueIdSource]
         ];*/
         [self.delegate addDebtForPerson:self.person];
-        [UIView commitAnimations];
+        //[UIView commitAnimations];
     }
     
     
     [UIView animateWithDuration:0.2 animations:^{
-        bkgViewRightSwipeIndicator.alpha=0;
+        bkgViewRightSwipeIndicator.bkgView.alpha=0;
         bkgViewLeftSwipeIndicator.alpha=0;
+        self.imgLeftSlider.frame=CGRectMake(0,
+                                            self.imgLeftSlider.frame.origin.y,
+                                            self.imgLeftSlider.frame.size.width,
+                                            self.imgLeftSlider.frame.size.height);
+        
+        bkgViewRightSwipeIndicator.frame = CGRectMake(bkgViewRightSwipeIndicator.frame.origin.x,
+                                                      bkgViewRightSwipeIndicator.frame.origin.y,
+                                                      1,
+                                                      bkgViewRightSwipeIndicator.frame.size.height);
     } completion:^(BOOL finished) {
         if(!finished)
             NSLog(@"error in animation");
+        self.userInteractionEnabled=YES;
         [bkgViewRightSwipeIndicator removeFromSuperview];
         [bkgViewLeftSwipeIndicator removeFromSuperview];
+        bkgViewRightSwipeIndicator=nil;
+        bkgViewLeftSwipeIndicator=nil;
     }];
 
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    if(isShowingOverlayView)
+        return;
+    
     UITouch *touch = [touches anyObject];
 
     CGFloat touchDx;
@@ -153,6 +209,11 @@ BOOL isLongTouching=FALSE;
     if(touchDx>0 && bkgViewLeftSwipeIndicator.alpha<0.1){
         float newAlpha = MIN(touchDx,200)/200.0f;
         
+        self.imgLeftSlider.frame = CGRectMake(touchDx,
+                                              self.imgLeftSlider.frame.origin.y,
+                                              self.imgLeftSlider.frame.size.width,
+                                              self.imgLeftSlider.frame.size.height);
+        
         /*bkgViewLeftSwipeIndicator.frame = CGRectMake(
                                                      bkgViewLeftSwipeIndicator.frame.origin.x,
                                                      bkgViewLeftSwipeIndicator.frame.origin.y-touchDx,
@@ -162,15 +223,20 @@ BOOL isLongTouching=FALSE;
         NSLog(@"changing height: %f", bkgViewLeftSwipeIndicator.frame.size.height+touchDx*2);
         */
         
-        //NSLog(@"newAlpha (for right swipe): %f", newAlpha);
-        bkgViewRightSwipeIndicator.alpha = newAlpha;
+        NSLog(@"newAlpha (for right swipe): %f", newAlpha);
+        bkgViewRightSwipeIndicator.bkgView.alpha = newAlpha;
+        bkgViewRightSwipeIndicator.frame = CGRectMake(
+                                                     bkgViewRightSwipeIndicator.frame.origin.x,
+                                                     bkgViewRightSwipeIndicator.frame.origin.y,
+                                                     touchDx,
+                                                     bkgViewRightSwipeIndicator.frame.size.height);
         if(newAlpha>=1){
             [self maybeBringUpDebtView];
             [self touchesCancelled:nil withEvent:nil];
         }
     }
     
-    if(touchDx<0 && bkgViewRightSwipeIndicator.alpha<0.1){
+    if(touchDx<0 && bkgViewRightSwipeIndicator.bkgView.alpha<0.1){
         float newAlpha = MIN(touchDx,200)/-200.0f;
         //NSLog(@"newAlpha (for left swipe): %f", newAlpha);
         bkgViewLeftSwipeIndicator.alpha = newAlpha;

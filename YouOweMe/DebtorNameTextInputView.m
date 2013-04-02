@@ -12,6 +12,9 @@
 @implementation DebtorNameTextInputView
 
 @synthesize textField, delegate;
+@synthesize doneButton, backgroundImage;
+
+
 
 #pragma mark - public functions
 
@@ -65,10 +68,11 @@
 -(void)setup{
     NSLog(@"DebtorNameTextInputView.m: setup");
     
-    self.layer.shadowColor=[[UIColor blackColor] CGColor];
+    /*self.layer.shadowColor=[[UIColor blackColor] CGColor];
     self.layer.shadowOpacity=0.8f;
     self.layer.shadowRadius=5.0f;
-   
+    */
+    
     [self.textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     self.textField.delegate = self;
 }

@@ -12,8 +12,10 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+//user default flags
 @property (nonatomic) BOOL isUsingAddressBook;
 @property (nonatomic) BOOL isUsingFacebook;
+@property (nonatomic) BOOL isFirstTimeRunningApp;
 
 //core data
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

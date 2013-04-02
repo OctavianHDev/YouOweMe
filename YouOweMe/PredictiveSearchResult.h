@@ -18,5 +18,7 @@
 @property (nonatomic, strong) NSString *uniqueIdSource;
 
 -(void)setAsMiniMode;
+-(void)setAsSelected;
+-(void)animateSliderHintWithDelay:(CGFloat)delayTime;
 
 @end

@@ -6,14 +6,17 @@
 //  Copyright (c) 2013 o. All rights reserved.
 //
 
-#import "PersonPredictiveSearchModel.h"
+
 #import <AddressBook/AddressBook.h>
-#import "PredictiveSearchResult.h"
 #import <QuartzCore/QuartzCore.h>
+#import <FacebookSDK/FacebookSDK.h>
+
+#import "PredictiveSearchResult.h"
+#import "PersonPredictiveSearchModel.h"
 #import "Person+Create.h"
 #import "CoreDataDBManager.h"
 #import "Constants.h"
-#import <FacebookSDK/FacebookSDK.h>
+#import "PrototypeAppDelegate.h"
 
 #define MAX_NUM_PREDICTIVE_ROWS_VISIBLE 3
 
@@ -24,6 +27,7 @@
     @property (nonatomic, strong) NSArray *allAddressbookContacts;
     @property (nonatomic, strong) UITableView *tableViewWeAreManipulating;
     @property (nonatomic, strong) NSMutableArray *filteredArrayOfPersonObjects;
+    @property (nonatomic) BOOL isFirstTimeRunningApp;
     //@property (nonatomic, strong) NSArray *facebookFriends;
 @end
 
@@ -39,6 +43,7 @@
 @synthesize tableViewWeAreManipulating;
 @synthesize delegate;
 @synthesize filteredArrayOfPersonObjects;
+@synthesize isFirstTimeRunningApp;
 
 //@synthesize facebookFriends;
 
@@ -178,7 +183,7 @@ int originalTableHeight=0;
     
     self.filteredResults = [[NSArray alloc] init];
     NSLog(@"facebook: %d, addressbook:%d", facebookOn, addressOn);
-
+    self.isFirstTimeRunningApp = ((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]).isFirstTimeRunningApp;
     [self setupSourcesWithFacebook:facebookOn andAddress:addressOn];
     
     return self;
@@ -359,6 +364,13 @@ int originalTableHeight=0;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.delegate = self.delegate;
     cell.person = p;
+    
+    if(self.isFirstTimeRunningApp && indexPath.row==0){
+    //if(indexPath.row==0){
+        CGFloat delayTime = 1.5;//indexPath.row*0.14;
+        [cell animateSliderHintWithDelay:delayTime];
+        self.isFirstTimeRunningApp=NO;
+    }
     //cell.parentTableView=tableView;
     
     return cell;

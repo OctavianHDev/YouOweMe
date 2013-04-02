@@ -12,8 +12,10 @@
 
 @implementation PrototypeAppDelegate
 
+//flags
 @synthesize isUsingAddressBook;
 @synthesize isUsingFacebook=_isUsingFacebook;
+@synthesize isFirstTimeRunningApp;
 
 //core data
 @synthesize managedObjectContext = _managedObjectContext;
@@ -119,10 +121,14 @@ NSString *const FBSessionStateChangedNotification =
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //TODO: change these so they read and write to user defaults
+    //
     self.isUsingAddressBook=YES;
     self.isUsingFacebook=NO;
-
+    self.isFirstTimeRunningApp=YES;
+    
     [self setupFacebookLogin];
+
     /*[FBSession openActiveSessionWithPermissions:nil
                                    allowLoginUI:YES
                               completionHandler:^(FBSession *session, FBSessionState state, NSError *error) {
@@ -133,6 +139,7 @@ NSString *const FBSessionStateChangedNotification =
                                       NSLog(@"opening fb session was error-free");
                               }];*/
     //[CoreDataDBManager initAndRetrieveSharedInstance];
+
     return YES;
 }
 							

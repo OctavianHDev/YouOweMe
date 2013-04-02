@@ -11,4 +11,6 @@
 @interface LatestDebtsDataSource : NSObject <UITableViewDataSource,
                                              UITableViewDelegate>
 
+-(void)setAsUsingFacebook:(BOOL)facebookOn andAddressBook:(BOOL)addressBookOn;
+
 @end

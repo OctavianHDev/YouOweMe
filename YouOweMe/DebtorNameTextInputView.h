@@ -13,6 +13,7 @@
     -(void)textChangedTo:(NSString*)text;
     -(void)cancelPressed;
     -(void)textFieldGainedFocus;
+
 @end
 
 
@@ -20,6 +21,9 @@
 @interface DebtorNameTextInputView : UIView <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *textField;
+@property (nonatomic, strong) IBOutlet UIImageView *backgroundImage;
+@property (nonatomic, strong) IBOutlet UIButton *doneButton;
+
 @property (nonatomic, weak) id<DebtorNameTextInputDelegate>delegate;
 
 -(void)resetVisualComponents;

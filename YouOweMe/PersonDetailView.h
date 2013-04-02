@@ -18,7 +18,8 @@
     -(void)animatedViewToOriginalPosition;
 @end
 
-@interface PersonDetailView : UIView
+@interface PersonDetailView : UIView <UITableViewDataSource,
+                                      UITableViewDelegate>
 
 @property (nonatomic, strong) PredictiveSearchResult* cell;
 @property (nonatomic, weak)id<DebtAddingDelegate> delegate;
@@ -28,4 +29,5 @@
 -(void)preapareForDismissal;
 -(void)setAsDebtAddingMode;
 -(void)setAsDebtViewingMode;
+
 @end

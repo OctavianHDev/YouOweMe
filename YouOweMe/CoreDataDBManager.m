@@ -23,7 +23,9 @@
 @synthesize debtDatabase = _debtDatabase;
 @synthesize context;
 
-#pragma mark - PUBLIC API - 
+
+
+#pragma mark - PUBLIC API -
 #pragma mark -
 + (id)initAndRetrieveSharedInstance
 {
@@ -44,6 +46,7 @@
 -(void)saveDB{
     [((PrototypeAppDelegate*)[[UIApplication sharedApplication] delegate]) saveContext];
 }
+
 
 
 #pragma mark create entities
@@ -71,6 +74,39 @@
     }*/
     return results;
 }
+
+
+
+
+
+#pragma mark - retrieve entities
+
+-(NSArray*)getPersonsWithMostRecentDebts:(NSNumber*)numberOfPeople fromSource:(NSString *)source{
+    NSPredicate *predicate;
+    if([source isEqualToString:SOURCE_ADDRESSBOOK]){
+        predicate = [NSPredicate predicateWithFormat:@"addressBookId.length>0"];
+    }else if([source isEqualToString:SOURCE_FACEBOOK]){
+        predicate = [NSPredicate predicateWithFormat:@"facebookId.length>0"];
+    }
+    NSArray *toReturn = [self getPersonsWithPredicate:predicate];
+    /*toReturn = [toReturn sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDate *first = [((Person*)obj1).debts valueForKeyPath:@"@max.date"];
+        NSDate *second = [((Person*)obj2).debts valueForKeyPath:@"@max.date"];
+        return [first compare:second];
+    }];*/
+
+    if([numberOfPeople intValue]<0 || [numberOfPeople intValue]>toReturn.count){
+        return toReturn;
+    }else{
+        toReturn = [toReturn subarrayWithRange:NSMakeRange(0, [numberOfPeople intValue]-1)];
+        return toReturn;
+    }
+    
+}
+
+
+
+#pragma mark - insert entities
 
 -(void)insertIntoDBPersonsPicture:(UIImage*)picture ForId:(NSString*)personId fromSource:(NSString*)source{
     NSPredicate *predicate;
